@@ -4,9 +4,12 @@
 #include <string.h>
 
 /*
+    DOESNT WORK AS INTENDED
     Adds chars to the end of the string
-    @return exit code
+    @param str string to append to
+    @param c char to append
+    @return status code
 */
-int strapnd(char *str, char c);
+char* strjoin(char *str1, char *str2);
 
 #endif

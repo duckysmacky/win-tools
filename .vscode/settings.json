@@ -3,7 +3,10 @@
     "dirent.h": "c",
     "stdio.h": "c",
     "string.h": "c",
-    "typeinfo": "c"
+    "typeinfo": "c",
+    "cstdlib": "c",
+    "stdlib.h": "c",
+    "str-utils.h": "c"
   },
   "C_Cpp_Runner.cCompilerPath": "gcc",
   "C_Cpp_Runner.cppCompilerPath": "g++",

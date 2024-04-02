@@ -3,20 +3,11 @@
 #include <stdlib.h>
 #include "str-utils.h"
 
-// str = "abcd" (4)
-// chars = "ef" (2)
-// total = 6
-// f = 5
+char* strjoin(char *str1, char *str2) {
+    char* str = (char*) malloc((strlen(str1) + strlen(str2) + 1) * sizeof(char));
 
-int strapnd(char *str, char c) {
-    size_t size = strlen(str);
-    
-    str = malloc(size + 2);
+    strcpy(str, str1);
+    strcat(str, str2);
 
-    str[size] = c;
-    str[size + 1] = '\0';
-
-    printf("%s\n", str);
-
-    return 0;
+    return str;
 }
