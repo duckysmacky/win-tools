@@ -1,6 +1,8 @@
-# A collection of command line tools for Windows
+# Tools for Windows
 
-Most of these tools are just Linux equivalent to them, as you don't have them as defaults in CMD or Powershell (with exceptions)
+A collection of simple command line tools for Windows
+
+Most of these tools are just their Linux equivalent, as they are not there in CMD or Powershell by default (with exceptions)
 
 ## Todo
 

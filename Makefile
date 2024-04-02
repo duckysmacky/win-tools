@@ -1,6 +1,4 @@
-all:
-	make util
-	make ls
+all: util ls
 
 util:
 	gcc utils/str-utils.c -c -o out/obj/str-utils.o
