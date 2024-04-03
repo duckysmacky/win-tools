@@ -1,5 +1,9 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+
+#include "../../utils/str-utils.h"
+#include "../../utils/colors.h"
 
 // TODO - search for pattern in file, output line number
 // TODO - search in whole dir, output filename
@@ -28,7 +32,15 @@ int main(int argc, char const *argv[])
     {
         if (strstr(line, pattern))
         {
+            // buff for colored pattern word
+            char *cpattern = malloc(
+                (sizeof(pattern) * sizeof(char) + 
+                (2 * sizeof(COLOR_GREEN) * sizeof(char) + 1))
+            );
+            sprintf(cpattern, "%s%s%s", COLOR_GREEN, pattern, COLOR_RESET);
+            strrplc(line, 256, pattern, cpattern);
             printf("%i %s", nline, line);
+            free(cpattern);
         }
         nline++;
     }

@@ -38,3 +38,25 @@ size_t stroccr(const char *str, const char c) {
     for (i = 0; str[i]; str[i] == c ? i++ : *str++);
     return i;
 }
+
+char* strrplc(char *str, size_t size, const char *substr, const char *newstr)
+{
+    char *p = strstr(str, substr); // pointer to the substr in str
+    if (p == NULL) return NULL;
+
+    // check if size is enough
+    if (size < strlen(str) - strlen(substr) + (strlen(newstr)) + 1) {
+        printf("Buffer size is too small!\n");
+        return NULL;
+    }
+
+    // move
+    memmove(
+        p + strlen(newstr), // to
+        p + strlen(substr), // from
+        strlen(p) - strlen(substr) + 1 // size
+    );
+
+    memcpy(p, newstr, strlen(newstr));
+    return p + strlen(newstr);
+}

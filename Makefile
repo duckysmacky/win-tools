@@ -11,4 +11,4 @@ touch:
 	gcc src/touch/touch.c out/obj/arr-utils.o out/obj/str-utils.o -o out/bin/touch
 
 grep:
-	gcc src/grep/grep.c -o out/bin/grep
+	gcc src/grep/grep.c out/obj/str-utils.o -o out/bin/grep

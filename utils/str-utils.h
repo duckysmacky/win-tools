@@ -29,4 +29,14 @@ int strfnd(int *buff, char *str, char c);
 */
 size_t stroccr(const char *str, const char c);
 
+/*
+    Replaces a substring in a string
+    @param str source
+    @param size buffer size
+    @param substr substring to replace
+    @param newstr what to replace with
+    @returns updated string if replaced, else NULL
+*/
+char* strrplc(char *str, size_t size, const char *substr, const char *newstr);
+
 #endif
