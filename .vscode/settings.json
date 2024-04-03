@@ -6,7 +6,9 @@
     "typeinfo": "c",
     "cstdlib": "c",
     "stdlib.h": "c",
-    "str-utils.h": "c"
+    "str-utils.h": "c",
+    "windows.h": "c",
+    "stat.h": "c"
   },
   "C_Cpp_Runner.cCompilerPath": "gcc",
   "C_Cpp_Runner.cppCompilerPath": "g++",

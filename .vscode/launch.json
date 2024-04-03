@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "d:/Projects/win-utils/utils",
-      "program": "d:/Projects/win-utils/utils/build/Debug/outDebug",
+      "cwd": "d:/Projects/win-tools/src/ls",
+      "program": "d:/Projects/win-tools/src/ls/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

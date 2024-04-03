@@ -11,11 +11,8 @@ int main(int argc, char const *argv[])
     char *NAME_EXEPTIONS[] = {
         "Makefile"
     };
-
-    DIR* dir;
     struct dirent* dEntry;
-
-    if (argc > 1) dir = opendir(argv[1]); else dir = opendir("./");
+    DIR *dir = argc > 1 ? opendir(argv[1]) : opendir("./");
 
     if (dir == NULL)
     {
