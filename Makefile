@@ -1,4 +1,4 @@
-all: util ls touch
+all: util ls touch grep
 
 util:
 	gcc utils/str-utils.c -c -o out/obj/str-utils.o
@@ -9,3 +9,6 @@ ls: util
 
 touch:
 	gcc src/touch/touch.c out/obj/arr-utils.o out/obj/str-utils.o -o out/bin/touch
+
+grep:
+	gcc src/grep/grep.c -o out/bin/grep

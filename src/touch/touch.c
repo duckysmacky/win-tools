@@ -11,7 +11,7 @@ int main(int argc, char const *argv[])
     FILE *file;
     if (argc < 2)
     {
-        printf("Error: missing arguments <filepath>");
+        printf("missing arguments! usage: touch <FILE>");
         return 1;
     }
 
