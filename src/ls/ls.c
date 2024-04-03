@@ -31,7 +31,7 @@ int main(int argc, char const *argv[])
         }
 
         const char* ext = strrchr(name, '.'); // holds file extention
-        if (ext == NULL && strinar(NAME_EXEPTIONS, sizeof(NAME_EXEPTIONS), name))
+        if (ext == NULL && strinarr(NAME_EXEPTIONS, sizeof(NAME_EXEPTIONS), name))
         { 
             prtgreen("%s/ ", name);
         }

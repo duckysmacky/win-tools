@@ -3,6 +3,9 @@
 #include <dirent.h>
 #include <sys/stat.h>
 
+#include "../../utils/arr-utils.h"
+#include "../../utils/str-utils.h"
+
 int main(int argc, char const *argv[])
 {
     FILE *file;
@@ -13,45 +16,41 @@ int main(int argc, char const *argv[])
     }
 
     const char *fpath = argv[1];
-    int slpos[32]; // holds indexes of slashes
-    int j = 0;
-    for (int i = 0; i <= strlen(fpath); i++)
+    int sloccr = stroccr(fpath, '/') + stroccr(fpath, '\\'); // total occurences of slashes
+    int slpos[sloccr], j = 0; // indexes of slashes
+    for (int i = 0; i < strlen(fpath); i++)
     {
         if (fpath[i] == '/' || fpath[i] == '\\')
         {
-            printf("fpath s %u\n", fpath[i]);
-            slpos[j] = i; // add the indexes of slashes
+            slpos[j] = i; // add the index of a slash
             j++;
         }
     }
 
-
-    printf("slpos ");
-    for (size_t x = 0; x < 32; x++) {  }
-
-    // checking if full path exists, if not creating one
-    size_t slposLen = sizeof(slpos) / sizeof(int);
-    if (slposLen != 0)
+    int slposLen = arrlen(slpos);
+    if (slposLen > 0)
     {
+        // checking if full path exists, if not creating each dir
         for (int i = 0; i < slposLen; i++) // for each index of slash
         {
-            // reading path up to slash index
-            char *dirpath = malloc(i * sizeof(char) + 1);
-            for (int s = 0; s < i; s++) // for each dir to to next slash
+            int slidx = slpos[i]; // slash index
+            char *dirpath = malloc((slidx + 1) * sizeof(char));
+            for (int j = 0; j < slidx; j++) // write dir name (until a slash)
             {
-                dirpath[s] = fpath[s];
+                dirpath[j] = fpath[j];
             }
-
-            printf("dirpath: %s\n", dirpath);
+            dirpath[slidx] = '\0';
 
             if (opendir(dirpath) == NULL) // if dir doesnt exist 
             {
-                // mkdir(dirpath);
-                printf("mkdir\n");
+                mkdir(dirpath);
             }
+
+            free(dirpath);
         }
     }
 
+    // create the file itself
     file = fopen(fpath, "w");
     fclose(file);
 

@@ -10,6 +10,11 @@
     @param str string to search in array
     @return status code
 */
-int strinar(char *arr[], size_t size, char *str);
+int strinarr(char *arr[], size_t size, char *str);
+
+/*
+    Get length of array
+*/
+#define arrlen(arr) (sizeof(arr) / sizeof(*arr))
 
 #endif
