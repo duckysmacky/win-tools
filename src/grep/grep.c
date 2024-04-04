@@ -7,26 +7,35 @@
 #include "../../utils/colors.h"
 
 // TODO - options support
-// TODO - search in whole dir, output filename
 
 void readFile(const char *path, const char *pattern)
 {
-    printf("recieved filepath: %s with pattern %s\n", path, pattern);
-    FILE *file;
-    if ((file = fopen(path, "r")) == NULL) printf("error reading file at %s\n", path);
+    FILE *file = fopen(path, "r");
+    if (file == NULL)
+    {
+        printf("error reading file!\n");
+        fclose(file);
+        return;
+    }
     
     char line[256];
-    int nline = 1;
-    while (fgets(line, sizeof(line), file))
+    int nline = 1, prth = 0;
+    while (fgets(line, 256, file))
     {
-        printf("reading line: %s", line);
         if (strstr(line, pattern))
         {
+            if (!prth) // print filepath at the top
+            {
+                prtblue("%s\n", path);
+                prth = 1;
+            }
+            
             // buff for colored pattern word
             char *cpattern = malloc(
-                sizeof(pattern) * sizeof(char) + 
-                (2 * sizeof(COLOR_GREEN) * sizeof(char) + 1)
+                strlen(pattern) * sizeof(char) + 
+                (2 * sizeof(COLOR_GREEN) + sizeof(char))
             );
+
             sprintf(cpattern, "%s%s%s", COLOR_GREEN, pattern, COLOR_RESET);
             strrplc(line, 256, pattern, cpattern);
             printf("%i %s", nline, line);
@@ -34,43 +43,38 @@ void readFile(const char *path, const char *pattern)
         }
         nline++;
     }
+    printf("\n");
     fclose(file);
+    return;
 }
 
 void readDir(const char *path, const char *pattern)
 {
     struct dirent *dEntry;
-    char *dpath = malloc(sizeof(path) * sizeof(char) + 1);
-    strcpy(dpath, path);
-    // check for slashes, if none add them
-    if (stroccr(path, '/') == 0 && stroccr(path, '\\') == 0) strcat(dpath, "/");
-    DIR *dir = opendir(dpath);
+    DIR *dir = opendir(path);
 
-    while (dEntry = readdir(dir))
+    while ((dEntry = readdir(dir)))
     {
         char *ename = malloc((strlen(dEntry -> d_name) + 1) * sizeof(char)); // entry name
         strcpy(ename, dEntry -> d_name);
+        ename[strlen(ename)] = '\0';
+
         // ignore . and .. files
         if (!strcmp(ename, ".") || !strcmp(ename, "..")) continue;
-        printf("found entry: %s at dir %s\n", ename, dpath);
 
         char *fpath = malloc( // holds dir path + entry name
-            sizeof(dpath) * sizeof(char) +
-            sizeof(ename) * sizeof(char) + 2
+            strlen(path) * sizeof(char) +
+            (strlen(ename) + 1) * sizeof(char)
         );
-
-        sprintf(fpath, "%s%s", dpath, ename);
+        sprintf(fpath, "%s%s", path, ename);
 
         if (opendir(fpath))
         {
-            printf("going to dir: %s\n", ename);
-            strcat(fpath, "/\0");
+            strcat(fpath, "/");
             readDir(fpath, pattern);
         }
         else if (fopen(fpath, "r"))   
         {
-            printf("opening file: %s\n", fpath);
-            strcat(fpath, "\0");
             readFile(fpath, pattern);
         }
         else
@@ -81,6 +85,7 @@ void readDir(const char *path, const char *pattern)
         free(fpath);
         free(ename);
     }
+    return;
 }
 
 int main(int argc, char const *argv[])
@@ -100,7 +105,17 @@ int main(int argc, char const *argv[])
     }
     else if (opendir(path))
     {
-        readDir(path, pattern);
+        if (stroccr(path, '/') > 0 || stroccr(path, '\\') > 0) // if there are slashes
+        {
+            readDir(path, pattern);
+        }
+        else
+        {
+            char *dpath = malloc(sizeof(strlen(path) + 2) * sizeof(char));
+            sprintf(dpath, "%s/", path);
+            readDir(dpath, pattern);
+            free(dpath);
+        }
     }
     else
     {
