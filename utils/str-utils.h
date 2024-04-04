@@ -22,12 +22,12 @@ char* strjoin(char *str1, char *str2);
 int strfnd(int *buff, char *str, char c);
 
 /*
-    Counts occurences of a char in string
-    @param str string to search in
-    @param c char to search
+    Counts occurences of a sting in string
+    @param str source string
+    @param c string to search in source
     @return occurences of c in str
 */
-size_t stroccr(const char *str, const char c);
+int stroccr(const char *str, const char c);
 
 /*
     Replaces a substring in a string

@@ -33,8 +33,8 @@ int strfnd(int *buff, char *str, char c) {
     return 0;
 }
 
-size_t stroccr(const char *str, const char c) {
-    size_t i;
+int stroccr(const char *str, const char c) {
+    int i;
     for (i = 0; str[i]; str[i] == c ? i++ : *str++);
     return i;
 }
