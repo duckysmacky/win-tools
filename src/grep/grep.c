@@ -29,7 +29,7 @@ void readFile(const char *path, const char *pattern)
                 prtblue("%s\n", path);
                 prth = 1;
             }
-            
+
             // buff for colored pattern word
             char *cpattern = malloc(
                 strlen(pattern) * sizeof(char) + 
@@ -43,7 +43,7 @@ void readFile(const char *path, const char *pattern)
         }
         nline++;
     }
-    printf("\n");
+    if (prth) printf("\n");
     fclose(file);
     return;
 }

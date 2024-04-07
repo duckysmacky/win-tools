@@ -8,8 +8,8 @@ Most of command line tools are just their Linux equivalent, as they are not ther
 Can be found in `out/bin/` (add `bin/` folder to your `PATH` to use in any terminal)
 - [x] ls (better ls)
 - [x] touch
+- [X] grep
 - [ ] mv
-- [ ] grep
 - [ ] sudo?
 
 ### C utilities
