@@ -15,5 +15,5 @@ Can be found in `out/bin/` (add `bin/` folder to your `PATH` to use in any termi
 ### C utilities
 Can be found in `utils/`
 - `colors.h` - colorful output
-- `arr-utils.h` - array utils
-- `str-utils.h` - string utils
+- ~~`arr-utils.h` - array utils~~
+- ~~`str-utils.h` - string utils~~
