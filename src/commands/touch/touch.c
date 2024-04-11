@@ -3,8 +3,8 @@
 #include <dirent.h>
 #include <sys/stat.h>
 
-#include "../../utils/arr-utils.h"
-#include "../../utils/str-utils.h"
+#include "../../headers/arr-utils.h"
+#include "../../headers/str-utils.h"
 
 int main(int argc, char const *argv[])
 {

@@ -3,8 +3,8 @@
 #include <string.h>
 #include <dirent.h>
 
-#include "../../utils/arr-utils.h"
-#include "../../utils/colors.h"
+#include "../../headers/arr-utils.h"
+#include "../../headers/colors.h"
 
 int main(int argc, char const *argv[])
 {
@@ -21,7 +21,7 @@ int main(int argc, char const *argv[])
     }
 
     // TODO - make files print in order
-    while (dEntry = readdir(dir))
+    while ((dEntry = readdir(dir)))
     {
         char* name = malloc((strlen(dEntry -> d_name) + 1) * sizeof(char)); // file name
         strcpy(name, dEntry -> d_name);

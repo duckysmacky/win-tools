@@ -1,21 +1,39 @@
 # TODO - make better makefile
-ARGS = -Wall
-OBJS := out/obj/arr-utils.o out/obj/str-utils.o
+# compiler
+CC = gcc
+CFLAGS = -Wall
 
-all: util ls touch grep
+# dirs
+SOURCE = src/commands
+HEADERS = src/headers
+UTIL = src/util
+BIN = out/bin
+OBJ = out/obj
+
+# files
+BINS = $(BIN)/ls $(BIN)/touch $(BIN)/grep
+UTILS = $(UTIL)/arr-utils.c $(UTIL)/str-utils.c
+OBJS = $(OBJ)/arr-utils.o $(OBJ)/str-utils.o
+
+all: $(BINS)
 
 clean:
-	rm out/bin/*
+	rm $(BIN)/*
+	rm $(OBJ)/*
 
-util:
-	gcc utils/str-utils.c -c -o out/obj/str-utils.o
-	gcc utils/arr-utils.c -c -o out/obj/arr-utils.o
+# bins
+$(BIN)/ls: $(OBJS)
+	$(CC) $(SOURCE)/ls/*.c $^ -o $@ $(CFLAGS)
 
-ls:
-	gcc src/ls/ls.c -o out/bin/ls $(OBJS) $(ARGS)
+$(BIN)/touch: $(OBJS)
+	$(CC) $(SOURCE)/touch/*.c $^ -o $@ $(CFLAGS)
 
-touch:
-	gcc src/touch/touch.c -o out/bin/touch $(OBJS) $(ARGS)
+$(BIN)/grep: $(OBJS)
+	$(CC) $(SOURCE)/grep/*.c $^ -o $@ $(CFLAGS)
 
-grep:
-	gcc src/grep/grep.c -o out/bin/grep $(OBJS) $(ARGS)
+# objs
+$(OBJ)/arr-utils.o:
+	$(CC) $(UTIL)/arr-utils.c -c -o $@ $(CFLAGS)
+
+$(OBJ)/str-utils.o:
+	$(CC) $(UTIL)/str-utils.c -c -o $@ $(CFLAGS)

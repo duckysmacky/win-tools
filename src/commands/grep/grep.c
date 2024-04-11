@@ -1,37 +1,39 @@
+// TODO - implement all options
+// TODO - multiple file support
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <dirent.h>
 #include <unistd.h>
 
-#include "../../utils/str-utils.h"
-#include "../../utils/colors.h"
+#include "../../headers/arr-utils.h"
+#include "../../headers/str-utils.h"
+#include "../../headers/colors.h"
 
-#define USAGEMSG "Usage: grep [OPTIONS] <FILE> <PATTERN>\n"
+#define USAGEMSG "Usage: grep [OPTIONS] <PATTERN> <PATH>\n"
 
 void readDir(const char *path, const char *pattern);
 void readFile(const char *path, const char *pattern);
 
-int main(int argc, char const *argv[])
+int main(int argc, const char *argv[])
 {
-    char *path = ".";
-    int opt;
-    // TODO - implement all options
     // read options
-    while ((opt = getopt(argc, argv, "lfh")) != -1)
+    int opt;
+    while ((opt = getopt(argc, (char * const*) argv, "lfh")) != -1)
     {
         switch (opt)
         {
             case 'h': break; // help
-            case 'c': break; // count how many types pattern appears
-            case 'i': break; // case-insensitive
-            case 'l': break; // show line number
-            case 'f': break; // show full line
-            case 'p': break; // specify path (probably will remove)
-            case 'w': break; // seperate word (only whole)
-            case 'r':
-            case 'R': break; // look in current dir and all subdirs
-            case 'F': break; // find all lines with pattern (alias - fgrep)
+            case 'c': break; // print line count of the matched pattern
+            case 'i': break; // ignore-case
+            case 'l': break; // display filenames only
+            case 'n': break; // show line numbers
+            case 'v': break; // print all lines which didnt match
+            case 'e': break; // regular expression to search
+            case 'f': break; // take pattern from file
+            case 'w': break; // match whole word only
+            case 'o': break; // print only matching parts of the lines
             default:
                 printf("Error: unknown option %c!\n", optopt);
                 printf(USAGEMSG);
@@ -39,22 +41,26 @@ int main(int argc, char const *argv[])
         }
     }
 
-    // count all non-options
-    int noptc[3];
-    for(int i = 0; optind < argc; optind++)
+    // holds all non-options (pattern and path)
+    char *noptc[2];
+    int i = 0;
+    for(; optind < argc; optind++)
     {
+        noptc[i] = (char *) argv[optind];
         printf("%d: %s\n", optind, argv[optind]);
+        i++;
     } 
 
-    const char *pattern = argv[optind];
-    
     // check for all required args
-    if (optind < 2)
+    if (i < 2)
     {
-        printf("Error: missing arguments!");
+        printf("Error: missing %d argument[s]!\n", 2 - i);
         printf(USAGEMSG);
         return 1;
     }
+
+    const char *pattern = noptc[0];
+    const char *path = noptc[1];
 
     if (fopen(path, "r"))
     {
