@@ -1,47 +1,35 @@
 // TODO - implement all options
 // TODO - multiple file support
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <dirent.h>
-#include <unistd.h>
-
-#include "../../headers/arr-utils.h"
-#include "../../headers/str-utils.h"
-#include "../../headers/colors.h"
-
-#define USAGEMSG "Usage: grep [OPTIONS] <PATTERN> <PATH>\n"
-
-void readDir(const char *path, const char *pattern);
-void readFile(const char *path, const char *pattern);
+#include "grep.h"
 
 int main(int argc, const char *argv[])
 {
+    GrepOpts opts;
+
     // read options
     int opt;
-    while ((opt = getopt(argc, (char * const*) argv, "lfh")) != -1)
+    while ((opt = getopt(argc, (char * const*) argv, GREP_OPTIONS)) != -1)
     {
         switch (opt)
-        {
+        { // TODO - all this
             case 'h': break; // help
-            case 'c': break; // print line count of the matched pattern
-            case 'i': break; // ignore-case
-            case 'l': break; // display filenames only
-            case 'n': break; // show line numbers
-            case 'v': break; // print all lines which didnt match
-            case 'e': break; // regular expression to search
-            case 'f': break; // take pattern from file
-            case 'w': break; // match whole word only
-            case 'o': break; // print only matching parts of the lines
+            case 'c': opts.c = true; break; // print line count of the matched pattern
+            case 'i': opts.i = true; break; // ignore-case
+            case 'l': opts.l = true; break; // display filenames only
+            case 'n': opts.n = true; break; // show line numbers
+            case 'v': opts.v = true; break; // print all lines which didnt match
+            case 'e': opts.e = optarg; break; // regular expression to search
+            case 'f': opts.f = optarg; break; // take pattern from file
+            case 'w': opts.w = true; break; // match whole word only
+            case 'o': opts.o = true; break; // print only matching parts of the lines
             default:
-                printf("Error: unknown option %c!\n", optopt);
-                printf(USAGEMSG);
+                printf("error: unknown option %c!\n", optopt);
+                printf(MSG_USAGE);
                 return 1;
         }
     }
 
-    // holds all non-options (pattern and path)
+    // holds all non-options (pattern and path arguments)
     char *noptc[2];
     int i = 0;
     for(; optind < argc; optind++)
@@ -54,8 +42,8 @@ int main(int argc, const char *argv[])
     // check for all required args
     if (i < 2)
     {
-        printf("Error: missing %d argument[s]!\n", 2 - i);
-        printf(USAGEMSG);
+        printf("error: missing %d argument[s]!\n", 2 - i);
+        printf(MSG_USAGE);
         return 1;
     }
 
@@ -64,19 +52,19 @@ int main(int argc, const char *argv[])
 
     if (fopen(path, "r"))
     {
-        readFile(path, pattern);
+        readFile(path, pattern, opts);
     }
     else if (opendir(path))
     {
         if (stroccr(path, '/') > 0 || stroccr(path, '\\') > 0) // if there are slashes
         {
-            readDir(path, pattern);
+            readDir(path, pattern, opts);
         }
         else
         {
             char *dpath = malloc(sizeof(strlen(path) + 2) * sizeof(char));
             sprintf(dpath, "%s/", path);
-            readDir(dpath, pattern);
+            readDir(dpath, pattern, opts);
             free(dpath);
         }
     }
@@ -89,7 +77,7 @@ int main(int argc, const char *argv[])
     return 0;
 }
 
-void readFile(const char *path, const char *pattern)
+void readFile(const char *path, const char *pattern, GrepOpts opts)
 {
     FILE *file = fopen(path, "r");
     if (file == NULL)
@@ -103,24 +91,39 @@ void readFile(const char *path, const char *pattern)
     int nline = 1, prth = 0;
     while (fgets(line, 256, file))
     {
+        if (opts.i)
+        {
+            // TODO - add tolower()
+            // #include <ctype.h>
+            // for(int i = 0; str[i]; i++){
+            //     str[i] = tolower(str[i]);
+            // }
+        }
         if (strstr(line, pattern))
         {
-            if (!prth) // print filepath at the top
+            if (!opts.c && !opts.l && !opts.v && !opts.o)
             {
-                prtblue("%s\n", path);
-                prth = 1;
+                if (!prth) // print filepath at the top
+                {
+                    prtblue("%s\n", path);
+                    prth = true;
+                }
+
+                // buff for colored pattern word
+                char *cpattern = malloc(
+                    strlen(pattern) * sizeof(char) + 
+                    (2 * sizeof(COLOR_GREEN) + sizeof(char))
+                );
+
+                sprintf(cpattern, "%s%s%s", COLOR_GREEN, pattern, COLOR_RESET);
+                strrplc(line, 256, pattern, cpattern);
+
+                if (opts.n) printf("%i %s", nline, line);
+                else printf("%s", nline, line);
+
+                free(cpattern);
             }
 
-            // buff for colored pattern word
-            char *cpattern = malloc(
-                strlen(pattern) * sizeof(char) + 
-                (2 * sizeof(COLOR_GREEN) + sizeof(char))
-            );
-
-            sprintf(cpattern, "%s%s%s", COLOR_GREEN, pattern, COLOR_RESET);
-            strrplc(line, 256, pattern, cpattern);
-            printf("%i %s", nline, line);
-            free(cpattern);
         }
         nline++;
     }
@@ -129,7 +132,7 @@ void readFile(const char *path, const char *pattern)
     return;
 }
 
-void readDir(const char *path, const char *pattern)
+void readDir(const char *path, const char *pattern, GrepOpts opts)
 {
     struct dirent *dEntry;
     DIR *dir = opendir(path);
@@ -140,7 +143,7 @@ void readDir(const char *path, const char *pattern)
         strcpy(ename, dEntry -> d_name);
         ename[strlen(ename)] = '\0';
 
-        // ignore . and .. files
+        // ignore "." and ".." files
         if (!strcmp(ename, ".") || !strcmp(ename, "..")) continue;
 
         char *fpath = malloc( // holds dir path + entry name
@@ -152,11 +155,11 @@ void readDir(const char *path, const char *pattern)
         if (opendir(fpath))
         {
             strcat(fpath, "/");
-            readDir(fpath, pattern);
+            readDir(fpath, pattern, opts);
         }
         else if (fopen(fpath, "r"))   
         {
-            readFile(fpath, pattern);
+            readFile(fpath, pattern, opts);
         }
         else
         {
