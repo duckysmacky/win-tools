@@ -11,17 +11,17 @@ int main(int argc, const char *argv[])
     while ((opt = getopt(argc, (char * const*) argv, GREP_OPTIONS)) != -1)
     {
         switch (opt)
-        { // TODO - all this
+        {
             case 'h': break; // help
-            case 'c': opts.c = true; break; // print line count of the matched pattern
-            case 'i': opts.i = true; break; // ignore-case
-            case 'l': opts.l = true; break; // display filenames only
+            case 'c': opts.c = true; break; // TODO print line count of the matched pattern
+            case 'i': opts.i = true; break; // TODO ignore-case
+            case 'l': opts.l = true; break; // TODO display filenames only
             case 'n': opts.n = true; break; // show line numbers
-            case 'v': opts.v = true; break; // print all lines which didnt match
-            case 'e': opts.e = optarg; break; // regular expression to search
-            case 'f': opts.f = optarg; break; // take pattern from file
-            case 'w': opts.w = true; break; // match whole word only
-            case 'o': opts.o = true; break; // print only matching parts of the lines
+            case 'v': opts.v = true; break; // TODO print all lines which didnt match
+            case 'e': opts.e = optarg; break; // TODO regular expression to search
+            case 'f': opts.f = optarg; break; // TODO take pattern from file
+            case 'w': opts.w = true; break; // TODO match whole word only
+            case 'o': opts.o = true; break; // TODO print only matching parts of the lines
             default:
                 printf("error: unknown option %c!\n", optopt);
                 printf(MSG_USAGE);
@@ -35,7 +35,6 @@ int main(int argc, const char *argv[])
     for(; optind < argc; optind++)
     {
         noptc[i] = (char *) argv[optind];
-        printf("%d: %s\n", optind, argv[optind]);
         i++;
     } 
 
@@ -47,7 +46,7 @@ int main(int argc, const char *argv[])
         return 1;
     }
 
-    const char *pattern = noptc[0];
+    char *pattern = noptc[0];
     const char *path = noptc[1];
 
     if (fopen(path, "r"))
@@ -77,7 +76,7 @@ int main(int argc, const char *argv[])
     return 0;
 }
 
-void readFile(const char *path, const char *pattern, GrepOpts opts)
+void readFile(const char *path, char *pattern, GrepOpts opts)
 {
     FILE *file = fopen(path, "r");
     if (file == NULL)
@@ -93,17 +92,17 @@ void readFile(const char *path, const char *pattern, GrepOpts opts)
     {
         if (opts.i)
         {
-            // TODO - add tolower()
-            // #include <ctype.h>
-            // for(int i = 0; str[i]; i++){
-            //     str[i] = tolower(str[i]);
-            // }
+            printf("i: %d\n", opts.i);
+            strlwr(pattern);
+            strlwr(line);
         }
+
         if (strstr(line, pattern))
         {
             if (!opts.c && !opts.l && !opts.v && !opts.o)
             {
-                if (!prth) // print filepath at the top
+                // print filepath at the top
+                if (!prth)
                 {
                     prtblue("%s\n", path);
                     prth = true;
@@ -118,8 +117,9 @@ void readFile(const char *path, const char *pattern, GrepOpts opts)
                 sprintf(cpattern, "%s%s%s", COLOR_GREEN, pattern, COLOR_RESET);
                 strrplc(line, 256, pattern, cpattern);
 
-                if (opts.n) printf("%i %s", nline, line);
-                else printf("%s", nline, line);
+                // check for -n flag
+                if (opts.n) { printf("%d %s", nline, line); printf("n: %d\n", opts.n); }
+                else printf("%s", line);
 
                 free(cpattern);
             }
@@ -132,7 +132,7 @@ void readFile(const char *path, const char *pattern, GrepOpts opts)
     return;
 }
 
-void readDir(const char *path, const char *pattern, GrepOpts opts)
+void readDir(const char *path, char *pattern, GrepOpts opts)
 {
     struct dirent *dEntry;
     DIR *dir = opendir(path);

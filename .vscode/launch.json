@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "d:/projects/win-tools/src/grep",
-      "program": "d:/projects/win-tools/src/grep/build/Debug/outDebug",
+      "cwd": "d:/Projects/win-tools/src/commands/grep",
+      "program": "d:/Projects/win-tools/src/commands/grep/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

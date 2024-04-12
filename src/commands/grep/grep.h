@@ -16,6 +16,10 @@
 
 // Data
 
+#define true 1
+#define false 0
+#define bool unsigned char
+
 // Passed options
 typedef struct GrepOpts {
     bool c; // count lines
@@ -29,22 +33,17 @@ typedef struct GrepOpts {
     char *f; // pattern from file
 } GrepOpts, *PGrepOpts;
 
-// Bool datatype
-typedef unsigned char bool;
-#define true 1
-#define false 0
-
 // Functions
 
 /*
     Opens and reads directory from path
 */
-void readDir(const char *path, const char *pattern, GrepOpts opts);
+void readDir(const char *path, char *pattern, GrepOpts opts);
 
 /*
     Opens and reads file from path
 */
-void readFile(const char *path, const char *pattern, GrepOpts opts);
+void readFile(const char *path, char *pattern, GrepOpts opts);
 
 // Strings
 

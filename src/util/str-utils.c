@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 #include "../headers/arr-utils.h"
 #include "../headers/str-utils.h"
@@ -59,4 +60,20 @@ char* strrplc(char *str, size_t size, const char *substr, const char *newstr)
 
     memcpy(p, newstr, strlen(newstr));
     return p + strlen(newstr);
+}
+
+void strtolwr(char *str)
+{
+    for (int i = 0; str[i]; i++)
+    {
+        str[i] = tolower(str[i]);
+    }
+}
+
+void strtoupr(char *str)
+{
+    for (int i = 0; str[i]; i++)
+    {
+        str[i] = toupper(str[i]);
+    }
 }

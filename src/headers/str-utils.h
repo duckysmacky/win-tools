@@ -39,4 +39,16 @@ int stroccr(const char *str, const char c);
 */
 char* strrplc(char *str, size_t size, const char *substr, const char *newstr);
 
+/*
+    Converts all characters in a string to lowercase
+    @param str string
+*/
+void strtolwr(char *str);
+
+/*
+    Converts all characters in a string to uppercase
+    @param str string
+*/
+void strtoupr(char *str);
+
 #endif
