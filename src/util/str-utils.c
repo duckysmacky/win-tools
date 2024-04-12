@@ -1,9 +1,3 @@
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <ctype.h>
-
-#include "../headers/arr-utils.h"
 #include "../headers/str-utils.h"
 
 char* strjoin(char *str1, char *str2) {
@@ -26,7 +20,7 @@ int strfnd(int *buff, char *str, char c) {
         }
     }
 
-    if (arrlen(buff) == 0)
+    if (sizeof(buff) == 0)
     {
         return 1;
     }
@@ -62,18 +56,22 @@ char* strrplc(char *str, size_t size, const char *substr, const char *newstr)
     return p + strlen(newstr);
 }
 
-void strtolwr(char *str)
+void strtolwr(char *buff, char *str)
 {
-    for (int i = 0; str[i]; i++)
+    int l = strlen(buff);
+    for (int i = 0; i < l; i++)
     {
-        str[i] = tolower(str[i]);
+        buff[i] = tolower(str[i]);
     }
+    buff[l] = '\0';
 }
 
-void strtoupr(char *str)
+void strtoupr(char *buff, char *str)
 {
-    for (int i = 0; str[i]; i++)
+    int l = strlen(buff);
+    for (int i = 0; i < l; i++)
     {
-        str[i] = toupper(str[i]);
+        buff[i] = toupper(str[i]);
     }
+    buff[l] = '\0';
 }

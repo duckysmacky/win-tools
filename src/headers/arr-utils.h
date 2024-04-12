@@ -1,6 +1,7 @@
 #ifndef ARR_UTILS
 #define ARR_UTILS
 
+#include <stdlib.h>
 #include <string.h>
 
 /*

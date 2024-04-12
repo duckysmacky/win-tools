@@ -1,7 +1,12 @@
 #ifndef STR_UTILS
 #define STR_UTILS
 
+#include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+#include <ctype.h>
+
+#include "../headers/arr-utils.h"
 
 /*
     DOESNT WORK AS INTENDED
@@ -41,14 +46,16 @@ char* strrplc(char *str, size_t size, const char *substr, const char *newstr);
 
 /*
     Converts all characters in a string to lowercase
-    @param str string
+    @param buff buffer to write converted string
+    @param str original string
 */
-void strtolwr(char *str);
+void strtolwr(char *buff, char *str);
 
 /*
     Converts all characters in a string to uppercase
-    @param str string
+    @param buff buffer to write converted string
+    @param str original string
 */
-void strtoupr(char *str);
+void strtoupr(char *buff, char *str);
 
 #endif

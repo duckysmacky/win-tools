@@ -1,5 +1,4 @@
-#include <stdlib.h>
-#include <string.h>
+#include "../headers/arr-utils.h"
 
 int strinarr(char *arr[], size_t size, char *str) {
     for(size_t i = 0; i < size / sizeof(*arr); i++) {
