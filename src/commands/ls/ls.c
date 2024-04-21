@@ -3,8 +3,8 @@
 #include <string.h>
 #include <dirent.h>
 
-#include "../../headers/arr-utils.h"
-#include "../../headers/colors.h"
+#include "../../include/arr-utils.h"
+#include "../../include/colors.h"
 
 int main(int argc, char const *argv[])
 {

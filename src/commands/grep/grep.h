@@ -10,9 +10,9 @@
 #include <dirent.h>
 #include <unistd.h>
 
-#include "../../headers/arr-utils.h"
-#include "../../headers/str-utils.h"
-#include "../../headers/colors.h"
+#include "../../include/arr-utils.h"
+#include "../../include/str-utils.h"
+#include "../../include/colors.h"
 
 // Data
 

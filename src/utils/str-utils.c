@@ -1,4 +1,4 @@
-#include "../headers/str-utils.h"
+#include "../include/str-utils.h"
 
 char* strjoin(char *str1, char *str2) {
     char* str = (char*) malloc((strlen(str1) + strlen(str2) + 1) * sizeof(char));

@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-#include "../headers/arr-utils.h"
+#include "../include/arr-utils.h"
 
 /*
     DOESNT WORK AS INTENDED
