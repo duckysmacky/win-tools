@@ -10,10 +10,18 @@ All currently avaliable tools and features are listed below (as well as future p
 ### Linux commands
 - [X] ls
   - [X] colors
-  - [ ] options
+  - [ ] flags
 - [X] touch
 - [X] grep
-  - [ ] options
+  - [ ] flags
+  - [ ] fgrep
+- [ ] cp
+- [ ] mv
+- [ ] less
+- [ ] man (?)
+- [ ] sed
+- [ ] sort
+- [ ] ln (?)
 
 ### Other tools
 - [ ] Port scanner
