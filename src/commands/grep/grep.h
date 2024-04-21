@@ -21,7 +21,7 @@
 #define bool unsigned char
 
 // Passed options
-typedef struct GrepOpts {
+struct GrepOpts_s {
     bool c; // count lines
     bool i; // ignore case
     bool l; // only file name
@@ -31,7 +31,16 @@ typedef struct GrepOpts {
     bool o; // only matching parts
     char *e; // regex
     char *f; // pattern from file
-} GrepOpts, *PGrepOpts;
+} GrepOpts_default = {
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+};
+typedef struct GrepOpts_s GrepOpts, *PGrepOpts;
 
 // Functions
 
@@ -48,6 +57,6 @@ void readFile(const char *path, char *pattern, GrepOpts *opts);
 // Strings
 
 #define MSG_USAGE "Usage: grep [OPTIONS] <PATTERN> <PATH>\n"
-#define GREP_OPTIONS "hcilnvefwo"
+#define GREP_OPTIONS "hcilnvwoe: f: "
 
 #endif

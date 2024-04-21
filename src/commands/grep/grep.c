@@ -4,7 +4,7 @@
 
 int main(int argc, const char *argv[])
 {
-    GrepOpts opts;
+    GrepOpts opts = GrepOpts_default;
 
     // read options
     int opt;
@@ -13,15 +13,15 @@ int main(int argc, const char *argv[])
         switch (opt)
         {
             case 'h': break; // help
-            case 'c': opts.c = true; break; // TODO print line count of the matched pattern
-            case 'i': opts.i = true; break; // TODO ignore-case
-            case 'l': opts.l = true; break; // TODO display filenames only
+            case 'c': opts.c = true; break; // print line count of the matched pattern
+            case 'i': opts.i = true; break; // ignore-case
+            case 'l': opts.l = true; break; // display filenames only
             case 'n': opts.n = true; break; // show line numbers
-            case 'v': opts.v = true; break; // TODO print all lines which didnt match
-            case 'e': opts.e = optarg; break; // TODO regular expression to search
-            case 'f': opts.f = optarg; break; // TODO take pattern from file
+            case 'v': opts.v = true; break; // print all lines which didnt match
             case 'w': opts.w = true; break; // TODO match whole word only
             case 'o': opts.o = true; break; // TODO print only matching parts of the lines
+            case 'e': opts.e = optarg; break; // TODO regular expression to search
+            case 'f': opts.f = optarg; break; // take pattern from file
             default:
                 printf("error: unknown option %c!\n", optopt);
                 printf(MSG_USAGE);
@@ -39,15 +39,42 @@ int main(int argc, const char *argv[])
     } 
 
     // check for all required args
-    if (i < 2)
+    if (i == 0)
     {
-        printf("error: missing %d argument[s]!\n", 2 - i);
+        printf("error: missing 2 arguments!\n");
+        printf(MSG_USAGE);
+        return 1;
+    }
+    if (i == 1 && !opts.f)
+    {
+        printf("error: missing 1 argument!\n");
         printf(MSG_USAGE);
         return 1;
     }
 
-    char *pattern = noptc[0];
-    const char *path = noptc[1];
+    char *pattern = malloc(1024 * sizeof(char));
+    const char *path;
+    if (opts.f)
+    {
+        FILE *patfile = fopen(opts.f, "r");
+        if (patfile == NULL)
+        {
+            printf("error: file %s doesn't exist!", opts.f);
+            fclose(patfile);
+            return 1;
+        }
+        fgets(pattern, 1024, patfile);
+        pattern[strcspn(pattern, "\n")] = 0; // removes newline
+        fclose(patfile);
+
+        path = noptc[0];
+    } 
+    else 
+    {
+        pattern = noptc[0];
+        path = noptc[1];
+    }
+
 
     if (fopen(path, "r"))
     {
@@ -69,10 +96,11 @@ int main(int argc, const char *argv[])
     }
     else
     {
-        printf("error: file doesn't exist!");
+        printf("error: file %s doesn't exist!", path);
         return 1;
     }
     
+    free(pattern);
     return 0;
 }
 
@@ -81,14 +109,15 @@ void readFile(const char *path, char *pattern, GrepOpts *opts)
     FILE *file = fopen(path, "r");
     if (file == NULL)
     {
-        printf("error reading file!\n");
+        printf("error reading file!");
         fclose(file);
         return;
     }
     
     char line[256];
     char *fpat; // holds found pattern
-    int nline = 1, prth = 0;
+    int nline = 1, linec = 0;
+    int prth = false; // printed filepath status
     while (fgets(line, 256, file))
     {
         if (opts->i)
@@ -103,39 +132,52 @@ void readFile(const char *path, char *pattern, GrepOpts *opts)
         }
         else fpat = strstr(line, pattern);
 
-        if (fpat)
+        // f    v
+        // 1 != 0 - 1 found only
+        // 1 != 1 - 0 nothing
+        // 0 != 1 - 1 not found only
+        // 0 != 0 - 0 nothing
+        if ((fpat != NULL) != opts->v) // if matched or looking for unmatched lines only
         {
-            if (!opts->c && !opts->l && !opts->v && !opts->o)
+            // print filepath at the top if haven't yet
+            if (!prth)
             {
-                // print filepath at the top
-                if (!prth)
+                prtblue("%s\n", path);
+                prth = true;
+            }
+
+            if (!opts->l && !opts->c && !opts->o) // only multi-flag actions
+            {
+                if (!opts->v) // if not for unmatched, as there wouldn't be any found pattern
                 {
-                    prtblue("%s\n", path);
-                    prth = true;
+                    // check for ignore case color highlight
+                    if (opts->i) strtolwr(pattern, pattern);
+
+                    // buff for colored pattern word
+                    char *cpattern = malloc(
+                        strlen(pattern) * sizeof(char) + 
+                        (2 * sizeof(COLOR_GREEN) + sizeof(char))
+                    );
+                    
+                    sprintf(cpattern, "%s%s%s", COLOR_GREEN, pattern, COLOR_RESET);
+                    strrplc(line, 256, pattern, cpattern);
+
+                    free(cpattern);
                 }
-
-                // check for ignore case color highlight
-                if (opts->i) strtolwr(pattern, pattern);
-
-                // buff for colored pattern word
-                char *cpattern = malloc(
-                    strlen(pattern) * sizeof(char) + 
-                    (2 * sizeof(COLOR_GREEN) + sizeof(char))
-                );
-                
-                sprintf(cpattern, "%s%s%s", COLOR_GREEN, pattern, COLOR_RESET);
-                strrplc(line, 256, pattern, cpattern);
 
                 // check for -n flag
                 if (opts->n) printf("%d %s", nline, line);
                 else printf("%s", line);
-
-                free(cpattern);
+            }
+            else if (opts->c) // only count lines
+            {
+                linec++;
             }
         }
         nline++;
     }
-    if (prth) printf("\n");
+    if (opts->c) printf("%d", linec);
+    // if (prth) printf("\n");
     free(fpat);
     fclose(file);
     return;
