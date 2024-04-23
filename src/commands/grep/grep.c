@@ -4,26 +4,27 @@
 
 int main(int argc, const char *argv[])
 {
-    GrepOpts opts = GrepOpts_default;
+    Opts opts = GrepOpts_default;
 
     // read options
     int opt;
-    while ((opt = getopt(argc, (char * const*) argv, GREP_OPTIONS)) != -1)
+    while ((opt = getopt(argc, (char * const*) argv, OPTION_FLAGS)) != -1)
     {
         switch (opt)
         {
-            case 'h': break; // help
-            case 'c': opts.c = true; break; // print line count of the matched pattern
-            case 'i': opts.i = true; break; // ignore-case
-            case 'l': opts.l = true; break; // display filenames only
-            case 'n': opts.n = true; break; // show line numbers
-            case 'v': opts.v = true; break; // print all lines which didnt match
-            case 'w': opts.w = true; break; // TODO match whole word only
-            case 'o': opts.o = true; break; // TODO print only matching parts of the lines
-            case 'e': opts.e = optarg; break; // TODO regular expression to search
-            case 'f': opts.f = optarg; break; // take pattern from file
+            // case 'h': break; // TODO - add help
+            case 'c': opts.c = true; break;
+            case 'i': opts.i = true; break;
+            case 'l': opts.l = true; break;
+            case 'n': opts.n = true; break;
+            case 'v': opts.v = true; break;
+            case 'w': opts.w = true; break;
+            case 'o': opts.o = true; break;
+            case 'e': opts.e = optarg; break;
+            case 'f': opts.f = optarg; break;
             default:
                 printf("error: unknown option %c!\n", optopt);
+                printf("do %s --help for help\n", argv[0]);
                 printf(MSG_USAGE);
                 return 1;
         }
@@ -104,7 +105,7 @@ int main(int argc, const char *argv[])
     return 0;
 }
 
-void readFile(const char *path, char *pattern, GrepOpts *opts)
+void readFile(const char *path, char *pattern, Opts *opts)
 {
     FILE *file = fopen(path, "r");
     if (file == NULL)
@@ -183,7 +184,7 @@ void readFile(const char *path, char *pattern, GrepOpts *opts)
     return;
 }
 
-void readDir(const char *path, char *pattern, GrepOpts *opts)
+void readDir(const char *path, char *pattern, Opts *opts)
 {
     struct dirent *dEntry;
     DIR *dir = opendir(path);
@@ -220,5 +221,7 @@ void readDir(const char *path, char *pattern, GrepOpts *opts)
         free(fpath);
         free(ename);
     }
+
+    closedir(dir);
     return;
 }

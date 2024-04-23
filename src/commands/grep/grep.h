@@ -1,4 +1,3 @@
-// Utility for grep.c
 #ifndef GREP_H
 #define GREP_H
 
@@ -20,16 +19,16 @@
 #define false 0
 #define bool unsigned char
 
-// Passed options
-struct GrepOpts_s {
+// Options struct
+struct GrepOpts {
     bool c; // count lines
     bool i; // ignore case
     bool l; // only file name
     bool n; // show line number
     bool v; // only lines that didnt match
-    bool w; // search for whole word
-    bool o; // only matching parts
-    char *e; // regex
+    bool w; // TODO match whole word only
+    bool o; // TODO only matching parts
+    char *e; // TODO regex
     char *f; // pattern from file
 } GrepOpts_default = {
     false,
@@ -40,23 +39,23 @@ struct GrepOpts_s {
     false,
     false
 };
-typedef struct GrepOpts_s GrepOpts, *PGrepOpts;
+typedef struct GrepOpts Opts, *POpts;
 
 // Functions
 
 /*
     Opens and reads directory from path
 */
-void readDir(const char *path, char *pattern, GrepOpts *opts);
+void readDir(const char *path, char *pattern, Opts *opts);
 
 /*
     Opens and reads file from path
 */
-void readFile(const char *path, char *pattern, GrepOpts *opts);
+void readFile(const char *path, char *pattern, Opts *opts);
 
 // Strings
 
 #define MSG_USAGE "Usage: grep [OPTIONS] <PATTERN> <PATH>\n"
-#define GREP_OPTIONS "hcilnvwoe: f: "
+#define OPTION_FLAGS "hcilnvwoe: f: "
 
 #endif
