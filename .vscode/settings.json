@@ -10,7 +10,9 @@
     "windows.h": "c",
     "stat.h": "c",
     "crtdefs.h": "c",
-    "arr-utils.h": "c"
+    "arr-utils.h": "c",
+    "colors.h": "c",
+    "grep.h": "c"
   },
   "C_Cpp_Runner.cCompilerPath": "gcc",
   "C_Cpp_Runner.cppCompilerPath": "g++",
