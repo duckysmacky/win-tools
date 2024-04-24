@@ -58,13 +58,11 @@ void listDir(const char *path, Opts *opts)
 
     while ((dEntry = readdir(dir)))
     {
-        char *name = malloc((strlen(dEntry -> d_name) + 1) * sizeof(char)); // file name
-        strcpy(name, dEntry -> d_name);
+        char *name = dEntry->d_name; // file name
         // ignore . and .. files
-        if ((!strcmp(name, ".") || !strcmp(name, "..")) && !opts->A) {
-            continue;
-        }
+        if ((!strcmp(name, ".") || !strcmp(name, "..")) && (!opts->a || !opts->A)) continue;
 
+        // Checking file types and printing them in the correct color
         const char *ext = strrchr(name, '.'); // holds file extention
         if
         (
@@ -78,15 +76,12 @@ void listDir(const char *path, Opts *opts)
         { 
             prtcyan("%s ", name);
         }
-        else if(((int) (ext - name)) != 0) // all other files (except hidden)
+        else if(((int) (ext - name)) != 0 && !opts->d) // all other files (except hidden)
         { 
             prtgreen("%s ", name);
         }
-
-        free(name);
     }
 
-    puts("\n");
     closedir(dir);
     return;
 }
@@ -109,6 +104,7 @@ void readDir(const char *path, Opts *opts)
         {
             prtblue("%s:\n", dpath);
             listDir(dpath, opts);
+            puts("\n");
             readDir(dpath, opts);
         }
 

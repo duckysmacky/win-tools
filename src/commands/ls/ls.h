@@ -27,7 +27,7 @@ struct LsOpts {
     bool i; // TODO show index of files
     bool g; // TODO show group ownership (?)
     bool h; // TODO print file sizes in human-readable format (e.g. k, mb, gb)
-    bool d; // TODO list dirs instead of files
+    bool d; // list dirs instead of files
     bool s; // TODO sort by size
     bool A; // show ALL files (including hidden, . and ..)
     bool R; // show recursively (all subdirs)
