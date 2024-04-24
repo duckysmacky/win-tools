@@ -107,9 +107,9 @@ char* formatLongFile(char *fpath, char *fname)
     longInfo = malloc(256 * sizeof(char));
     sprintf(longInfo, "%c--------- %2u %s %s %6lu %s %2d %5s %s\n",
         (fileAttributes & FILE_ATTRIBUTE_DIRECTORY) ? 'd' : '-',
-        0,
-        "owner",
-        "group",
+        0, // TODO
+        "owner", // TODO
+        "group", // TODO
         (fileAttributes & FILE_ATTRIBUTE_DIRECTORY) ? 0 : GetFileSize(hFile, NULL),
         accessMonth,
         sFileTime->wDay,
@@ -137,11 +137,16 @@ void listDir(const char *path, Opts *opts)
     while ((dEntry = readdir(dir)))
     {
         char *ename = dEntry->d_name; // file name
-        // ignore . and .. files
-        if ((!strcmp(ename, ".") || !strcmp(ename, "..")) && (!opts->a || !opts->A)) continue;
-
         const char *ext = strrchr(ename, '.'); // holds file extention
         int extpos = (int) (ext - ename); // index of the extention
+
+        // ignore . and .. files
+        if ((!strcmp(ename, ".") || !strcmp(ename, "..")) && !opts->A) continue;
+        // ignore dotfiles
+        if (extpos == 0 && !(opts->a || opts->A)) continue;
+        // ignore everything except dirs if -d
+        if (opts->d && !(ext == NULL && strinarr(NAME_EXEPTIONS, sizeof(NAME_EXEPTIONS), ename))) continue;
+
 
         // Checking file types and assigning them the correct color
         char *cname = malloc(sizeof(ename) + 2 * sizeof(char) + 2 * sizeof(COLOR_BLACK)); // colored entry name
@@ -153,11 +158,11 @@ void listDir(const char *path, Opts *opts)
         { 
             sprintf(cname, "%s%s/%s ", COLOR_BLUE, ename, COLOR_RESET);
         }
-        else if (extpos == 0 && (opts->a || opts->A)) // if index of the extention is 0 (.files and hidden files)
+        else if (extpos == 0) // if index of the extention is 0 (.files and hidden files)
         { 
             sprintf(cname, "%s%s%s ", COLOR_CYAN, ename, COLOR_RESET);
         }
-        else if(extpos != 0 && !opts->d) // all other files (except hidden)
+        else // all other files (except hidden)
         { 
             sprintf(cname, "%s%s%s ", COLOR_GREEN, ename, COLOR_RESET);
         }

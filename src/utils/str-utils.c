@@ -1,6 +1,7 @@
 #include "../include/str-utils.h"
 
-char* strjoin(char *str1, char *str2) {
+char* strjoin(char *str1, char *str2)
+{
     char* str = (char*) malloc((strlen(str1) + strlen(str2) + 1) * sizeof(char));
 
     strcpy(str, str1);
@@ -9,7 +10,8 @@ char* strjoin(char *str1, char *str2) {
     return str;
 }
 
-int strfnd(int *buff, char *str, char c) {
+int strfnd(int *buff, char *str, char c)
+{
     int j = 0;
     for (int i = 0; i < strlen(str); i++)
     {
@@ -28,7 +30,8 @@ int strfnd(int *buff, char *str, char c) {
     return 0;
 }
 
-int stroccr(const char *str, const char c) {
+int stroccr(const char *str, const char c)
+{
     int i;
     for (i = 0; str[i]; str[i] == c ? i++ : *str++);
     return i;
