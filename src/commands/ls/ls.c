@@ -66,15 +66,19 @@ void listDir(const char *path, Opts *opts)
         }
 
         const char *ext = strrchr(name, '.'); // holds file extention
-        if (ext == NULL && strinarr(NAME_EXEPTIONS, sizeof(NAME_EXEPTIONS), name)) // if theres no extention (dir)
+        if
+        (
+            (ext == NULL && strinarr(NAME_EXEPTIONS, sizeof(NAME_EXEPTIONS), name)) // if theres no extention (dir)
+            || (strcmp(name, ".") == 0 || strcmp(name, "..") == 0) // or if it's "." or ".."
+        )
         { 
             prtblue("%s/ ", name);
         }
-        else if (((int)(ext - name)) == 0) // if index of the extention is 0 (.files and hidden files)
+        else if (((int) (ext - name)) == 0 && (opts->a || opts->A)) // if index of the extention is 0 (.files and hidden files)
         { 
             prtcyan("%s ", name);
         }
-        else // all other files
+        else if(((int) (ext - name)) != 0) // all other files (except hidden)
         { 
             prtgreen("%s ", name);
         }

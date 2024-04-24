@@ -20,15 +20,15 @@
 
 // Ls Options
 struct LsOpts {
-    bool l; // show detailed info about files and dirs
+    bool l; // TODO show detailed info about files and dirs
     bool a; // show all files (including hidden)
-    bool t; // sort by modify time
-    bool r; // reverse sort
-    bool i; // show index of files
-    bool g; // show group ownership (?)
-    bool h; // print file sizes in human-readable format (e.g. k, mb, gb)
-    bool d; // list dirs instead of files
-    bool s; // sort by size
+    bool t; // TODO sort by modify time
+    bool r; // TODO reverse sort
+    bool i; // TODO show index of files
+    bool g; // TODO show group ownership (?)
+    bool h; // TODO print file sizes in human-readable format (e.g. k, mb, gb)
+    bool d; // TODO list dirs instead of files
+    bool s; // TODO sort by size
     bool A; // show ALL files (including hidden, . and ..)
     bool R; // show recursively (all subdirs)
 } LsOpts_default = {
