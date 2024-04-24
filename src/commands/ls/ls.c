@@ -26,6 +26,7 @@ int main(int argc, char const *argv[])
             case 's': opts.s = true; break;
             case 'A': opts.A = true; break;
             case 'R': opts.R = true; break;
+            case '1': opts.ol = true; break;
             default:
                 printf("error: unknown option %c!\n", optopt);
                 printf("do %s --help for help\n", argv[0]);
@@ -174,6 +175,7 @@ void listDir(const char *path, Opts *opts)
             printf("%s", formatLongFile(fpath, cname));
             free(fpath);
         }
+        else if (opts->ol) printf("%s\n", cname);
         else printf("%s", cname);
     }
 
