@@ -8,6 +8,8 @@
 #include <string.h>
 #include <dirent.h>
 #include <unistd.h>
+#include <time.h>
+#include <windows.h>
 
 #include "../../include/arr-utils.h"
 #include "../../include/colors.h"
@@ -62,5 +64,10 @@ void listDir(const char *path, Opts *opts);
     Read dir and find subdirs, then list them if found
 */
 void readDir(const char *path, Opts *opts);
+
+/*
+    Generates a long info format for file
+*/
+char* formatLongFile(char *fpath, char *fname);
 
 #endif // LS_H

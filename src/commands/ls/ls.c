@@ -51,6 +51,84 @@ int main(int argc, char const *argv[])
     return 0;
 }
 
+// TODO - fix error 24 (ERROR_BAD_LENGTH) somewhere
+char* formatLongFile(char *fpath, char *fname)
+{
+    char *longInfo, *accessMonth, *accessTime;
+    FILE_INFO_BY_HANDLE_CLASS fileInfo;
+    DWORD fileAttributes;
+    PFILETIME fileTime;
+    PSYSTEMTIME sFileTime;
+    HANDLE hFile;
+    
+    // TODO - add support for dirs
+    if (opendir(fpath)) return "";
+
+    // Get a handle to the file
+    hFile = CreateFileA(fpath, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+    if (hFile == NULL) {
+        printf("error getting a handle to file %s!\n", fpath);
+        goto cleanup;
+    }
+
+    // Get file info
+    GetFileInformationByHandleEx(hFile, FileBasicInfo, &fileInfo, sizeof(fileInfo));
+    fileAttributes = GetFileAttributes(fpath);
+
+    // Time manipulations
+    fileTime = malloc(sizeof(fileTime));
+    sFileTime = malloc(sizeof(sFileTime));
+    GetFileTime(hFile, NULL, NULL, fileTime);
+    FileTimeToSystemTime(fileTime, sFileTime); // Convert time to human format
+    switch (sFileTime->wMonth) // Convert months
+    {
+        case 1: accessMonth = "Jan"; break;
+        case 2: accessMonth = "Feb"; break;
+        case 3: accessMonth = "Mar"; break;
+        case 4: accessMonth = "Apr"; break;
+        case 5: accessMonth = "May"; break;
+        case 6: accessMonth = "Jun"; break;
+        case 7: accessMonth = "Jul"; break;
+        case 8: accessMonth = "Aug"; break;
+        case 9: accessMonth = "Sep"; break;
+        case 10: accessMonth = "Oct"; break;
+        case 11: accessMonth = "Nov"; break;
+        case 12: accessMonth = "Dec"; break;
+    }
+    accessTime = malloc(5 * sizeof(char));
+    time_t currTime = time(NULL);
+    struct tm locTime = *localtime(&currTime);
+    if (locTime.tm_year == (int) sFileTime->wYear) // compare years - show time if same year
+        sprintf(accessTime, "%d:%d", sFileTime->wHour, sFileTime->wMinute);
+    else
+        sprintf(accessTime, "%d", sFileTime->wYear);
+
+    // long output: type permissions links owner group size lastMonth lastDate lastTime name
+    longInfo = malloc(256 * sizeof(char));
+    sprintf(longInfo, "%c--------- %2u %s %s %6lu %s %2d %5s %s\n",
+        (fileAttributes & FILE_ATTRIBUTE_DIRECTORY) ? 'd' : '-',
+        0,
+        "owner",
+        "group",
+        (fileAttributes & FILE_ATTRIBUTE_DIRECTORY) ? 0 : GetFileSize(hFile, NULL),
+        accessMonth,
+        sFileTime->wDay,
+        accessTime,
+        fname
+    );
+
+    goto cleanup;
+
+    cleanup:
+
+    free(accessTime);
+    free(fileTime);
+    free(sFileTime);
+    CloseHandle(hFile);
+    return longInfo ? longInfo : "";
+    free(longInfo);
+}
+
 void listDir(const char *path, Opts *opts)
 {
     struct dirent *dEntry;
@@ -58,29 +136,44 @@ void listDir(const char *path, Opts *opts)
 
     while ((dEntry = readdir(dir)))
     {
-        char *name = dEntry->d_name; // file name
+        char *ename = dEntry->d_name; // file name
         // ignore . and .. files
-        if ((!strcmp(name, ".") || !strcmp(name, "..")) && (!opts->a || !opts->A)) continue;
+        if ((!strcmp(ename, ".") || !strcmp(ename, "..")) && (!opts->a || !opts->A)) continue;
 
-        // Checking file types and printing them in the correct color
-        const char *ext = strrchr(name, '.'); // holds file extention
+        const char *ext = strrchr(ename, '.'); // holds file extention
+        int extpos = (int) (ext - ename); // index of the extention
+
+        // Checking file types and assigning them the correct color
+        char *cname = malloc(sizeof(ename) + 2 * sizeof(char) + 2 * sizeof(COLOR_BLACK)); // colored entry name
         if
         (
-            (ext == NULL && strinarr(NAME_EXEPTIONS, sizeof(NAME_EXEPTIONS), name)) // if theres no extention (dir)
-            || (strcmp(name, ".") == 0 || strcmp(name, "..") == 0) // or if it's "." or ".."
+            (ext == NULL && strinarr(NAME_EXEPTIONS, sizeof(NAME_EXEPTIONS), ename)) // if theres no extention (dir)
+            || (strcmp(ename, ".") == 0 || strcmp(ename, "..") == 0) // or if it's "." or ".."
         )
         { 
-            prtblue("%s/ ", name);
+            sprintf(cname, "%s%s/%s ", COLOR_BLUE, ename, COLOR_RESET);
         }
-        else if (((int) (ext - name)) == 0 && (opts->a || opts->A)) // if index of the extention is 0 (.files and hidden files)
+        else if (extpos == 0 && (opts->a || opts->A)) // if index of the extention is 0 (.files and hidden files)
         { 
-            prtcyan("%s ", name);
+            sprintf(cname, "%s%s%s ", COLOR_CYAN, ename, COLOR_RESET);
         }
-        else if(((int) (ext - name)) != 0 && !opts->d) // all other files (except hidden)
+        else if(extpos != 0 && !opts->d) // all other files (except hidden)
         { 
-            prtgreen("%s ", name);
+            sprintf(cname, "%s%s%s ", COLOR_GREEN, ename, COLOR_RESET);
         }
+
+        if (opts->l)
+        {
+            char *fpath = malloc(sizeof(path) + sizeof(char) + sizeof(ename)); // full path to file
+            sprintf(fpath, "%s/%s", path, ename);
+            printf("%s", formatLongFile(fpath, cname));
+            free(fpath);
+        }
+        else printf("%s", cname);
     }
+
+    // Please ignore this amalgamation 💀
+    if (opts->R) { if (opts->l) printf("\n"); else printf("\n\n"); }
 
     closedir(dir);
     return;
@@ -96,7 +189,7 @@ void readDir(const char *path, Opts *opts)
         char *ename = dEntry->d_name; // entry name
         if (!strcmp(ename, ".") || !strcmp(ename, "..")) continue;
 
-        char *dpath = malloc(sizeof(path) + sizeof(ename) + sizeof(char) * 2); // full path to dir
+        char *dpath = malloc(sizeof(path) + sizeof(ename) + sizeof(char)); // full path to dir
         sprintf(dpath, "%s/%s", path, ename);
 
         // try to open entry item as dir
@@ -104,7 +197,6 @@ void readDir(const char *path, Opts *opts)
         {
             prtblue("%s:\n", dpath);
             listDir(dpath, opts);
-            puts("\n");
             readDir(dpath, opts);
         }
 
