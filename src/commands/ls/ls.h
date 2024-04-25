@@ -33,7 +33,7 @@ struct LsOpts {
     bool s; // TODO sort by size
     bool A; // show ALL files (including hidden, . and ..)
     bool R; // show recursively (all subdirs)
-    bool ol; // show in one line vertically
+    int rows; // show in x rows vertically
     // TODO - make "-1" better and scalable
 } LsOpts_default = {
     false,
@@ -47,14 +47,14 @@ struct LsOpts {
     false,
     false,
     false,
-    false
+    0
 };
 typedef struct LsOpts Opts, *POpts;
 
 // Strings
 
 #define MSG_USAGE "Usage: ls [OPTIONS]\n"
-#define OPTION_FLAGS "latrighdsAR1"
+#define OPTION_FLAGS "latrighdsAR1234567890"
 
 // Functions
 

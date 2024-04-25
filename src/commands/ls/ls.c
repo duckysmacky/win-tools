@@ -26,12 +26,21 @@ int main(int argc, char const *argv[])
             case 's': opts.s = true; break;
             case 'A': opts.A = true; break;
             case 'R': opts.R = true; break;
-            case '1': opts.ol = true; break;
             default:
-                printf("error: unknown option %c!\n", optopt);
-                printf("do %s --help for help\n", argv[0]);
-                printf(MSG_USAGE);
-                return 1;
+                // check if the passed flag is a number
+                char copt = (char) opt;
+                if (isdigit(copt))
+                {
+                    opts.rows = atoi(&copt);
+                    break;
+                }
+                else
+                {
+                    printf("error: unknown option %c!\n", optopt);
+                    printf("do ls --help for help\n");
+                    printf(MSG_USAGE);
+                    return 1;
+                }
         }
     }
 
@@ -135,6 +144,7 @@ void listDir(const char *path, Opts *opts)
     struct dirent *dEntry;
     DIR *dir = opendir(path);
 
+    int rowc = 1;
     while ((dEntry = readdir(dir)))
     {
         char *ename = dEntry->d_name; // file name
@@ -150,22 +160,22 @@ void listDir(const char *path, Opts *opts)
 
 
         // Checking file types and assigning them the correct color
-        char *cname = malloc(sizeof(ename) + 2 * sizeof(char) + 2 * sizeof(COLOR_BLACK)); // colored entry name
+        char *cname = malloc(sizeof(ename) + sizeof(char) + 2 * sizeof(COLOR_BLACK)); // colored entry name
         if
         (
             (ext == NULL && strinarr(NAME_EXEPTIONS, sizeof(NAME_EXEPTIONS), ename)) // if theres no extention (dir)
             || (strcmp(ename, ".") == 0 || strcmp(ename, "..") == 0) // or if it's "." or ".."
         )
         { 
-            sprintf(cname, "%s%s/%s ", COLOR_BLUE, ename, COLOR_RESET);
+            sprintf(cname, "%s%s/%s", COLOR_BLUE, ename, COLOR_RESET);
         }
         else if (extpos == 0) // if index of the extention is 0 (.files and hidden files)
         { 
-            sprintf(cname, "%s%s%s ", COLOR_CYAN, ename, COLOR_RESET);
+            sprintf(cname, "%s%s%s", COLOR_CYAN, ename, COLOR_RESET);
         }
         else // all other files (except hidden)
         { 
-            sprintf(cname, "%s%s%s ", COLOR_GREEN, ename, COLOR_RESET);
+            sprintf(cname, "%s%s%s", COLOR_GREEN, ename, COLOR_RESET);
         }
 
         if (opts->l)
@@ -175,8 +185,13 @@ void listDir(const char *path, Opts *opts)
             printf("%s", formatLongFile(fpath, cname));
             free(fpath);
         }
-        else if (opts->ol) printf("%s\n", cname);
-        else printf("%s", cname);
+        else if (opts->rows > 0)
+        {
+            if (rowc % opts->rows == 0) printf("%s\n", cname);
+            else printf("%s ", cname);
+            rowc++;
+        }
+        else printf("%s ", cname);
     }
 
     // Please ignore this amalgamation 💀
