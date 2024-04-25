@@ -36,7 +36,7 @@ int main(int argc, char const *argv[])
                 }
                 else
                 {
-                    printf("error: unknown option %c!\n", optopt);
+                    printf("error: unknown option \"%c\"!\n", optopt);
                     printf("do ls --help for help\n");
                     printf(MSG_USAGE);
                     return 1;
@@ -108,8 +108,8 @@ char* formatLongFile(char *fpath, char *fname)
     accessTime = malloc(5 * sizeof(char));
     time_t currTime = time(NULL);
     struct tm locTime = *localtime(&currTime);
-    if (locTime.tm_year == (int) sFileTime->wYear) // compare years - show time if same year
-        sprintf(accessTime, "%d:%d", sFileTime->wHour, sFileTime->wMinute);
+    if (locTime.tm_year  + 1900 == (int) sFileTime->wYear) // compare years - show time if same year
+        sprintf(accessTime, "%.2d:%.2d", sFileTime->wHour, sFileTime->wMinute);
     else
         sprintf(accessTime, "%d", sFileTime->wYear);
 
@@ -187,8 +187,8 @@ void listDir(const char *path, Opts *opts)
         }
         else if (opts->rows > 0)
         {
-            if (rowc % opts->rows == 0) printf("%s\n", cname);
-            else printf("%s ", cname);
+            if (rowc % opts->rows == 0) printf("%-*s\n", (int) strlen(cname), cname);
+            else printf("%-*s ", (int) strlen(cname), cname);
             rowc++;
         }
         else printf("%s ", cname);
