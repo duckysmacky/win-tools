@@ -46,7 +46,7 @@ struct LsOpts {
     false,
     false,
     false,
-    12
+    0
 };
 typedef struct LsOpts Opts, *POpts;
 
