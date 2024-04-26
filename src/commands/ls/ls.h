@@ -47,14 +47,14 @@ struct LsOpts {
     false,
     false,
     false,
-    0
+    8
 };
 typedef struct LsOpts Opts, *POpts;
 
 // Strings
 
 #define MSG_USAGE "Usage: ls [OPTIONS]\n"
-#define OPTION_FLAGS "latrighdsAR1234567890"
+#define OPTION_FLAGS "latrighdsAR123456789"
 
 // Functions
 

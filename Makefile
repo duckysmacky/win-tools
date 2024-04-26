@@ -6,8 +6,8 @@ CFLAGS = -Wall
 SOURCE = src/commands
 HEADERS = src/include
 UTIL = src/utils
-BIN = out/bin
-OBJ = out/obj
+BIN = bin
+OBJ = obj
 
 # files
 CMDS = ls touch grep

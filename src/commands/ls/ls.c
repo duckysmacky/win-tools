@@ -143,8 +143,12 @@ void listDir(const char *path, Opts *opts)
 {
     struct dirent *dEntry;
     DIR *dir = opendir(path);
+    char *dentries[1000]; // holds all entries
 
-    int rowc = 1;
+    int rowc = 1; // row counter
+    int roww[opts->rows]; // row width for each column in a row
+    memset(roww, 0, sizeof(roww));
+
     while ((dEntry = readdir(dir)))
     {
         char *ename = dEntry->d_name; // file name
@@ -182,16 +186,24 @@ void listDir(const char *path, Opts *opts)
         {
             char *fpath = malloc(sizeof(path) + sizeof(char) + sizeof(ename)); // full path to file
             sprintf(fpath, "%s/%s", path, ename);
-            printf("%s", formatLongFile(fpath, cname));
+            dentries[rowc] = formatLongFile(fpath, cname);
             free(fpath);
         }
-        else if (opts->rows > 0)
+        else if (opts->rows > 0) // TODO - allign rows items by width
         {
-            if (rowc % opts->rows == 0) printf("%-*s\n", (int) strlen(cname), cname);
-            else printf("%-*s ", (int) strlen(cname), cname);
-            rowc++;
+            int rowi = (rowc > 4) ? (rowc - (4 * (rowc / 4)) - 1) : (rowc - 1); // row index in roww
+            roww[rowi] = max(roww[rowi], strlen(ename));
+
+            // printf("rowc: %d\nrowi: %d\nstrlen of %s: %lld\nroww[rowi]: %d\n", rowc, rowi, ename, strlen(ename), roww[rowi]);
+            // printf("column [%d:%d] max len: %d\n\n", rowc, rowi, roww[rowi]);
+
+            // printf("%-*s ", roww[rowi], cname);
+            // if (rowc % opts->rows == 0) printf("\n");
+            dentries[rowc] = cname;
         }
-        else printf("%s ", cname);
+        else /* printf("%s ", cname); */ dentries[rowc] = cname;
+
+        rowc++;
     }
 
     // Please ignore this amalgamation 💀
