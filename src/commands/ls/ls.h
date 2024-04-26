@@ -34,7 +34,6 @@ struct LsOpts {
     bool A; // show ALL files (including hidden, . and ..)
     bool R; // show recursively (all subdirs)
     int rows; // show in x rows vertically
-    // TODO - make "-1" better and scalable
 } LsOpts_default = {
     false,
     false,
@@ -47,7 +46,7 @@ struct LsOpts {
     false,
     false,
     false,
-    8
+    12
 };
 typedef struct LsOpts Opts, *POpts;
 

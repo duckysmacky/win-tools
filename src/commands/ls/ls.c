@@ -141,13 +141,15 @@ char* formatLongFile(char *fpath, char *fname)
 
 void listDir(const char *path, Opts *opts)
 {
+    int i;
     struct dirent *dEntry;
     DIR *dir = opendir(path);
     char *dentries[1000]; // holds all entries
 
     int rowc = 1; // row counter
+    // int roww[] = {0, 0};
     int roww[opts->rows]; // row width for each column in a row
-    memset(roww, 0, sizeof(roww));
+    memset(roww, 0, opts->rows * sizeof(int));
 
     while ((dEntry = readdir(dir)))
     {
@@ -186,27 +188,42 @@ void listDir(const char *path, Opts *opts)
         {
             char *fpath = malloc(sizeof(path) + sizeof(char) + sizeof(ename)); // full path to file
             sprintf(fpath, "%s/%s", path, ename);
-            dentries[rowc] = formatLongFile(fpath, cname);
+            dentries[rowc - 1] = formatLongFile(fpath, cname);
             free(fpath);
         }
-        else if (opts->rows > 0) // TODO - allign rows items by width
-        {
-            int rowi = (rowc > 4) ? (rowc - (4 * (rowc / 4)) - 1) : (rowc - 1); // row index in roww
-            roww[rowi] = max(roww[rowi], strlen(ename));
+        else /* printf("%s ", cname); */ dentries[rowc - 1] = cname;
 
-            // printf("rowc: %d\nrowi: %d\nstrlen of %s: %lld\nroww[rowi]: %d\n", rowc, rowi, ename, strlen(ename), roww[rowi]);
-            // printf("column [%d:%d] max len: %d\n\n", rowc, rowi, roww[rowi]);
-
-            // printf("%-*s ", roww[rowi], cname);
-            // if (rowc % opts->rows == 0) printf("\n");
-            dentries[rowc] = cname;
-        }
-        else /* printf("%s ", cname); */ dentries[rowc] = cname;
+        // printf("%s: %lld | %s: %lld\n", ename, strlen(ename), cname, strlen(cname));
 
         rowc++;
     }
 
-    // Please ignore this amalgamation 💀
+
+    int rowi; // row index
+    if (opts->rows > 0)
+    {
+        // set the biggest width for each of columns
+        for (i = 0; i < rowc - 1; i++)
+        {
+            rowi = (i >= opts->rows) ? i - (opts->rows * (i / opts->rows)) : i; // row index in roww
+            // printf("i: %d | rowi: %d | roww[rowi]: %d | len: %lld | %s\n", i, rowi, roww[rowi], strlen(dentries[i]) - 11, dentries[i]);
+            roww[rowi] = max(roww[rowi], strlen(dentries[i]));
+            // printf("i: %d | rowi: %d | roww[rowi]: %d | len: %lld | %s\n", i, rowi, roww[rowi], strlen(dentries[i]) - 11, dentries[i]);
+        }
+
+        // for (int m = 0; m < 4; m++) printf("%d ", roww[m]);
+        // printf("\n");
+
+        for (i = 0; i < rowc - 1; i++)
+        {
+            rowi = (i >= opts->rows) ? i - (opts->rows * (i / opts->rows)) : i; // row index in roww
+            printf("%-*s   ", roww[rowi], dentries[i]);
+            // printf("%d %% %d == %d\n", rowi + 1, opts->rows, (rowi + 1) % opts->rows);
+            if ((rowi + 1) % opts->rows == 0) printf("\n");
+        }
+    }
+
+    // ignore this amalgamation 💀
     if (opts->R) { if (opts->l) printf("\n"); else printf("\n\n"); }
 
     closedir(dir);
