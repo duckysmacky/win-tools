@@ -141,20 +141,28 @@ char* formatLongFile(char *fpath, char *fname)
 
 void listDir(const char *path, Opts *opts)
 {
-    CONSOLE_SCREEN_BUFFER_INFO terminalInfo;
-    int terminalWidth;
-    int i;
     struct dirent *dEntry;
-    DIR *dir = opendir(path);
-    char *dentries[1000]; // holds all entries
+    char *dEntries[1000]; // holds all entries
 
+    CONSOLE_SCREEN_BUFFER_INFO terminalInfo;
+    DIR *dir;
+    int i, terminalWidth;
+    int rowi; // row index
     int rowc = 1; // row counter
+    int maxlen = 0;
 
+    const char *ext; // holds file extention
+    char *ename; // file name
+    int extpos; // index of the extention
+    char *cname; // colored entry name
+    char *fpath; // full path to file
+
+    dir = opendir(path);
     while ((dEntry = readdir(dir)))
     {
-        char *ename = dEntry->d_name; // file name
-        const char *ext = strrchr(ename, '.'); // holds file extention
-        int extpos = (int) (ext - ename); // index of the extention
+        ename = dEntry->d_name;
+        ext = strrchr(ename, '.'); 
+        extpos = (int) (ext - ename); 
 
         // ignore . and .. files
         if ((!strcmp(ename, ".") || !strcmp(ename, "..")) && !opts->A) continue;
@@ -163,81 +171,86 @@ void listDir(const char *path, Opts *opts)
         // ignore everything except dirs if -d
         if (opts->d && !(ext == NULL && strinarr(NAME_EXEPTIONS, sizeof(NAME_EXEPTIONS), ename))) continue;
 
-
         // Checking file types and assigning them the correct color
-        char *cname = malloc(sizeof(ename) + sizeof(char) + 2 * sizeof(COLOR_BLACK)); // colored entry name
+        cname = malloc(sizeof(ename) + sizeof(char) + 2 * sizeof(COLOR_BLACK));
         if
         (
-            (ext == NULL && strinarr(NAME_EXEPTIONS, sizeof(NAME_EXEPTIONS), ename)) // if theres no extention (dir)
-            || (strcmp(ename, ".") == 0 || strcmp(ename, "..") == 0) // or if it's "." or ".."
+            (ext == NULL && strinarr(NAME_EXEPTIONS, sizeof(NAME_EXEPTIONS), ename)) 
+            || (strcmp(ename, ".") == 0 || strcmp(ename, "..") == 0)
         )
-        { 
+        {
+            // if theres no extention (dir) or if it's "." or ".."
             sprintf(cname, "%s%s/%s", COLOR_BLUE, ename, COLOR_RESET);
         }
-        else if (extpos == 0) // if index of the extention is 0 (.files and hidden files)
-        { 
+        else if (extpos == 0)
+        {
+            // if index of the extention is 0 (.files and hidden files)
             sprintf(cname, "%s%s%s", COLOR_CYAN, ename, COLOR_RESET);
         }
-        else // all other files (except hidden)
-        { 
+        else
+        {
+            // all other files (except hidden)
             sprintf(cname, "%s%s%s", COLOR_GREEN, ename, COLOR_RESET);
         }
 
         if (opts->l)
         {
-            char *fpath = malloc(sizeof(path) + sizeof(char) + sizeof(ename)); // full path to file
+            fpath = malloc(sizeof(path) + sizeof(char) + sizeof(ename));
             sprintf(fpath, "%s/%s", path, ename);
-            dentries[rowc - 1] = formatLongFile(fpath, cname);
+            dEntries[rowc - 1] = formatLongFile(fpath, cname);
             free(fpath);
         }
-        else /* printf("%s ", cname); */ dentries[rowc - 1] = cname;
-
-        // printf("%s: %lld | %s: %lld\n", ename, strlen(ename), cname, strlen(cname));
+        else dEntries[rowc - 1] = cname;
 
         rowc++;
+        // free(cname); DO NOT FREE CNAME. IT STAYS HERE TILL THE END. FREEDOM IS A LIE. CNAME IS AN ETERNAL SLAVE TO THIS PROGRAM.
     }
 
-    if (opts->rows == 0)
+    if (!opts->l)
     {
-        // get width of the screen
-        GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &terminalInfo);
-        terminalWidth = terminalInfo.srWindow.Right - terminalInfo.srWindow.Left + 1;
+        // Automatically setting rows
+        if (opts->rows == 0)
+        {
+            // Get width of the screen
+            GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &terminalInfo);
+            terminalWidth = terminalInfo.srWindow.Right - terminalInfo.srWindow.Left + 1;
 
-        int maxlen = 0;
-        for (i = 0; i < rowc - 1; i++) maxlen = max(maxlen, strlen(dentries[i]) - 11);
+            // Set rows according to how many longest entries fit in a line
+            for (i = 0; i < rowc - 1; i++) maxlen = max(maxlen, strlen(dEntries[i]) - 11);
+            opts->rows = terminalWidth / maxlen;
+        }
+        
+        int roww[opts->rows]; // holds row width for each column in a row
+        memset(roww, 0, opts->rows * sizeof(int));
 
-        opts->rows = terminalWidth / maxlen;
-        printf("%d / %d = %d\n", terminalWidth, maxlen, terminalWidth / maxlen);
+        // Set the biggest width for each of columns
+        for (i = 0; i < rowc - 1; i++)
+        {
+            rowi = (i >= opts->rows) ? i - (opts->rows * (i / opts->rows)) : i; // row index in roww
+            roww[rowi] = max(roww[rowi], strlen(dEntries[i]));
+        }
+
+        // Print entries according to width
+        for (i = 0; i < rowc - 1; i++)
+        {
+            rowi = (i >= opts->rows) ? i - (opts->rows * (i / opts->rows)) : i; // row index in roww
+            printf("%-*s   ", roww[rowi], dEntries[i]);
+            if ((rowi + 1) % opts->rows == 0) printf("\n");
+        }
     }
-    
-    int rowi; // row index
-    int roww[opts->rows]; // row width for each column in a row
-    memset(roww, 0, opts->rows * sizeof(int));
-
-    // set the biggest width for each of columns
-    for (i = 0; i < rowc - 1; i++)
+    else
     {
-        rowi = (i >= opts->rows) ? i - (opts->rows * (i / opts->rows)) : i; // row index in roww
-        // printf("i: %d | rowi: %d | roww[rowi]: %d | len: %lld | %s\n", i, rowi, roww[rowi], strlen(dentries[i]) - 11, dentries[i]);
-        roww[rowi] = max(roww[rowi], strlen(dentries[i]));
-        // printf("i: %d | rowi: %d | roww[rowi]: %d | len: %lld | %s\n", i, rowi, roww[rowi], strlen(dentries[i]) - 11, dentries[i]);
+        // TODO - fix the bug where sometimes it works, but sometimes it doesnt
+        // I DONT EVEN KNOW AT THIS POINT 😭😭😭
+
+        // Print entries in long format
+        for (i = 0; i < rowc - 1; i++) printf("%s", dEntries[i]);
     }
 
-    // for (int m = 0; m < 4; m++) printf("%d ", roww[m]);
-    // printf("\n");
-
-    // print entries according to width
-    for (i = 0; i < rowc - 1; i++)
-    {
-        rowi = (i >= opts->rows) ? i - (opts->rows * (i / opts->rows)) : i; // row index in roww
-        printf("%-*s   ", roww[rowi], dentries[i]);
-        // printf("%d %% %d == %d\n", rowi + 1, opts->rows, (rowi + 1) % opts->rows);
-        if ((rowi + 1) % opts->rows == 0) printf("\n");
-    }
-
-    // ignore this amalgamation 💀
+    // just ignore this amalgamation 💀
     if (opts->R) { if (opts->l) printf("\n"); else printf("\n\n"); }
 
+    free(cname);
     closedir(dir);
     return;
 }
@@ -247,12 +260,15 @@ void readDir(const char *path, Opts *opts)
     struct dirent *dEntry;
     DIR *dir = opendir(path);
 
+    char *ename; // entry name
+    char *dpath; // full path to dir
+
     while ((dEntry = readdir(dir)))
     {
-        char *ename = dEntry->d_name; // entry name
+        ename = dEntry->d_name;
         if (!strcmp(ename, ".") || !strcmp(ename, "..")) continue;
 
-        char *dpath = malloc(sizeof(path) + sizeof(ename) + sizeof(char)); // full path to dir
+        dpath = malloc(sizeof(path) + sizeof(ename) + sizeof(char));
         sprintf(dpath, "%s/%s", path, ename);
 
         // try to open entry item as dir
