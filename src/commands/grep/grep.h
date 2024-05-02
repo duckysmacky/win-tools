@@ -20,7 +20,7 @@
 #define bool unsigned char
 
 // Options struct
-struct GrepOpts {
+struct Opts_t {
     bool c; // count lines
     bool i; // ignore case
     bool l; // only file name
@@ -30,7 +30,7 @@ struct GrepOpts {
     bool o; // TODO only matching parts
     char *e; // TODO regex
     char *f; // pattern from file
-} GrepOpts_default = {
+} Opts_default = {
     false,
     false,
     false,
@@ -39,7 +39,7 @@ struct GrepOpts {
     false,
     false
 };
-typedef struct GrepOpts Opts, *POpts;
+typedef struct Opts_t Opts, *POpts;
 
 // Functions
 

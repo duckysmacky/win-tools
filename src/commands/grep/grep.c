@@ -1,10 +1,9 @@
-// TODO - implement all options
 // TODO - multiple file support
 #include "grep.h"
 
 int main(int argc, const char *argv[])
 {
-    Opts opts = GrepOpts_default;
+    Opts opts = Opts_default;
 
     // read options
     int opt;
@@ -12,7 +11,7 @@ int main(int argc, const char *argv[])
     {
         switch (opt)
         {
-            // case 'h': break; // TODO - add help
+            // case '?': break; // TODO - show help
             case 'c': opts.c = true; break;
             case 'i': opts.i = true; break;
             case 'l': opts.l = true; break;

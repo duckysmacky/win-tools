@@ -20,21 +20,21 @@
 #define false 0
 #define bool unsigned char
 
-// Ls Options
-struct LsOpts {
+// Options
+struct Opts_t {
     bool l; // TODO show detailed info about files and dirs
     bool a; // show all files (including hidden)
     bool t; // TODO sort by modify time
     bool r; // TODO reverse sort
     bool i; // TODO show index of files
     bool g; // TODO show group ownership (?)
-    bool h; // TODO print file sizes in human-readable format (e.g. k, mb, gb)
+    bool H; // TODO print file sizes in human-readable format (e.g. k, mb, gb)
     bool d; // list dirs instead of files
     bool s; // TODO sort by size
     bool A; // show ALL files (including hidden, . and ..)
     bool R; // show recursively (all subdirs)
     int rows; // show in x rows vertically
-} LsOpts_default = {
+} Opts_default = {
     false,
     false,
     false,
@@ -48,12 +48,12 @@ struct LsOpts {
     false,
     0
 };
-typedef struct LsOpts Opts, *POpts;
+typedef struct Opts_t Opts, *POpts;
 
 // Strings
 
 #define MSG_USAGE "Usage: ls [OPTIONS]\n"
-#define OPTION_FLAGS "latrighdsAR123456789"
+#define OPTION_FLAGS "hlatrigHdsAR123456789"
 
 // Functions
 

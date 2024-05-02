@@ -1,14 +1,29 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <dirent.h>
-#include <sys/stat.h>
-
-#include "../../include/arr-utils.h"
-#include "../../include/str-utils.h"
+#include "touch.h"
 
 int main(int argc, char const *argv[])
 {
     FILE *file;
+    Opts opts = Opts_default;
+
+    // read options
+    int opt;
+    while ((opt = getopt(argc, (char * const*) argv, OPTION_FLAGS)) != -1)
+    {
+        switch (opt)
+        {
+            // case 'h': break; // TODO - show help
+            case 'a':
+            case 'm':
+            case 'd':
+            case 'r':
+            case 'c':
+            default:
+                printf("error: unknown option \"%c\"!\n", optopt);
+                printf("do ls --help for help\n");
+                printf(MSG_USAGE);
+                return 1;
+        }
+    }
     if (argc < 2)
     {
         printf("missing arguments! usage: touch <FILE>");

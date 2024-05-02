@@ -6,7 +6,7 @@ char *NAME_EXEPTIONS[] = {
 
 int main(int argc, char const *argv[])
 {
-    Opts opts = LsOpts_default;
+    Opts opts = Opts_default;
 
     // read options
     int opt;
@@ -14,7 +14,7 @@ int main(int argc, char const *argv[])
     {
         switch (opt)
         {
-            // case 'h': break; // TODO - add help
+            // case 'h': break; // TODO - show help
             case 'l': opts.l = true; break;
             case 'a': opts.a = true; break;
             case 't': opts.t = true; break;
@@ -126,8 +126,6 @@ char* formatLongFile(char *fpath, char *fname)
         accessTime,
         fname
     );
-
-    goto cleanup;
 
     cleanup:
 
