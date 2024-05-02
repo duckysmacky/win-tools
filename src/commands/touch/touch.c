@@ -2,8 +2,9 @@
 
 int main(int argc, char const *argv[])
 {
-    FILE *file;
     Opts opts = Opts_default;
+    char *fpath;
+    int i;
 
     // read options
     int opt;
@@ -24,42 +25,69 @@ int main(int argc, char const *argv[])
                 return 1;
         }
     }
-    if (argc < 2)
+
+    // holds all non-options
+    char *noptc[argc];
+    i = 0;
+    for(; optind < argc; optind++)
     {
-        printf("missing arguments! usage: touch <FILE>");
+        noptc[i] = (char *) argv[optind];
+        i++;
+    } 
+
+    // check for all required args
+    if (i == 0)
+    {
+        printf("Error: missing 1 argument!\n");
+        printf(MSG_USAGE);
         return 1;
     }
 
-    const char *fpath = argv[1];
-    int sloccr = stroccr(fpath, '/') + stroccr(fpath, '\\'); // total occurences of slashes
-    int slpos[sloccr], j = 0; // indexes of slashes
-    for (int i = 0; i < strlen(fpath); i++)
+    // for each passed path
+    for (i = 0; i < arrlen(noptc); i++)
     {
-        if (fpath[i] == '/' || fpath[i] == '\\')
-        {
-            slpos[j] = i; // add the index of a slash
-            j++;
-        }
+        fpath = noptc[i];
+
+        createFile(fpath);
     }
 
-    int slposLen = arrlen(slpos);
-    if (slposLen > 0)
-    {
-        // checking if full path exists, if not creating each dir
-        for (int i = 0; i < slposLen; i++) // for each index of slash
-        {
-            int slidx = slpos[i]; // slash index
-            char *dirpath = malloc((slidx + 1) * sizeof(char));
-            for (int j = 0; j < slidx; j++) // write dir name (until a slash)
-            {
-                dirpath[j] = fpath[j];
-            }
-            dirpath[slidx] = '\0';
+    return 0;
+}
 
-            if (opendir(dirpath) == NULL) // if dir doesnt exist 
+void createFile(char *fpath)
+{
+    FILE *file;
+    char *dirpath;
+    int toccr, idx, i, j;
+
+    toccr = stroccr(fpath, '/') + stroccr(fpath, '\\');
+    // holds indexes of slashes
+    int idxs[toccr];
+    
+    if (toccr > 0)
+    {
+        // add the index of each slash
+        j = 0;
+        for (i = 0; i < strlen(fpath); i++)
+        {
+            if (fpath[i] == '/' || fpath[i] == '\\')
             {
-                mkdir(dirpath);
+                idxs[j] = i;
+                j++;
             }
+        }
+
+        // checking if full path exists, if not creating each dir
+        for (i = 0; i < arrlen(idxs); i++) // for each index of slash
+        {
+            idx = idxs[i] + 1; // slash index
+            dirpath = malloc(idx + 1);
+
+            strncpy(dirpath, fpath, idx);
+            dirpath[idx] = '\0';
+
+            // if dir doesnt exist
+            if (opendir(dirpath) == NULL) mkdir(dirpath);
 
             free(dirpath);
         }
@@ -67,7 +95,6 @@ int main(int argc, char const *argv[])
 
     // create the file itself
     file = fopen(fpath, "w");
-    fclose(file);
 
-    return 0;
+    fclose(file);
 }

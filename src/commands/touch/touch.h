@@ -41,4 +41,6 @@ typedef struct Opts_t Opts, *POpts;
 
 // Functions
 
+void createFile(char *path);
+
 #endif // TOUCH_H
