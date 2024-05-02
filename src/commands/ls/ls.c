@@ -21,7 +21,7 @@ int main(int argc, char const *argv[])
             case 'r': opts.r = true; break;
             case 'i': opts.i = true; break;
             case 'g': opts.g = true; break;
-            case 'h': opts.h = true; break;
+            case 'H': opts.H = true; break;
             case 'd': opts.d = true; break;
             case 's': opts.s = true; break;
             case 'A': opts.A = true; break;
@@ -36,8 +36,8 @@ int main(int argc, char const *argv[])
                 }
                 else
                 {
-                    printf("error: unknown option \"%c\"!\n", optopt);
-                    printf("do ls --help for help\n");
+                    printf("Error: unknown option \"%c\"!\n", optopt);
+                    printf("Do \"ls -h\" for help\n");
                     printf(MSG_USAGE);
                     return 1;
                 }

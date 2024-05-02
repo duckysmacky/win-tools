@@ -12,14 +12,14 @@ int main(int argc, char const *argv[])
         switch (opt)
         {
             // case 'h': break; // TODO - show help
-            case 'a':
-            case 'm':
-            case 'd':
-            case 'r':
-            case 'c':
+            case 'a': break;
+            case 'm': break;
+            case 'd': break;
+            case 'r': break;
+            case 'c': break;
             default:
-                printf("error: unknown option \"%c\"!\n", optopt);
-                printf("do ls --help for help\n");
+                printf("Error: unknown option \"%c\"!\n", optopt);
+                printf("Do \"touch -h\" for help\n");
                 printf(MSG_USAGE);
                 return 1;
         }

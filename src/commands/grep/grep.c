@@ -22,8 +22,8 @@ int main(int argc, const char *argv[])
             case 'e': opts.e = optarg; break;
             case 'f': opts.f = optarg; break;
             default:
-                printf("error: unknown option %c!\n", optopt);
-                printf("do %s --help for help\n", argv[0]);
+                printf("Error: unknown option %c!\n", optopt);
+                printf("Do \"grep -h\" for help\n");
                 printf(MSG_USAGE);
                 return 1;
         }
