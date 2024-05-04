@@ -1,4 +1,6 @@
 test/
+bin/
+obj/
 
 .test
 

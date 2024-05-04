@@ -47,11 +47,32 @@ int main(int argc, char const *argv[])
     for (i = 0; i < arrlen(noptc); i++)
     {
         fpath = noptc[i];
+        if (opts.a | opts.m) updateFile(fpath, &opts);
+        else createFile(fpath);
 
-        createFile(fpath);
     }
 
     return 0;
+}
+
+void updateFile(char *fpath, Opts *opts)
+{
+    HANDLE hFile;
+    FILETIME fileTime;
+    SYSTEMTIME sysTime;
+
+    hFile = CreateFileA(fpath, FILE_WRITE_ATTRIBUTES, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+    if (hFile == NULL) { printf("Error has occured while trying to access file: %ld\n", GetLastError()); return; }
+
+    GetSystemTime(&sysTime);
+    SystemTimeToFileTime(&sysTime, &fileTime);
+    SetFileTime
+    (
+        hFile,
+        NULL,
+        (opts->a) ? &fileTime : NULL,
+        (opts->m) ? &fileTime : NULL
+    );
 }
 
 void createFile(char *fpath)

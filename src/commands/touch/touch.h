@@ -8,6 +8,7 @@
 #include <dirent.h>
 #include <getopt.h>
 #include <sys/stat.h>
+#include <windows.h>
 
 #include "../../include/arr-utils.h"
 #include "../../include/str-utils.h"
@@ -40,6 +41,8 @@ typedef struct Opts_t Opts, *POpts;
 #define OPTION_FLAGS "hamdrc"
 
 // Functions
+
+void updateFile(char *fpath, Opts *opts);
 
 void createFile(char *path);
 
