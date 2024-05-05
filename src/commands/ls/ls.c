@@ -64,7 +64,7 @@ int main(int argc, char const *argv[])
 // TODO - fix error 24 (ERROR_BAD_LENGTH) somewhere
 char* formatLongFile(char *fpath, char *fname)
 {
-    char *longInfo, *accessMonth, *accessTime;
+    char *longInfo, *modifyMonth, *modifyTime;
     FILE_INFO_BY_HANDLE_CLASS fileInfo;
     DWORD fileAttributes;
     PFILETIME fileTime;
@@ -92,44 +92,44 @@ char* formatLongFile(char *fpath, char *fname)
     FileTimeToSystemTime(fileTime, sFileTime); // Convert time to human format
     switch (sFileTime->wMonth) // Convert months
     {
-        case 1: accessMonth = "Jan"; break;
-        case 2: accessMonth = "Feb"; break;
-        case 3: accessMonth = "Mar"; break;
-        case 4: accessMonth = "Apr"; break;
-        case 5: accessMonth = "May"; break;
-        case 6: accessMonth = "Jun"; break;
-        case 7: accessMonth = "Jul"; break;
-        case 8: accessMonth = "Aug"; break;
-        case 9: accessMonth = "Sep"; break;
-        case 10: accessMonth = "Oct"; break;
-        case 11: accessMonth = "Nov"; break;
-        case 12: accessMonth = "Dec"; break;
+        case 1: modifyMonth = "Jan"; break;
+        case 2: modifyMonth = "Feb"; break;
+        case 3: modifyMonth = "Mar"; break;
+        case 4: modifyMonth = "Apr"; break;
+        case 5: modifyMonth = "May"; break;
+        case 6: modifyMonth = "Jun"; break;
+        case 7: modifyMonth = "Jul"; break;
+        case 8: modifyMonth = "Aug"; break;
+        case 9: modifyMonth = "Sep"; break;
+        case 10: modifyMonth = "Oct"; break;
+        case 11: modifyMonth = "Nov"; break;
+        case 12: modifyMonth = "Dec"; break;
     }
-    accessTime = malloc(5 * sizeof(char));
+    modifyTime = malloc(5 * sizeof(char));
     time_t currTime = time(NULL);
     struct tm locTime = *localtime(&currTime);
     if (locTime.tm_year  + 1900 == (int) sFileTime->wYear) // compare years - show time if same year
-        sprintf(accessTime, "%.2d:%.2d", sFileTime->wHour, sFileTime->wMinute);
+        sprintf(modifyTime, "%.2d:%.2d", sFileTime->wHour, sFileTime->wMinute);
     else
-        sprintf(accessTime, "%d", sFileTime->wYear);
+        sprintf(modifyTime, "%d", sFileTime->wYear);
 
     // long output: type permissions links owner group size lastMonth lastDate lastTime name
     longInfo = malloc(256 * sizeof(char));
     sprintf(longInfo, "%c--------- %2u %s %s %6lu %s %2d %5s %s\n",
         (fileAttributes & FILE_ATTRIBUTE_DIRECTORY) ? 'd' : '-',
-        0, // TODO
-        "owner", // TODO
-        "group", // TODO
+        0, // TODO - add links amount
+        "owner", // TODO - add owner
+        "group", // TODO - add group
         (fileAttributes & FILE_ATTRIBUTE_DIRECTORY) ? 0 : GetFileSize(hFile, NULL),
-        accessMonth,
+        modifyMonth,
         sFileTime->wDay,
-        accessTime,
+        modifyTime,
         fname
     );
 
     cleanup:
 
-    free(accessTime);
+    free(modifyTime);
     free(fileTime);
     free(sFileTime);
     CloseHandle(hFile);

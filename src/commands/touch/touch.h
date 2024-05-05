@@ -21,8 +21,8 @@
 
 // Options
 struct Opts_t {
-    bool a; // TODO - change access time only
-    bool m; // TODO - change modift time only
+    bool a; // change access time only
+    bool m; // change modify time only
     bool d; // TODO - set access and modify time from string
     bool r; // TODO - set access and modify time from file
     bool c; // TODO - supress file creation if doesnt exist

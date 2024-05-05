@@ -22,7 +22,7 @@
 
 // Options
 struct Opts_t {
-    bool l; // TODO show detailed info about files and dirs
+    bool l; // show detailed info about files and dirs
     bool a; // show all files (including hidden)
     bool t; // TODO sort by modify time
     bool r; // TODO reverse sort
