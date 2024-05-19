@@ -45,7 +45,7 @@ int main(int argc, char const *argv[])
     }
 
     // holds specified dir path, else current
-    const char *dirpath = argv[optind] ? argv[optind] : "./";
+    const char *dirpath = argv[optind] ? argv[optind] : ".";
 
     if (opts.R)
     {
@@ -61,36 +61,102 @@ int main(int argc, char const *argv[])
     return 0;
 }
 
+ULONG getFileIndex(char *fpath) {
+    HANDLE hFile;
+    FILE_FULL_DIR_INFO fileDirInfo;
+
+    hFile = CreateFileA(fpath, GENERIC_READ, (FILE_SHARE_READ | FILE_SHARE_WRITE), NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+    GetFileInformationByHandleEx(hFile, FileFullDirectoryInfo, &fileDirInfo, sizeof(fileDirInfo));
+
+    CloseHandle(hFile);
+    return fileDirInfo.FileIndex;  
+}
+
+LONGLONG getDirSize(char *dirpath)
+{
+    LARGE_INTEGER dirSize;
+    WIN32_FIND_DATA findData;
+    HANDLE hFind;
+    char *path, *filename;
+
+    printf("dirpath: %s\n", dirpath);
+
+    hFind = FindFirstFileEx(dirpath, FindExInfoBasic, &findData, FindExSearchNameMatch, NULL, FIND_FIRST_EX_LARGE_FETCH);
+    if (hFind == INVALID_HANDLE_VALUE)
+    {
+        printf("error getting the find handle for %s!\n", dirpath);
+        return 0;
+    }
+
+    do
+    {
+        LARGE_INTEGER fileSize = { 0 };
+        filename = findData.cFileName;
+        printf("file: %s\n", filename);
+        // if (strstr(dirpath, filename)) continue;
+        if (findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+        {
+            path = malloc(sizeof(dirpath) + sizeof(filename) + 1);
+
+            sprintf(path, "%s/%s", dirpath, filename);
+            
+            dirSize.QuadPart += getDirSize(path);
+        }
+        else
+        {
+            fileSize.LowPart += findData.nFileSizeLow;
+            fileSize.HighPart += findData.nFileSizeHigh;
+            dirSize.QuadPart += fileSize.QuadPart;
+        }
+    } while (FindNextFile(hFind, &findData) != 0);
+    
+
+    free(path);
+    CloseHandle(hFind);
+    return dirSize.QuadPart;
+}
+
+
 // TODO - fix error 24 (ERROR_BAD_LENGTH) somewhere
 char* formatLongFile(char *fpath, char *fname)
 {
-    char *longInfo, *modifyMonth, *modifyTime;
-    FILE_INFO_BY_HANDLE_CLASS fileInfo;
-    DWORD fileAttributes;
-    PFILETIME fileTime;
-    PSYSTEMTIME sFileTime;
+    FILE_STANDARD_INFO standartInfo;
+    FILE_FULL_DIR_INFO directoryInfo;
+    SYSTEMTIME sysFileTime;
+    FILETIME fileTime;
     HANDLE hFile;
-    
-    // TODO - add support for dirs
-    if (opendir(fpath)) return "";
+    DWORD attrs;
+    LARGE_INTEGER fileSizeInfo;
+    LONGLONG fileSize, dirSize;
+    bool isDir;
+    char *longInfo, *modifyMonth, *modifyTime;
 
     // Get a handle to the file
-    hFile = CreateFileA(fpath, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-    if (hFile == NULL) {
+    hFile = CreateFileA(fpath, GENERIC_READ, (FILE_SHARE_READ | FILE_SHARE_WRITE), NULL, OPEN_EXISTING, (FILE_ATTRIBUTE_NORMAL | FILE_FLAG_BACKUP_SEMANTICS), NULL);
+    if (hFile == INVALID_HANDLE_VALUE) {
         printf("error getting a handle to file %s!\n", fpath);
         goto cleanup;
     }
 
     // Get file info
-    GetFileInformationByHandleEx(hFile, FileBasicInfo, &fileInfo, sizeof(fileInfo));
-    fileAttributes = GetFileAttributes(fpath);
+    GetFileInformationByHandleEx(hFile, FileStandardInfo, &standartInfo, sizeof(standartInfo));
+    GetFileInformationByHandleEx(hFile, FileFullDirectoryInfo, &directoryInfo, sizeof(directoryInfo));
+    attrs = directoryInfo.FileAttributes;
+
+    isDir = (attrs & FILE_ATTRIBUTE_DIRECTORY);
+
+    if (!isDir) {
+        GetFileSizeEx(hFile, &fileSizeInfo);
+        
+        fileSize = fileSizeInfo.QuadPart;
+    } else {
+        dirSize = getDirSize(fpath);
+    }
 
     // Time manipulations
-    fileTime = malloc(sizeof(fileTime));
-    sFileTime = malloc(sizeof(sFileTime));
-    GetFileTime(hFile, NULL, NULL, fileTime);
-    FileTimeToSystemTime(fileTime, sFileTime); // Convert time to human format
-    switch (sFileTime->wMonth) // Convert months
+    GetFileTime(hFile, NULL, NULL, &fileTime);
+    FileTimeToSystemTime(&fileTime, &sysFileTime); // Convert time to human format
+    switch (sysFileTime.wMonth) // Convert months
     {
         case 1: modifyMonth = "Jan"; break;
         case 2: modifyMonth = "Feb"; break;
@@ -108,21 +174,25 @@ char* formatLongFile(char *fpath, char *fname)
     modifyTime = malloc(5 * sizeof(char));
     time_t currTime = time(NULL);
     struct tm locTime = *localtime(&currTime);
-    if (locTime.tm_year  + 1900 == (int) sFileTime->wYear) // compare years - show time if same year
-        sprintf(modifyTime, "%.2d:%.2d", sFileTime->wHour, sFileTime->wMinute);
+    if (locTime.tm_year  + 1900 == (int) sysFileTime.wYear) // compare years - show time if same year
+        sprintf(modifyTime, "%.2d:%.2d", sysFileTime.wHour, sysFileTime.wMinute);
     else
-        sprintf(modifyTime, "%d", sFileTime->wYear);
+        sprintf(modifyTime, "%d", sysFileTime.wYear);
 
     // long output: type permissions links owner group size lastMonth lastDate lastTime name
     longInfo = malloc(256 * sizeof(char));
-    sprintf(longInfo, "%c--------- %2u %s %s %6lu %s %2d %5s %s\n",
-        (fileAttributes & FILE_ATTRIBUTE_DIRECTORY) ? 'd' : '-',
-        0, // TODO - add links amount
+    sprintf(longInfo, "%c%c %c%c%c %2lu %s %s %6llu %s %2d %5s %s\n",
+        isDir ? 'd' : '-',
+        (attrs & FILE_ATTRIBUTE_HIDDEN) ? 'h' : '-',
+        'r',
+        (attrs & FILE_ATTRIBUTE_READONLY) ? '-' : 'w',
+        '-',
+        standartInfo.NumberOfLinks,
         "owner", // TODO - add owner
         "group", // TODO - add group
-        (fileAttributes & FILE_ATTRIBUTE_DIRECTORY) ? 0 : GetFileSize(hFile, NULL),
+        isDir ? dirSize : fileSize,
         modifyMonth,
-        sFileTime->wDay,
+        sysFileTime.wDay,
         modifyTime,
         fname
     );
@@ -130,8 +200,6 @@ char* formatLongFile(char *fpath, char *fname)
     cleanup:
 
     free(modifyTime);
-    free(fileTime);
-    free(sFileTime);
     CloseHandle(hFile);
     return longInfo ? longInfo : "";
     free(longInfo);
@@ -173,27 +241,27 @@ void listDir(const char *path, Opts *opts)
         cname = malloc(sizeof(ename) + sizeof(char) + 2 * sizeof(COLOR_BLACK));
         if
         (
+            // if theres no extention (dir) or if it's "." or ".."
             (ext == NULL && strinarr(NAME_EXEPTIONS, sizeof(NAME_EXEPTIONS), ename)) 
             || (strcmp(ename, ".") == 0 || strcmp(ename, "..") == 0)
         )
         {
-            // if theres no extention (dir) or if it's "." or ".."
             sprintf(cname, "%s%s/%s", COLOR_BLUE, ename, COLOR_RESET);
         }
+        // if index of the extention is 0 (.files and hidden files)
         else if (extpos == 0)
         {
-            // if index of the extention is 0 (.files and hidden files)
             sprintf(cname, "%s%s%s", COLOR_CYAN, ename, COLOR_RESET);
         }
+        // all other files (except hidden)
         else
         {
-            // all other files (except hidden)
             sprintf(cname, "%s%s%s", COLOR_GREEN, ename, COLOR_RESET);
         }
 
         if (opts->l)
         {
-            fpath = malloc(sizeof(path) + sizeof(char) + sizeof(ename));
+            fpath = malloc(sizeof(path) + sizeof(ename) + 1);
             sprintf(fpath, "%s/%s", path, ename);
             dEntries[rowc - 1] = formatLongFile(fpath, cname);
             free(fpath);

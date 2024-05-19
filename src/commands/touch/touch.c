@@ -18,6 +18,7 @@ int main(int argc, char const *argv[])
             case 'd': opts.d = true; break;
             case 'r': opts.r = true; break;
             case 'c': opts.c = true; break;
+            case 't': opts.t = true; break;
             default:
                 printf("Error: unknown option \"%c\"!\n", optopt);
                 printf("Do \"touch -h\" for help\n");
@@ -79,13 +80,13 @@ void createFile(char *fpath)
 {
     FILE *file;
     char *dirpath;
-    int toccr, idx, i, j;
+    int occr, idx, i, j;
 
-    toccr = stroccr(fpath, '/') + stroccr(fpath, '\\');
+    occr = stroccr(fpath, '/') + stroccr(fpath, '\\');
     // holds indexes of slashes
-    int idxs[toccr];
+    int idxs[occr];
     
-    if (toccr > 0)
+    if (occr > 0)
     {
         // add the index of each slash
         j = 0;

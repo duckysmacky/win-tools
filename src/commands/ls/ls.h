@@ -57,6 +57,8 @@ typedef struct Opts_t Opts, *POpts;
 
 // Functions
 
+LONGLONG getDirSize(char *fpath);
+
 /*
     List items in dir
 */

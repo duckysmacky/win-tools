@@ -24,9 +24,11 @@ struct Opts_t {
     bool a; // change access time only
     bool m; // change modify time only
     bool d; // TODO - set access and modify time from string
-    bool r; // TODO - set access and modify time from file
+    bool r; // TODO - set access and modify time from another file's
     bool c; // TODO - supress file creation if doesnt exist
+    bool t; // TODO - create file using specified YYMMDDHHMM
 } Opts_default = {
+    false,
     false,
     false,
     false,
