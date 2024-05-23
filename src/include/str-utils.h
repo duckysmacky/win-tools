@@ -40,7 +40,7 @@ int stroccr(const char *str, const char c);
     @param size buffer size
     @param substr substring to replace
     @param newstr what to replace with
-    @returns updated string if replaced, else NULL
+    @return updated string if replaced, else NULL
 */
 char* strrplc(char *str, size_t size, const char *substr, const char *newstr);
 
@@ -57,5 +57,13 @@ void strtolwr(char *buff, char *str);
     @param str original string
 */
 void strtoupr(char *buff, char *str);
+
+/*
+    Get the last n characters from the string
+    @param str string
+    @param n amount of characters to get
+    @return last n characters of string
+*/
+char* strlastn(char *str, int n);
 
 #endif

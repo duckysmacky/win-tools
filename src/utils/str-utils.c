@@ -78,3 +78,9 @@ void strtoupr(char *buff, char *str)
     }
     buff[l] = '\0';
 }
+
+char* strlastn(char *str, int n)
+{
+    size_t len = strlen(str);
+    return (char *) str + len - n;
+}

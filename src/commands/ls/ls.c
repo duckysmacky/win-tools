@@ -72,16 +72,29 @@ ULONG getFileIndex(char *fpath) {
     return fileDirInfo.FileIndex;  
 }
 
+bool isDot(char *str)
+{
+    if (str[0] == '.')
+    {
+        if (str[1] == '\0' || (str[1] == '.' && str[2] == '\0')) return true;
+        else return false;
+    }
+    else return false;
+}
+
 LONGLONG getDirSize(char *dirpath)
 {
     LARGE_INTEGER dirSize;
     WIN32_FIND_DATA findData;
     HANDLE hFind;
-    char *path, *filename;
+    LONGLONG dirSizeQuad;
+    char *path, *filename, *dirpathA;
 
-    printf("dirpath: %s\n", dirpath);
+    dirpathA = malloc(sizeof(dirpath) + 2);
+    sprintf(dirpathA, "%s/*", dirpath);
+    printf("dirpathA: %s\n", dirpathA);
 
-    hFind = FindFirstFileEx(dirpath, FindExInfoBasic, &findData, FindExSearchNameMatch, NULL, FIND_FIRST_EX_LARGE_FETCH);
+    hFind = FindFirstFileExA(dirpathA, FindExInfoBasic, &findData, FindExSearchNameMatch, NULL, FIND_FIRST_EX_LARGE_FETCH);
     if (hFind == INVALID_HANDLE_VALUE)
     {
         printf("error getting the find handle for %s!\n", dirpath);
@@ -92,27 +105,31 @@ LONGLONG getDirSize(char *dirpath)
     {
         LARGE_INTEGER fileSize = { 0 };
         filename = findData.cFileName;
-        printf("file: %s\n", filename);
-        // if (strstr(dirpath, filename)) continue;
+
         if (findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
         {
             path = malloc(sizeof(dirpath) + sizeof(filename) + 1);
 
             sprintf(path, "%s/%s", dirpath, filename);
             
-            dirSize.QuadPart += getDirSize(path);
+            dirSizeQuad = isDot(filename) ? 0 : getDirSize(path);
+            dirSize.QuadPart += dirSizeQuad;
+            printf("dir: %s | size: %llu\n", filename, dirSizeQuad);
         }
         else
         {
-            fileSize.LowPart += findData.nFileSizeLow;
-            fileSize.HighPart += findData.nFileSizeHigh;
+            fileSize.LowPart = findData.nFileSizeLow;
+            fileSize.HighPart = findData.nFileSizeHigh;
             dirSize.QuadPart += fileSize.QuadPart;
+            printf("file: %s | size: %llu\n", filename, fileSize.QuadPart);
         }
-    } while (FindNextFile(hFind, &findData) != 0);
-    
+    } while (FindNextFileA(hFind, &findData) != 0);
+
+    printf("size of %s found: %llu\n", dirpath, dirSize.QuadPart);
 
     free(path);
-    CloseHandle(hFind);
+    free(dirpathA);
+    FindClose(hFind);
     return dirSize.QuadPart;
 }
 
@@ -131,8 +148,18 @@ char* formatLongFile(char *fpath, char *fname)
     bool isDir;
     char *longInfo, *modifyMonth, *modifyTime;
 
+    isDir = opendir(fpath) != NULL;
+
     // Get a handle to the file
-    hFile = CreateFileA(fpath, GENERIC_READ, (FILE_SHARE_READ | FILE_SHARE_WRITE), NULL, OPEN_EXISTING, (FILE_ATTRIBUTE_NORMAL | FILE_FLAG_BACKUP_SEMANTICS), NULL);
+    hFile = CreateFileA(
+        fpath,
+        GENERIC_READ,
+        (FILE_SHARE_READ | FILE_SHARE_WRITE),
+        NULL,
+        OPEN_EXISTING,
+        isDir ? (FILE_ATTRIBUTE_NORMAL | FILE_FLAG_BACKUP_SEMANTICS) : FILE_ATTRIBUTE_NORMAL,
+        NULL
+    );
     if (hFile == INVALID_HANDLE_VALUE) {
         printf("error getting a handle to file %s!\n", fpath);
         goto cleanup;
@@ -142,8 +169,6 @@ char* formatLongFile(char *fpath, char *fname)
     GetFileInformationByHandleEx(hFile, FileStandardInfo, &standartInfo, sizeof(standartInfo));
     GetFileInformationByHandleEx(hFile, FileFullDirectoryInfo, &directoryInfo, sizeof(directoryInfo));
     attrs = directoryInfo.FileAttributes;
-
-    isDir = (attrs & FILE_ATTRIBUTE_DIRECTORY);
 
     if (!isDir) {
         GetFileSizeEx(hFile, &fileSizeInfo);
