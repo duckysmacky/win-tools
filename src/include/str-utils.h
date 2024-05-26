@@ -8,6 +8,8 @@
 
 #include "../include/arr-utils.h"
 
+#define isnumber(str) strspn(str, "0123456789") == strlen(str)
+
 /*
     DOESNT WORK AS INTENDED
     Adds chars to the end of the string

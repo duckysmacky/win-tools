@@ -21,6 +21,8 @@ All currently avaliable tools and features are listed below, as well as future p
 - [X] ls
 - [X] touch
 - [X] grep
+- [ ] head
+- [ ] tail
 - [ ] copyf
 - [ ] cp
 - [ ] mv
@@ -36,4 +38,4 @@ All currently avaliable tools and features are listed below, as well as future p
 2. Trying to `ls -R` or `grep` in a really big directory crashes the program
 3. Trying to `ls -R` the `.git` directory crashes the program 
 
-If you find any other bugs please submit them in [issues](https://github.com/duckysmacky/win-tools/issues). It would mean world to me, if I can release these tools without any bugs!
+If you find any other bugs please submit them [here](https://github.com/duckysmacky/win-tools/issues). It would mean world to me, if I can release these tools without any bugs!

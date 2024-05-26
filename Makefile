@@ -10,11 +10,11 @@ BIN = bin
 OBJ = obj
 
 # files
-CMDS = ls touch grep
+CMDS = $(BIN)/ls $(BIN)/touch $(BIN)/grep $(BIN)/head
 UTILS = $(UTIL)/arr-utils.c $(UTIL)/str-utils.c
 OBJS = $(OBJ)/arr-utils.o $(OBJ)/str-utils.o
 
-all: $(BIN)/ls $(BIN)/touch $(BIN)/grep
+all: $(CMDS)
 	@echo All bins finished compiling!
 
 # TODO - fix make clean
@@ -34,6 +34,10 @@ $(BIN)/touch: $(OBJS)
 $(BIN)/grep: $(OBJS)
 	@$(CC) $(SOURCE)/grep/*.c $^ -o $@ $(CFLAGS)
 	@echo Built grep
+
+$(BIN)/head: $(OBJS)
+	@$(CC) $(SOURCE)/head/*.c $^ -o $@ $(CFLAGS)
+	@echo Built head
 
 # objs
 objs: $(OBJS)
