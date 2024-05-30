@@ -22,7 +22,7 @@ All currently avaliable commands as well as future plans are listed below:
 | Command               | Status | Options | Stability |
 | :-------------------- |:------:| :-----: | :-------: |
 | [`ls`](#ls)           | ✅    | ➖      | ✅       |
-| [`ll (ls -l)`](#ll)   | ➖    | ❌      | ❌       |
+| [`ll (ls -l)`](#ls)   | ➖    | ❌      | ❌       |
 | [`touch`](#touch)     | ✅    | ➖      | ✅       |
 | [`grep`](#grep)       | ➖    | ➖      | ➖       |
 | [`head`](#head)       | ✅    | ➖      | ✅       |
@@ -33,8 +33,8 @@ All currently avaliable commands as well as future plans are listed below:
 | [`less`](#less)       | ❌    | ❌      | ❌       |
 | [`sed`](#sed)         | ❌    | ❌      | ❌       |
 | [`sort`](#sort)       | ❌    | ❌      | ❌       |
-| [`man`](#man)         | ❓    | ❌      | ❌       |
-| [`ln`](#ln)           | ❓    | ❌      | ❌       |
+| [`man`](#man)         | ❓     |         |           |
+| [`ln`](#ln)           | ❓     |         |           |
 
 
 | Emoji | Meaning          |
@@ -46,13 +46,13 @@ All currently avaliable commands as well as future plans are listed below:
 
 
 ## `ls`
-Lists directory contents of files and other directories. Output is colored based on file type (blue - directory, green - file, yellow - executable, cyan - hidden files). Much more prettier then the default Poweshell `ls` command.
+Lists directory contents of files and other directories. *Much more prettier then the default Poweshell `ls` command.*
 
 ### Usage
 ```bash
 Usage: ls [OPTIONS] [DIRECTORY]
 ```
-By default lists content of current directory.
+By default lists content of current directory. Output is colored based on file type (blue - directory, green - file, yellow - executable, cyan - hidden files).
 
 ### Options
 | Option | Description |
@@ -69,6 +69,7 @@ By default lists content of current directory.
 | -g	 | Display the group ownership instead of the owner
 | -H	 | Print file sizes in human-readable format (1K, 234M, 2G)
 | -d	 | List directories themselves, rather than their contents
+
 [Source](https://www.geeksforgeeks.org/ls-command-in-linux/)
 
 ## `touch`
@@ -135,11 +136,13 @@ By default, it prints the first 10 lines of the specified files. If more than on
 | -q     | Don't print file names
 | -n     | Number of lines from top to print
 | -c     | Number of bytes to print
+
 [Source](https://www.geeksforgeeks.org/head-command-linux-examples/)
 
 ## Known Issues
 
+- Memory leaks 💀
 - Trying to `ls -R` or `grep` in a really big directory crashes the program
 - Trying to `ls -R` the `.git` directory crashes the program 
 
-If you find any other bugs please submit them [here](https://github.com/duckysmacky/win-tools/issues). It would mean world to me, if I can release these tools without any bugs!
+If you find any other bugs please submit them [here](https://github.com/duckysmacky/win-tools/issues).

@@ -28,9 +28,11 @@ struct Opts_t {
     bool v; // only lines that didnt match
     bool w; // TODO match whole word only
     bool o; // TODO only matching parts
+    bool R; // TODO recursive search
     char *e; // TODO regex
     char *f; // pattern from file
 } Opts_default = {
+    false,
     false,
     false,
     false,
@@ -55,7 +57,7 @@ void readFile(const char *path, char *pattern, Opts *opts);
 
 // Strings
 
-#define MSG_USAGE "Usage: grep [OPTIONS] <PATTERN> <PATH>\n"
+#define MSG_USAGE "Usage: grep [OPTIONS] <PATTERN> [FILE_NAME]...\n"
 #define OPTION_FLAGS "hcilnvwoe: f: "
 
 #endif

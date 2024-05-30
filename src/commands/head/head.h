@@ -22,9 +22,9 @@
 #define OPTION_FLAGS "qvzn: c:"
 
 struct Opts_t {
-    bool q; // TODO don't print file names
-    bool v; // TODO always print file names
-    int n; // TODO number of lines to print
+    bool v; // always print file names
+    bool q; // don't print file names
+    int n; // number of lines to print
     int c; // TODO number of bytes to print
 } Opts_default = {
     false,

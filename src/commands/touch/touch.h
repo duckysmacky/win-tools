@@ -39,7 +39,7 @@ typedef struct Opts_t Opts, *POpts;
 
 // Strings
 
-#define MSG_USAGE "Usage: touch [OPTIONS] <PATH>\n"
+#define MSG_USAGE "Usage: touch [OPTIONS] <FILE_NAME>...\n"
 #define OPTION_FLAGS "hamdrc"
 
 // Functions
