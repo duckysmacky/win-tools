@@ -15,7 +15,8 @@
     "grep.h": "c",
     "corecrt.h": "c",
     "io.h": "c",
-    "unistd.h": "c"
+    "unistd.h": "c",
+    "time.h": "c"
   },
   "C_Cpp_Runner.cCompilerPath": "gcc",
   "C_Cpp_Runner.cppCompilerPath": "g++",

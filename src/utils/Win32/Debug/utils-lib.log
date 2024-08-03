@@ -1,0 +1,7 @@
+﻿  array-utils.c
+  string-utils.c
+C:\Users\nikdor\Projects\win-tools\src\utils\string-utils.c(16,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\nikdor\Projects\win-tools\src\utils\string-utils.c(65,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\nikdor\Projects\win-tools\src\utils\string-utils.c(75,23): warning C4018: '<': signed/unsigned mismatch
+  Generating Code...
+  utils-lib.vcxproj -> C:\Users\nikdor\Projects\win-tools\src\utils\Win32\Debug\utils.lib
