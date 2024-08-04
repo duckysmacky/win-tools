@@ -1,1 +1,0 @@
-C:\Users\nikdor\Projects\win-tools\src\utils\Win32\Debug\utils.lib

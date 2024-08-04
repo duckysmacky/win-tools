@@ -2,8 +2,6 @@
 
 test/
 bin/
-obj/
 
-.test
-
-test.txt
+src/*/Win32/
+src/*/x64/

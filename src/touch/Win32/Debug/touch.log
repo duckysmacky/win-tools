@@ -1,2 +1,0 @@
-﻿  touch.c
-C:\Users\nikdor\Projects\win-tools\src\touch\touch.h(8,10): error C1083: Cannot open include file: 'dirent.h': No such file or directory
