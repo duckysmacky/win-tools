@@ -40,79 +40,120 @@ int main(int argc, char const *argv[])
     }
 
     // for each passed path
-    char* fpath;
+    char* filePath;
     for (argCount = 0; argCount < arrlen(args); argCount++)
     {
-        fpath = args[argCount];
-        if (flags.a | flags.m) updateFile(fpath, &flags);
-        else createFile(fpath);
-
+        filePath = args[argCount];
+        if (flags.a | flags.m)
+        {
+            if (updateFile(filePath, &flags) == -1) return -1;
+        }
+        else
+        {
+            if (createFile(filePath) == -1) return -1;
+        }
     }
 
     return 0;
 }
 
-void updateFile(char *fpath, FLAGS *opts)
+int updateFile(char *filePath, FLAGS *opts)
 {
-    HANDLE hFile;
-    FILETIME fileTime;
+    HANDLE hFile = CreateFileA(filePath, FILE_WRITE_ATTRIBUTES, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+    if (hFile == NULL)
+    {
+        fprintf(stderr, "Error: unable to access the file at \"%s\" (%ld)\n", filePath, GetLastError());
+        CloseHandle(hFile);
+        return -1;
+    }
+
     SYSTEMTIME sysTime;
-
-    hFile = CreateFileA(fpath, FILE_WRITE_ATTRIBUTES, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-    if (hFile == NULL) { printf("Error has occured while trying to access file: %ld\n", GetLastError()); return; }
-
     GetSystemTime(&sysTime);
-    SystemTimeToFileTime(&sysTime, &fileTime);
-    SetFileTime
-    (
-        hFile,
-        NULL,
-        (opts->a) ? &fileTime : NULL,
-        (opts->m) ? &fileTime : NULL
-    );
+
+    FILETIME fileTime;
+    if (!SystemTimeToFileTime(&sysTime, &fileTime))
+    {
+        fprintf(stderr, "Error: unable to converting system time (%ld)\n", GetLastError());
+        CloseHandle(hFile);
+        return -1;
+    }
+
+    if (!SetFileTime(
+            hFile,
+            NULL,
+            (opts->a) ? &fileTime : NULL,
+            (opts->m) ? &fileTime : NULL
+        )
+    ) {
+        fprintf(stderr, "Error: unable to update file time for \"%s\" (%ld)\n", filePath, GetLastError());
+        CloseHandle(hFile);
+        return -1;
+    }
+
+    CloseHandle(hFile);
+    return 0;
 }
 
-void createFile(char *fpath)
+int createFile(char *filePath)
 {
-    FILE *file;
-    char *dirpath;
-    int occr, idx, i, j;
-
-    occr = countCharOccurences(fpath, '/') + countCharOccurences(fpath, '\\');
-    // holds indexes of slashes
-    int idxs[occr];
+    int slashOccurences = countCharOccurences(filePath, '/') + countCharOccurences(filePath, '\\');
+    int *slashIndexes = malloc(sizeof(int) * slashOccurences);
     
-    if (occr > 0)
+    if (slashOccurences > 0)
     {
         // add the index of each slash
-        j = 0;
-        for (i = 0; i < strlen(fpath); i++)
+        int j = 0;
+        int i;
+        for (i = 0; i < strlen(filePath); i++)
         {
-            if (fpath[i] == '/' || fpath[i] == '\\')
+            if (filePath[i] == '/' || filePath[i] == '\\')
             {
-                idxs[j] = i;
+                slashIndexes[j] = i;
                 j++;
             }
         }
 
         // checking if full path exists, if not creating each dir
-        for (i = 0; i < arrlen(idxs); i++) // for each index of slash
+        int slashIndex;
+        char* directoryPath;
+        for (i = 0; i < arrlen(slashIndexes); i++) // for each index of slash
         {
-            idx = idxs[i] + 1; // slash index
-            dirpath = malloc(idx + 1);
+            slashIndex = slashIndexes[i] + 1;
+            directoryPath = malloc(slashIndex);
 
-            strncpy(dirpath, fpath, idx);
-            dirpath[idx] = '\0';
+            strncpy_s(directoryPath, sizeof(directoryPath), filePath, sizeof(filePath));
 
             // if dir doesnt exist
-            if (opendir(dirpath) == NULL) mkdir(dirpath);
+            if (openDir(directoryPath) == NULL)
+            {
+                if (!CreateDirectoryW(directoryPath, NULL))
+                {
+                    fprintf(stderr, "Error: unable to create directory at \"&s\" (%ld)\n", directoryPath, GetLastError());
+                    free(directoryPath);
+                    return -1;
+                }
+            }
 
-            free(dirpath);
+            free(directoryPath);
         }
     }
 
     // create the file itself
-    file = fopen(fpath, "w");
+    HANDLE hFile = CreateFileA(filePath, GENERIC_WRITE, NULL, NULL, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, NULL);
+    if (hFile == NULL)
+    {
+        if (GetLastError() == ERROR_ALREADY_EXISTS)
+        {
+            fprintf(stderr, "Error: file at \"&s\" already exists!", filePath);
+        }
+        else
+        {
+            fprintf(stderr, "Error: unable to create a new file at \"&s\" (%ld)", filePath, GetLastError());
+        }
+        CloseHandle(hFile);
+        return -1;
+    }
 
-    fclose(file);
+    CloseHandle(hFile);
+    return 0;
 }

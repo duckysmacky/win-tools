@@ -8,13 +8,13 @@
 #include "array-utils.h"
 #include "string-utils.h"
 #include "option-utils.h"
+#include "directory-utils.h"
 
 #include "options.h"
 
 // Functions
 
-void updateFile(char *fpath, FLAGS *opts);
-
-void createFile(char *path);
+int updateFile(char *fpath, FLAGS *opts);
+int createFile(char *path);
 
 #endif // TOUCH_H
