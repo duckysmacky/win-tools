@@ -24,12 +24,21 @@
     <ClInclude Include="string-utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="directory-utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="framework.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="array-utils.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="string-utils.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="directory-utils.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

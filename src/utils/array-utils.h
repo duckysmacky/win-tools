@@ -1,8 +1,7 @@
 #ifndef ARRAY_UTILS_H
 #define ARRAY_UTILS_H
 
-#include <stdlib.h>
-#include <string.h>
+#include "framework.h"
 
 /*
     Searches for a string in array

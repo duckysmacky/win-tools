@@ -49,7 +49,7 @@ int main(int argc, char const *argv[])
 
     if (opts.R)
     {
-        prtblue("%s:\n", dirpath);
+        printBlue("%s:\n", dirpath);
         listDir(dirpath, &opts);
         readDir(dirpath, &opts);
     }
@@ -61,7 +61,8 @@ int main(int argc, char const *argv[])
     return 0;
 }
 
-ULONG getFileIndex(char *fpath) {
+ULONG getFileIndex(char *fpath)
+{
     HANDLE hFile;
     FILE_FULL_DIR_INFO fileDirInfo;
 
@@ -232,11 +233,9 @@ char* formatLongFile(char *fpath, char *fname)
 
 void listDir(const char *path, Opts *opts)
 {
-    struct dirent *dEntry;
     char *dEntries[1000]; // holds all entries
 
     CONSOLE_SCREEN_BUFFER_INFO terminalInfo;
-    DIR *dir;
     int i, terminalWidth;
     int rowi; // row index
     int rowc = 1; // row counter
@@ -248,10 +247,17 @@ void listDir(const char *path, Opts *opts)
     char *cname; // colored entry name
     char *fpath; // full path to file
 
-    dir = opendir(path);
-    while ((dEntry = readdir(dir)))
+    DIRECTORY *dir = openDir(path);
+    if (dir == NULL)
     {
-        ename = dEntry->d_name;
+        printf("Error opening directory \"%s\"\n", path);
+        return;
+    }
+
+    ENTRY *dirEntry;
+    while ((dirEntry = nextEntry(dir)))
+    {
+        ename = dirEntry->name;
         ext = strrchr(ename, '.'); 
         extpos = (int) (ext - ename); 
 
@@ -348,15 +354,15 @@ void listDir(const char *path, Opts *opts)
 
 void readDir(const char *path, Opts *opts)
 {
-    struct dirent *dEntry;
-    DIR *dir = opendir(path);
+    DIRECTORY *dir = openDir(path);
 
     char *ename; // entry name
     char *dpath; // full path to dir
 
-    while ((dEntry = readdir(dir)))
+    ENTRY *dEntry;
+    while ((dEntry = nextEntry(dir)))
     {
-        ename = dEntry->d_name;
+        ename = dEntry->name;
         if (!strcmp(ename, ".") || !strcmp(ename, "..")) continue;
 
         dpath = malloc(sizeof(path) + sizeof(ename) + sizeof(char));
@@ -365,7 +371,7 @@ void readDir(const char *path, Opts *opts)
         // try to open entry item as dir
         if (opendir(dpath))
         {
-            prtblue("%s:\n", dpath);
+            printBlue("%s:\n", dpath);
             listDir(dpath, opts);
             readDir(dpath, opts);
         }

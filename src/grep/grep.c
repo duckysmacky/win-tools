@@ -80,9 +80,9 @@ int main(int argc, const char *argv[])
     {
         readFile(path, pattern, &opts);
     }
-    else if (opendir(path))
+    else if (openDir(path) != NULL)
     {
-        if (stroccr(path, '/') > 0 || stroccr(path, '\\') > 0) // if there are slashes
+        if (countCharOccurences(path, '/') > 0 || countCharOccurences(path, '\\') > 0) // if there are slashes
         {
             readDir(path, pattern, &opts);
         }
@@ -124,8 +124,8 @@ void readFile(const char *path, char *pattern, Opts *opts)
         {
             char *lpattern = malloc(strlen(pattern) * sizeof(char));
             char *lline = malloc(strlen(line) * sizeof(char));
-            strtolwr(lpattern, pattern);
-            strtolwr(lline, line);
+            stringToLower(lpattern, pattern);
+            stringToLower(lline, line);
             fpat = strstr(lline, lpattern);
             free(lline);
             free(lpattern);
@@ -142,7 +142,7 @@ void readFile(const char *path, char *pattern, Opts *opts)
             // print filepath at the top if haven't yet
             if (!prth)
             {
-                prtblue("%s\n", path);
+                printBlue("%s\n", path);
                 prth = true;
             }
 
@@ -151,7 +151,7 @@ void readFile(const char *path, char *pattern, Opts *opts)
                 if (!opts->v) // if not for unmatched, as there wouldn't be any found pattern
                 {
                     // check for ignore case color highlight
-                    if (opts->i) strtolwr(pattern, pattern);
+                    if (opts->i) stringToLower(pattern, pattern);
 
                     // buff for colored pattern word
                     char *cpattern = malloc(
@@ -160,7 +160,7 @@ void readFile(const char *path, char *pattern, Opts *opts)
                     );
                     
                     sprintf(cpattern, "%s%s%s", COLOR_GREEN, pattern, COLOR_RESET);
-                    strrplc(line, 256, pattern, cpattern);
+                    replaceString(line, 256, pattern, cpattern);
 
                     free(cpattern);
                 }
@@ -185,14 +185,13 @@ void readFile(const char *path, char *pattern, Opts *opts)
 
 void readDir(const char *path, char *pattern, Opts *opts)
 {
-    struct dirent *dEntry;
-    DIR *dir = opendir(path);
+    ENTRY *dEntry;
+    DIRECTORY *dir = openDir(path);
 
-    while ((dEntry = readdir(dir)))
+    while (dEntry = nextEntry(dir))
     {
-        char *ename = malloc((strlen(dEntry -> d_name) + 1) * sizeof(char)); // entry name
-        strcpy(ename, dEntry -> d_name);
-        ename[strlen(ename)] = '\0';
+        char *ename = malloc(sizeof(dEntry->name)); // entry name
+        strcpy(ename, dEntry->name);
 
         // ignore "." and ".." files
         if (!strcmp(ename, ".") || !strcmp(ename, "..")) continue;
@@ -203,7 +202,7 @@ void readDir(const char *path, char *pattern, Opts *opts)
         );
         sprintf(fpath, "%s%s", path, ename);
 
-        if (opendir(fpath))
+        if (openDir(fpath) != NULL)
         {
             strcat(fpath, "/");
             readDir(fpath, pattern, opts);

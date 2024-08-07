@@ -2,22 +2,11 @@
 #define GREP_H
 
 // Includes
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <dirent.h>
-#include <unistd.h>
-
+#include "framework.h"
+#include "colors.h"
 #include "array-utils.h"
 #include "string-utils.h"
-#include "colors.h"
-
-// Data
-
-#define true 1
-#define false 0
-#define bool unsigned char
+#include "directory-utils.h"
 
 // Options struct
 struct Opts_t {

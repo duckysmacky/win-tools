@@ -2,22 +2,11 @@
 #define TOUCH_H
 
 // Includes
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <dirent.h>
-#include <getopt.h>
 #include <sys/stat.h>
-#include <windows.h>
 
+#include "framework.h"
 #include "array-utils.h"
 #include "string-utils.h"
-
-// Data
-
-#define true 1
-#define false 0
-#define bool unsigned char
 
 // Options
 struct Opts_t {

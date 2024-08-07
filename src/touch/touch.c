@@ -82,7 +82,7 @@ void createFile(char *fpath)
     char *dirpath;
     int occr, idx, i, j;
 
-    occr = stroccr(fpath, '/') + stroccr(fpath, '\\');
+    occr = countCharOccurences(fpath, '/') + countCharOccurences(fpath, '\\');
     // holds indexes of slashes
     int idxs[occr];
     

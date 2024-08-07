@@ -1,11 +1,7 @@
 #ifndef STRING_UTILS_H
 #define STRING_UTILS_H
 
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <ctype.h>
-
+#include "framework.h"
 #include "array-utils.h"
 
 #define isnumber(str) strspn(str, "0123456789") == strlen(str)
@@ -17,7 +13,7 @@
     @param c char to append
     @return status code
 */
-char* strjoin(char *str1, char *str2);
+char* joinStrings(char *str1, char *str2);
 
 /*
     Searches the string for characters
@@ -26,7 +22,7 @@ char* strjoin(char *str1, char *str2);
     @param c char to search
     @return true if found any
 */
-int strfnd(int *buff, char *str, char c);
+int findChar(int *buff, char *str, char c);
 
 /*
     Counts occurences of a sting in string
@@ -34,7 +30,7 @@ int strfnd(int *buff, char *str, char c);
     @param c string to search in source
     @return occurences of c in str
 */
-int stroccr(const char *str, const char c);
+int countCharOccurences(const char *str, const char c);
 
 /*
     Replaces a substring in a string
@@ -44,21 +40,21 @@ int stroccr(const char *str, const char c);
     @param newstr what to replace with
     @return updated string if replaced, else NULL
 */
-char* strrplc(char *str, size_t size, const char *substr, const char *newstr);
+char* replaceString(char *str, size_t size, const char *substr, const char *newstr);
 
 /*
     Converts all characters in a string to lowercase
     @param buff buffer to write converted string
     @param str original string
 */
-void strtolwr(char *buff, char *str);
+void stringToLower(char *buff, char *str);
 
 /*
     Converts all characters in a string to uppercase
     @param buff buffer to write converted string
     @param str original string
 */
-void strtoupr(char *buff, char *str);
+void stringToUpper(char *buff, char *str);
 
 /*
     Get the last n characters from the string
@@ -66,6 +62,6 @@ void strtoupr(char *buff, char *str);
     @param n amount of characters to get
     @return last n characters of string
 */
-char* strlastn(char *str, int n);
+char* getSuffix(char *str, int n);
 
 #endif

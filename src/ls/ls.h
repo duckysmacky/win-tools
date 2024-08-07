@@ -2,23 +2,12 @@
 #define LS_H
 
 // Includes
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <dirent.h>
-#include <unistd.h>
 #include <time.h>
-#include <windows.h>
 
-#include "array-utils.h"
+#include "framework.h"
 #include "colors.h"
-
-// Data
-
-#define true 1
-#define false 0
-#define bool unsigned char
+#include "array-utils.h"
+#include "directory-utils.h"
 
 // Options
 struct Opts_t {

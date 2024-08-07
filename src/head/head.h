@@ -3,21 +3,9 @@
 
 // Includes
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <getopt.h>
-#include <windows.h>
-
+#include "framework.h"
 #include "array-utils.h"
 #include "string-utils.h"
-
-// Data
-
-#define true 1
-#define false 0
-#define bool unsigned char
-
 // Options
 #define OPTION_FLAGS "qvzn: c:"
 

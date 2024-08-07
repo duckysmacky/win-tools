@@ -1,6 +1,6 @@
 #include "string-utils.h"
 
-char* strjoin(char *str1, char *str2)
+char* joinStrings(char *str1, char *str2)
 {
     char *str = (char*) malloc(sizeof(str1) + sizeof(str2));
 
@@ -10,7 +10,7 @@ char* strjoin(char *str1, char *str2)
     return str;
 }
 
-int strfnd(int *buff, char *str, char c)
+int findChar(int *buff, char *str, char c)
 {
     int j = 0;
     for (int i = 0; i < strlen(str); i++)
@@ -30,14 +30,14 @@ int strfnd(int *buff, char *str, char c)
     return 0;
 }
 
-int stroccr(const char *str, const char c)
+int countCharOccurences(const char *str, const char c)
 {
     int i;
     for (i = 0; str[i]; str[i] == c ? i++ : *str++);
     return i;
 }
 
-char* strrplc(char *str, size_t size, const char *substr, const char *newstr)
+char* replaceString(char *str, size_t size, const char *substr, const char *newstr)
 {
     char *p = strstr(str, substr); // pointer to the substr in str
     if (p == NULL) return NULL;
@@ -59,7 +59,7 @@ char* strrplc(char *str, size_t size, const char *substr, const char *newstr)
     return p + strlen(newstr);
 }
 
-void strtolwr(char *buff, char *str)
+void stringToLower(char *buff, char *str)
 {
     size_t l = strlen(buff);
     for (int i = 0; i < l; i++)
@@ -69,7 +69,7 @@ void strtolwr(char *buff, char *str)
     buff[l] = '\0';
 }
 
-void strtoupr(char *buff, char *str)
+void stringToUpper(char *buff, char *str)
 {
     size_t l = strlen(buff);
     for (int i = 0; i < l; i++)
@@ -79,7 +79,7 @@ void strtoupr(char *buff, char *str)
     buff[l] = '\0';
 }
 
-char* strlastn(char *str, int n)
+char* getSuffix(char *str, int n)
 {
     size_t len = strlen(str);
     return (char *) str + len - n;
