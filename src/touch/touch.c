@@ -2,53 +2,49 @@
 
 int main(int argc, char const *argv[])
 {
-    Opts opts = Opts_default;
-    char *fpath;
-    int i;
+    FLAGS flags = FLAGS_DEFAULT;
 
-    // read options
-    int opt;
-    while ((opt = getopt(argc, (char * const*) argv, OPTION_FLAGS)) != -1)
+    int flag;
+    while ((flag = getNextFlag(argc, argv, OPTION_FLAGS)) != -1)
     {
-        switch (opt)
+        switch (flag)
         {
             // case 'h': break; // TODO - show help
-            case 'a': opts.a = true; break;
-            case 'm': opts.m = true; break;
-            case 'd': opts.d = true; break;
-            case 'r': opts.r = true; break;
-            case 'c': opts.c = true; break;
-            case 't': opts.t = true; break;
+            case 'a': flags.a = true; break;
+            case 'm': flags.m = true; break;
+            case 'd': flags.d = true; break;
+            case 'r': flags.r = true; break;
+            case 'c': flags.c = true; break;
+            case 't': flags.t = true; break;
             default:
-                printf("Error: unknown option \"%c\"!\n", optopt);
-                printf("Do \"touch -h\" for help\n");
-                printf(MSG_USAGE);
+                fprintf(stderr, "Error: unknown option \"%c\"\n", optionFlag);
+                printf(MESSAGE_USAGE);
                 return 1;
         }
     }
 
-    // holds all non-options
-    char *noptc[argc];
-    i = 0;
-    for(; optind < argc; optind++)
+    char *args[64];
+    int argCount = 0;
+    for(; optionIndex < argc; optionIndex++)
     {
-        noptc[i] = (char *) argv[optind];
-        i++;
+        args[argCount] = (char *) argv[optionIndex];
+        argCount++;
     } 
 
     // check for all required args
-    if (i == 0)
+    if (argCount == 0)
     {
-        printf("Error: missing 1 argument!\n");
-        printf(MSG_USAGE);
-        return 1;
+        fprintf(stderr, "Error: missing 1 argument\n");
+        printf(MESSAGE_USAGE);
+        return -1;
     }
 
     // for each passed path
-    for (i = 0; i < arrlen(noptc); i++)
+    char* fpath;
+    for (argCount = 0; argCount < arrlen(args); argCount++)
     {
-        fpath = noptc[i];
-        if (opts.a | opts.m) updateFile(fpath, &opts);
+        fpath = args[argCount];
+        if (flags.a | flags.m) updateFile(fpath, &flags);
         else createFile(fpath);
 
     }
@@ -56,7 +52,7 @@ int main(int argc, char const *argv[])
     return 0;
 }
 
-void updateFile(char *fpath, Opts *opts)
+void updateFile(char *fpath, FLAGS *opts)
 {
     HANDLE hFile;
     FILETIME fileTime;

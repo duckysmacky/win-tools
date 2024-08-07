@@ -22,6 +22,7 @@
     <ClCompile Include="touch.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="options.h" />
     <ClInclude Include="touch.h" />
   </ItemGroup>
   <ItemGroup>

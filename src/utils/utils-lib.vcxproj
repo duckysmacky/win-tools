@@ -164,6 +164,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="option-utils.h" />
     <ClInclude Include="array-utils.h" />
     <ClInclude Include="colors.h" />
     <ClInclude Include="directory-utils.h" />
@@ -171,6 +172,7 @@
     <ClInclude Include="string-utils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="option-utils.c" />
     <ClCompile Include="array-utils.c" />
     <ClCompile Include="directory-utils.c" />
     <ClCompile Include="string-utils.c" />

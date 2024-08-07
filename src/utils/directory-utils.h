@@ -1,15 +1,18 @@
 #ifndef DIRECTORY_UTILS_H
 #define DIRECTORY_UTILS_H
 
-#include "framework.h"
+#include <Windows.h>
+#include <tchar.h> 
+#include <stdio.h>
+#include <strsafe.h>
 
-typedef struct T_DIRECTORY {
+typedef struct DIRECTORY_T {
     HANDLE handle;
     LPWIN32_FIND_DATAA findData;
     int firstEntry;  // Flag to check if we are reading the first entry
 } DIRECTORY;
 
-typedef struct T_ENTRY {
+typedef struct ENTRY_T {
     char name[MAX_PATH];
 } ENTRY;
 

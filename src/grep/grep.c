@@ -3,108 +3,107 @@
 
 int main(int argc, const char *argv[])
 {
-    Opts opts = Opts_default;
+    FLAGS flags = FLAGS_DEFAULT;
 
     // read options
-    int opt;
-    while ((opt = getopt(argc, (char * const*) argv, OPTION_FLAGS)) != -1)
+    int flag;
+    while ((flag = getNextFlag(argc, argv, OPTION_FLAGS)) != -1)
     {
-        switch (opt)
+        switch (flag)
         {
             // case '?': break; // TODO - show help
-            case 'c': opts.c = true; break;
-            case 'i': opts.i = true; break;
-            case 'l': opts.l = true; break;
-            case 'n': opts.n = true; break;
-            case 'v': opts.v = true; break;
-            case 'w': opts.w = true; break;
-            case 'o': opts.o = true; break;
-            case 'e': opts.e = optarg; break;
-            case 'f': opts.f = optarg; break;
+            case 'c': flags.c = true; break;
+            case 'i': flags.i = true; break;
+            case 'l': flags.l = true; break;
+            case 'n': flags.n = true; break;
+            case 'v': flags.v = true; break;
+            case 'w': flags.w = true; break;
+            case 'o': flags.o = true; break;
+            case 'e': flags.e = optionArgument; break;
+            case 'f': flags.f = optionArgument; break;
             default:
-                printf("Error: unknown option %c!\n", optopt);
-                printf("Do \"grep -h\" for help\n");
-                printf(MSG_USAGE);
-                return 1;
+                fprintf(stderr, "Error: unknown option \"%c\"\n", optionFlag);
+                printf(MESSAGE_USAGE);
+                return -1;
         }
     }
 
-    // holds all non-options (pattern and path arguments)
-    char *noptc[2];
-    int i = 0;
-    for(; optind < argc; optind++)
+    // holds all arguments (pattern and path arguments)
+    char *args[2];
+    int argCount = 0;
+    for(; optionIndex < argc; optionIndex++)
     {
-        noptc[i] = (char *) argv[optind];
-        i++;
+        args[argCount] = (char *) argv[optionIndex];
+        argCount++;
     } 
 
     // check for all required args
-    if (i == 0)
+    if (argCount == 0)
     {
-        printf("error: missing 2 arguments!\n");
-        printf(MSG_USAGE);
-        return 1;
+        fprintf(stderr, "Error: missing 2 arguments\n");
+        printf(MESSAGE_USAGE);
+        return -1;
     }
-    if (i == 1 && !opts.f)
+    if (argCount == 1 && !flags.f)
     {
-        printf("error: missing 1 argument!\n");
-        printf(MSG_USAGE);
-        return 1;
+        fprintf(stderr, "Error: missing 1 argument\n");
+        printf(MESSAGE_USAGE);
+        return -1;
     }
 
     char *pattern = malloc(1024 * sizeof(char));
     const char *path;
-    if (opts.f)
+    if (flags.f)
     {
-        FILE *patfile = fopen(opts.f, "r");
+        FILE *patfile = fopen(flags.f, "r");
         if (patfile == NULL)
         {
-            printf("error: file %s doesn't exist!", opts.f);
+            fprintf(stderr, "Error: unable to open \"%s\"", flags.f);
             fclose(patfile);
-            return 1;
+            return -1;
         }
         fgets(pattern, 1024, patfile);
         pattern[strcspn(pattern, "\n")] = 0; // removes newline
         fclose(patfile);
 
-        path = noptc[0];
+        path = args[0];
     } 
     else 
     {
-        pattern = noptc[0];
-        path = noptc[1];
+        pattern = args[0];
+        path = args[1];
     }
 
 
     if (fopen(path, "r"))
     {
-        readFile(path, pattern, &opts);
+        readFile(path, pattern, &flags);
     }
     else if (openDir(path) != NULL)
     {
         if (countCharOccurences(path, '/') > 0 || countCharOccurences(path, '\\') > 0) // if there are slashes
         {
-            readDir(path, pattern, &opts);
+            readDir(path, pattern, &flags);
         }
         else
         {
             char *dpath = malloc(sizeof(strlen(path) + 2) * sizeof(char));
             sprintf(dpath, "%s/", path);
-            readDir(dpath, pattern, &opts);
+            readDir(dpath, pattern, &flags);
             free(dpath);
         }
     }
     else
     {
-        printf("error: file %s doesn't exist!", path);
-        return 1;
+        fprintf(stderr, "Error: unable to open file \"%s\"", path);
+        return -1;
     }
     
     free(pattern);
     return 0;
 }
 
-void readFile(const char *path, char *pattern, Opts *opts)
+void readFile(const char *path, char *pattern, FLAGS *opts)
 {
     FILE *file = fopen(path, "r");
     if (file == NULL)
@@ -183,7 +182,7 @@ void readFile(const char *path, char *pattern, Opts *opts)
     return;
 }
 
-void readDir(const char *path, char *pattern, Opts *opts)
+void readDir(const char *path, char *pattern, FLAGS *opts)
 {
     ENTRY *dEntry;
     DIRECTORY *dir = openDir(path);

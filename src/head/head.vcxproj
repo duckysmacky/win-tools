@@ -23,6 +23,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="head.h" />
+    <ClInclude Include="options.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\utils\utils-lib.vcxproj">

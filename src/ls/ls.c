@@ -6,56 +6,54 @@ char *NAME_EXEPTIONS[] = {
 
 int main(int argc, char const *argv[])
 {
-    Opts opts = Opts_default;
+    FLAGS flags = FLAGS_DEFAULT;
 
-    // read options
-    int opt;
-    while ((opt = getopt(argc, (char * const*) argv, OPTION_FLAGS)) != -1)
+    int flag;
+    while ((flag = getNextFlag(argc, argv, OPTION_FLAGS)) != -1)
     {
-        switch (opt)
+        switch (flag)
         {
             // case 'h': break; // TODO - show help
-            case 'l': opts.l = true; break;
-            case 'a': opts.a = true; break;
-            case 't': opts.t = true; break;
-            case 'r': opts.r = true; break;
-            case 'i': opts.i = true; break;
-            case 'g': opts.g = true; break;
-            case 'H': opts.H = true; break;
-            case 'd': opts.d = true; break;
-            case 's': opts.s = true; break;
-            case 'A': opts.A = true; break;
-            case 'R': opts.R = true; break;
+            case 'l': flags.l = true; break;
+            case 'a': flags.a = true; break;
+            case 't': flags.t = true; break;
+            case 'r': flags.r = true; break;
+            case 'i': flags.i = true; break;
+            case 'g': flags.g = true; break;
+            case 'H': flags.H = true; break;
+            case 'd': flags.d = true; break;
+            case 's': flags.s = true; break;
+            case 'A': flags.A = true; break;
+            case 'R': flags.R = true; break;
             default:
                 // check if the passed flag is a number
-                char copt = (char) opt;
-                if (isdigit(copt))
+                char charFlag = (char) flag;
+                if (isdigit(charFlag))
                 {
-                    opts.rows = atoi(&copt);
+                    flags.rows = atoi(&charFlag);
                     break;
                 }
                 else
                 {
-                    printf("Error: unknown option \"%c\"!\n", optopt);
-                    printf("Do \"ls -h\" for help\n");
-                    printf(MSG_USAGE);
+                    fprintf(stderr, "Error: unknown option \"%c\"!\n", optionFlag);
+                    printf(MESSAGE_USAGE);
                     return 1;
                 }
         }
     }
 
     // holds specified dir path, else current
-    const char *dirpath = argv[optind] ? argv[optind] : ".";
+    const char *dirpath = argv[optionIndex] ? argv[optionIndex] : ".";
 
-    if (opts.R)
+    if (flags.R)
     {
         printBlue("%s:\n", dirpath);
-        listDir(dirpath, &opts);
-        readDir(dirpath, &opts);
+        listDir(dirpath, &flags);
+        readDir(dirpath, &flags);
     }
     else
     {
-        listDir(dirpath, &opts);
+        listDir(dirpath, &flags);
     }
 
     return 0;
@@ -231,7 +229,7 @@ char* formatLongFile(char *fpath, char *fname)
     free(longInfo);
 }
 
-void listDir(const char *path, Opts *opts)
+void listDir(const char *path, FLAGS *opts)
 {
     char *dEntries[1000]; // holds all entries
 
@@ -352,7 +350,7 @@ void listDir(const char *path, Opts *opts)
     return;
 }
 
-void readDir(const char *path, Opts *opts)
+void readDir(const char *path, FLAGS *opts)
 {
     DIRECTORY *dir = openDir(path);
 

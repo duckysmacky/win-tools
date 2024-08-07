@@ -2,81 +2,79 @@
 
 int main(int argc, char const *argv[])
 {
-    Opts opts = Opts_default;
-    int opt, i;
+    FLAGS flags = FLAGS_DEFAULT;
 
-    // read options
-    while ((opt = getopt(argc, (char * const *) argv, OPTION_FLAGS)) != -1)
+    int flag;
+    while ((flag = getNextFlag(argc, argv, OPTION_FLAGS)) != -1)
     {
-        switch (opt)
+        switch (flag)
         {
             // case 'h': break; // TODO - show help
-            case 'q': opts.q = true; break;
-            case 'v': opts.v = true; break;
+            case 'q': flags.q = true; break;
+            case 'v': flags.v = true; break;
             case 'n': {
-                if (isnumber(optarg))
+                if (isnumber(optionArgument))
                 {
-                    opts.n = atoi(optarg);
+                    flags.n = atoi(optionArgument);
                     break;
                 }
                 else
                 {
-                    printf("Error: supplied argument \"%s\" is not a number!\n", optarg);
-                    printf(MSG_HELP);
-                    return 1;
+                    fprintf(stderr, "Error: supplied argument \"%s\" is not a number\n", optionArgument);
+                    printf(MESSAGE_HELP);
+                    return -1;
                 }
             }
             case 'c': {
-                if (isnumber(optarg))
+                if (isnumber(optionArgument))
                 {
-                    opts.c = atoi(optarg);
+                    flags.c = atoi(optionArgument);
                     break;
                 }
                 else
                 {
-                    printf("Error: supplied argument \"%s\" is not a number!\n", optarg);
-                    printf(MSG_HELP);
-                    return 1;
+                    fprintf(stderr, "Error: supplied argument \"%s\" is not a number\n", optionArgument);
+                    printf(MESSAGE_HELP);
+                    return -1;
                 }
             }
             default:
-                printf("Error: unknown option \"%c\"!\n", optopt);
-                printf(MSG_USAGE);
-                printf(MSG_HELP);
-                return 1;
+                fprintf(stderr, "Error: unknown option \"%c\"\n", optionFlag);
+                printf(MESSAGE_USAGE);
+                return -1;
         }
     }
 
-    // holds all non-options
-    char *noptc[argc];
-    i = 0;
-    for(; optind < argc; optind++)
+    // holds all args
+    char *args[64];
+    int argCount = 0;
+    for(; optionIndex < argc; optionIndex++)
     {
-        noptc[i] = (char *) argv[optind];
-        i++;
+        args[argCount] = (char *) argv[optionIndex];
+        argCount++;
     } 
 
     // check for all required args
-    if (i == 0)
+    if (argCount == 0)
     {
-        printf("Error: missing 1 argument!\n");
-        printf(MSG_USAGE);
-        return 1;
+        fprintf(stderr, "Error: missing 1 argument!\n");
+        printf(MESSAGE_USAGE);
+        return -1;
     }
 
     // if there are multiple files
-    if (i > 1) opts.v = true;
+    if (argCount > 1) flags.v = true;
 
     // for each passed path
-    for (i = 0; i < arrlen(noptc); i++)
+    for (argCount = 0; argCount < arrlen(args); argCount++)
     {
-        readFile(noptc[i], &opts);
+        readFile(args[argCount], &flags);
     }
 
     return 0;
 }
 
-void readFile(char *path, Opts *opts)
+void readFile(char *path, FLAGS *opts)
 {
     FILE *file;
     char line[1024], *filename;
