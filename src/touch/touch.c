@@ -19,7 +19,7 @@ int main(int argc, char const *argv[])
             default:
                 fprintf(stderr, "Error: unknown option \"%c\"\n", optionFlag);
                 printf(MESSAGE_USAGE);
-                return 1;
+                return EXIT_FAILURE;
         }
     }
 
@@ -36,7 +36,7 @@ int main(int argc, char const *argv[])
     {
         fprintf(stderr, "Error: missing 1 argument\n");
         printf(MESSAGE_USAGE);
-        return -1;
+        return EXIT_FAILURE;
     }
 
     // for each passed path
@@ -46,24 +46,23 @@ int main(int argc, char const *argv[])
         filePath = args[argCount];
         if (flags.a | flags.m)
         {
-            if (updateFile(filePath, &flags) == -1) return -1;
+            if (updateFile(filePath, &flags) != 0) return EXIT_FAILURE;
         }
         else
         {
-            if (createFile(filePath) == -1) return -1;
+            if (createFile(filePath) != 0) return EXIT_FAILURE;
         }
     }
 
-    return 0;
+    return EXIT_SUCCESS;
 }
 
-int updateFile(char *filePath, FLAGS *opts)
+int updateFile(const char *filePath, FLAGS *opts)
 {
     HANDLE hFile = CreateFileA(filePath, FILE_WRITE_ATTRIBUTES, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
     if (hFile == NULL)
     {
         fprintf(stderr, "Error: unable to access the file at \"%s\" (%ld)\n", filePath, GetLastError());
-        CloseHandle(hFile);
         return -1;
     }
 
@@ -97,10 +96,10 @@ int updateFile(char *filePath, FLAGS *opts)
 int createFile(char *filePath)
 {
     int slashOccurences = countCharOccurences(filePath, '/') + countCharOccurences(filePath, '\\');
-    int *slashIndexes = malloc(sizeof(int) * slashOccurences);
     
     if (slashOccurences > 0)
     {
+        int* slashIndexes = malloc(sizeof(int) * slashOccurences);
         // add the index of each slash
         int j = 0;
         int i;
@@ -116,10 +115,10 @@ int createFile(char *filePath)
         // checking if full path exists, if not creating each dir
         int slashIndex;
         char* directoryPath;
-        for (i = 0; i < arrlen(slashIndexes); i++) // for each index of slash
+        for (i = 0; i < slashOccurences; i++) // for each index of slash
         {
             slashIndex = slashIndexes[i] + 1;
-            directoryPath = malloc(slashIndex);
+            directoryPath = malloc(slashIndex + 1);
 
             strncpy_s(directoryPath, sizeof(directoryPath), filePath, sizeof(filePath));
 
@@ -136,6 +135,8 @@ int createFile(char *filePath)
 
             free(directoryPath);
         }
+
+        free(slashIndexes);
     }
 
     // create the file itself

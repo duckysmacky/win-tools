@@ -1,6 +1,6 @@
 #include "head.h"
 
-int main(int argc, char const *argv[])
+int main(int argc, char *argv[])
 {
     FLAGS flags = FLAGS_DEFAULT;
 
@@ -46,7 +46,7 @@ int main(int argc, char const *argv[])
     }
 
     // holds all args
-    char *args[64];
+    char* args[64] = {0};
     int argCount = 0;
     for(; optionIndex < argc; optionIndex++)
     {
@@ -57,7 +57,7 @@ int main(int argc, char const *argv[])
     // check for all required args
     if (argCount == 0)
     {
-        fprintf(stderr, "Error: missing 1 argument!\n");
+        fprintf(stderr, "Error: missing 1 argument\n");
         printf(MESSAGE_USAGE);
         return -1;
     }
@@ -68,41 +68,43 @@ int main(int argc, char const *argv[])
     // for each passed path
     for (argCount = 0; argCount < arrlen(args); argCount++)
     {
-        readFile(args[argCount], &flags);
+        if (readFile(args[argCount], &flags) != 0) return EXIT_FAILURE;
     }
 
-    return 0;
+    return EXIT_SUCCESS;
 }
 
-void readFile(char *path, FLAGS *opts)
+int readFile(const char *filePath, FLAGS *opts)
 {
-    FILE *file;
-    char line[1024], *filename;
-    int nline;
-
-    file = fopen(path, "r");
+    FILE **file = malloc(sizeof(FILE));
     if (file == NULL)
     {
-        printf("Error reading file \"%s\"!\n", path);
-        fclose(file);
-        return;
+        fprintf(stderr, "Error: allocation failed\n");
+        free(file);
+        return -1;
+    }
+
+    if (!fopen_s(file, filePath, "r"))
+    {
+        fprintf(stderr, "Error: unable to open file at \"%s\"\n", filePath);
+        free(file);
+        return -1;
     }
 
     // print file name
-    if (opts->v && !opts->q) printf("==> %s <==\n", path);
+    if (opts->v && !opts->q) printf("==> %s <==\n", filePath);
 
     // default number of lines
     if (opts->n == 0) opts->n = 10;
     
-    nline = 1;
-    while (fgets(line, 1024, file) && nline <= opts->n)
+    char line[1024];
+    int lineNumber = 1;
+    while (fgets(line, 1024, *file) && lineNumber <= opts->n)
     {
-        // printf("%llu | %s", strlen(line), line);
         printf("%s", line);
-        // if (line[strlen(line)] != '\n') printf("\n");
-        nline++;
+        lineNumber++;
     }
 
-    fclose(file);
-    return;
+    free(file);
+    return 0;
 }

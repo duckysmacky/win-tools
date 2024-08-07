@@ -90,7 +90,7 @@ LONGLONG getDirSize(char *dirpath)
     char *path, *filename, *dirpathA;
 
     dirpathA = malloc(sizeof(dirpath) + 2);
-    sprintf(dirpathA, "%s/*", dirpath);
+    sprintf_s(dirpathA, "%s/*", dirpath);
     printf("dirpathA: %s\n", dirpathA);
 
     hFind = FindFirstFileExA(dirpathA, FindExInfoBasic, &findData, FindExSearchNameMatch, NULL, FIND_FIRST_EX_LARGE_FETCH);
@@ -109,7 +109,7 @@ LONGLONG getDirSize(char *dirpath)
         {
             path = malloc(sizeof(dirpath) + sizeof(filename) + 1);
 
-            sprintf(path, "%s/%s", dirpath, filename);
+            sprintf_s(path, "%s/%s", dirpath, filename);
             
             dirSizeQuad = isDot(filename) ? 0 : getDirSize(path);
             dirSize.QuadPart += dirSizeQuad;
@@ -199,13 +199,13 @@ char* formatLongFile(char *fpath, char *fname)
     time_t currTime = time(NULL);
     struct tm locTime = *localtime(&currTime);
     if (locTime.tm_year  + 1900 == (int) sysFileTime.wYear) // compare years - show time if same year
-        sprintf(modifyTime, "%.2d:%.2d", sysFileTime.wHour, sysFileTime.wMinute);
+        sprintf_s(modifyTime, "%.2d:%.2d", sysFileTime.wHour, sysFileTime.wMinute);
     else
-        sprintf(modifyTime, "%d", sysFileTime.wYear);
+        sprintf_s(modifyTime, "%d", sysFileTime.wYear);
 
     // long output: type permissions links owner group size lastMonth lastDate lastTime name
     longInfo = malloc(256 * sizeof(char));
-    sprintf(longInfo, "%c%c %c%c%c %2lu %s %s %6llu %s %2d %5s %s\n",
+    sprintf_s(longInfo, "%c%c %c%c%c %2lu %s %s %6llu %s %2d %5s %s\n",
         isDir ? 'd' : '-',
         (attrs & FILE_ATTRIBUTE_HIDDEN) ? 'h' : '-',
         'r',
@@ -275,23 +275,23 @@ void listDir(const char *path, FLAGS *opts)
             || (strcmp(ename, ".") == 0 || strcmp(ename, "..") == 0)
         )
         {
-            sprintf(cname, "%s%s/%s", COLOR_BLUE, ename, COLOR_RESET);
+            sprintf_s(cname, "%s%s/%s", COLOR_BLUE, ename, COLOR_RESET);
         }
         // if index of the extention is 0 (.files and hidden files)
         else if (extpos == 0)
         {
-            sprintf(cname, "%s%s%s", COLOR_CYAN, ename, COLOR_RESET);
+            sprintf_s(cname, "%s%s%s", COLOR_CYAN, ename, COLOR_RESET);
         }
         // all other files (except hidden)
         else
         {
-            sprintf(cname, "%s%s%s", COLOR_GREEN, ename, COLOR_RESET);
+            sprintf_s(cname, "%s%s%s", COLOR_GREEN, ename, COLOR_RESET);
         }
 
         if (opts->l)
         {
             fpath = malloc(sizeof(path) + sizeof(ename) + 1);
-            sprintf(fpath, "%s/%s", path, ename);
+            sprintf_s(fpath, "%s/%s", path, ename);
             dEntries[rowc - 1] = formatLongFile(fpath, cname);
             free(fpath);
         }
@@ -364,7 +364,7 @@ void readDir(const char *path, FLAGS *opts)
         if (!strcmp(ename, ".") || !strcmp(ename, "..")) continue;
 
         dpath = malloc(sizeof(path) + sizeof(ename) + sizeof(char));
-        sprintf(dpath, "%s/%s", path, ename);
+        sprintf_s(dpath, "%s/%s", path, ename);
 
         // try to open entry item as dir
         if (opendir(dpath))

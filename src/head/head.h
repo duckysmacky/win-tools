@@ -12,6 +12,6 @@
 
 // Functions
 
-void readFile(char *path, FLAGS *opts);
+int readFile(const char *path, FLAGS *opts);
 
 #endif // LS_H

@@ -75,7 +75,7 @@ int main(int argc, const char *argv[])
     }
 
 
-    if (fopen(path, "r"))
+    if (fopen_s(path, "r"))
     {
         readFile(path, pattern, &flags);
     }
@@ -88,7 +88,7 @@ int main(int argc, const char *argv[])
         else
         {
             char *dpath = malloc(sizeof(strlen(path) + 2) * sizeof(char));
-            sprintf(dpath, "%s/", path);
+            sprintf_s(dpath, "%s/", path);
             readDir(dpath, pattern, &flags);
             free(dpath);
         }
@@ -158,7 +158,7 @@ void readFile(const char *path, char *pattern, FLAGS *opts)
                         (2 * sizeof(COLOR_GREEN) + sizeof(char))
                     );
                     
-                    sprintf(cpattern, "%s%s%s", COLOR_GREEN, pattern, COLOR_RESET);
+                    sprintf_s(cpattern, "%s%s%s", COLOR_GREEN, pattern, COLOR_RESET);
                     replaceString(line, 256, pattern, cpattern);
 
                     free(cpattern);
@@ -190,7 +190,7 @@ void readDir(const char *path, char *pattern, FLAGS *opts)
     while (dEntry = nextEntry(dir))
     {
         char *ename = malloc(sizeof(dEntry->name)); // entry name
-        strcpy(ename, dEntry->name);
+        strcpy_s(ename, dEntry->name);
 
         // ignore "." and ".." files
         if (!strcmp(ename, ".") || !strcmp(ename, "..")) continue;
@@ -199,14 +199,14 @@ void readDir(const char *path, char *pattern, FLAGS *opts)
             strlen(path) * sizeof(char) +
             (strlen(ename) + 1) * sizeof(char)
         );
-        sprintf(fpath, "%s%s", path, ename);
+        sprintf_s(fpath, "%s%s", path, ename);
 
         if (openDir(fpath) != NULL)
         {
-            strcat(fpath, "/");
+            strcat_s(fpath, "/");
             readDir(fpath, pattern, opts);
         }
-        else if (fopen(fpath, "r"))   
+        else if (fopen_s(fpath, "r"))   
         {
             readFile(fpath, pattern, opts);
         }
