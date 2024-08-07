@@ -10,10 +10,9 @@ DIRECTORY* openDir(const char* dirPath)
     }
 
     char dirFilePath[MAX_PATH];
-    snprintf(dirFilePath, MAX_PATH, dirPath);
-    snprintf(dirFilePath, MAX_PATH, TEXT("\\*"));
+    snprintf(dirFilePath, MAX_PATH, "%s\\*", dirPath);
 
-    dir->handle = FindFirstFileA(dirFilePath, &dir->findData);
+    dir->handle = FindFirstFileA(dirFilePath, dir->findData);
     if (dir->handle == INVALID_HANDLE_VALUE)
     {
         fprintf(stderr, "Error: unable to open directory \"%s\"\n", dirPath);
@@ -42,17 +41,17 @@ ENTRY* nextEntry(DIRECTORY* dir)
     if (dir->firstEntry)
     {
         dir->firstEntry = 0;
-        strncpy(entry->name, dir->findData.cFileName, MAX_PATH);
+        strncpy_s(entry->name, sizeof(entry->name), dir->findData->cFileName, MAX_PATH);
     }
     else
     {
-        if (!FindNextFile(dir->handle, &dir->findData))
+        if (!FindNextFileW(dir->handle, (LPWIN32_FIND_DATAW) dir->findData))
         {
             free(entry);
             return NULL;
         }
 
-        strncpy(entry->name, dir->findData.cFileName, MAX_PATH);
+        strncpy_s(entry->name, sizeof(entry->name), dir->findData->cFileName, MAX_PATH);
     }
 
     return entry;

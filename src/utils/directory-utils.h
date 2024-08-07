@@ -1,13 +1,11 @@
 #ifndef DIRECTORY_UTILS_H
 #define DIRECTORY_UTILS_H
 
-#include <strsafe.h>
-
 #include "framework.h"
 
 typedef struct T_DIRECTORY {
     HANDLE handle;
-    WIN32_FIND_DATA findData;
+    LPWIN32_FIND_DATAA findData;
     int firstEntry;  // Flag to check if we are reading the first entry
 } DIRECTORY;
 
