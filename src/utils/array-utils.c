@@ -1,6 +1,8 @@
 #include "array-utils.h"
 
-int strinarr(char *arr[], size_t size, char *str)
+#include <string.h>
+
+int stringInArray(char *arr[], size_t size, char *str)
 {
     for (size_t i = 0; i < size / sizeof(*arr); i++)
     {

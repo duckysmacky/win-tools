@@ -1,5 +1,8 @@
 #include "string-utils.h"
 
+#include <string.h>
+#include "array-utils.h"
+
 char* joinStrings(char *str1, char *str2)
 {
     char *str = (char*) malloc(sizeof(str1) + sizeof(str2));

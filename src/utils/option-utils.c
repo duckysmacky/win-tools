@@ -1,10 +1,13 @@
 #include "option-utils.h"
 
+#include <stdio.h>
+#include <string.h>
+
 char* optionArgument = NULL;
 int optionIndex = 1, optionError = 1;
 char optionFlag;
 
-char getNextFlag(int argc, char* const argv[], const char* allOptionsString) {
+char getNextFlag(int argc, const char *argv[], const char* allOptionsString) {
     static char* next = NULL;
     
     if (optionIndex == 1)

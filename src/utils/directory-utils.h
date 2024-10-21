@@ -2,9 +2,6 @@
 #define DIRECTORY_UTILS_H
 
 #include <Windows.h>
-#include <tchar.h> 
-#include <stdio.h>
-#include <strsafe.h>
 
 typedef struct DIRECTORY_T {
     HANDLE handle;
@@ -16,8 +13,16 @@ typedef struct ENTRY_T {
     char name[MAX_PATH];
 } ENTRY;
 
-DIRECTORY* openDir(const char* dirPath);
-ENTRY* nextEntry(DIRECTORY* dir);
-int closeDir(DIRECTORY* dir);
+#ifdef __cplusplus
+extern "C" {
+#endif 
+
+        DIRECTORY* openDir(const char* dirPath);
+        ENTRY* nextEntry(DIRECTORY* dir);
+        int closeDir(DIRECTORY* dir);
+
+#ifdef __cplusplus
+}
+#endif 
 
 #endif // !DIRECTORY_UTILS_H

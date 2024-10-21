@@ -1,5 +1,9 @@
 #include "directory-utils.h"
 
+#include <tchar.h> 
+#include <stdio.h>
+#include <strsafe.h>
+
 DIRECTORY* openDir(const char* dirPath)
 {
     DIRECTORY* dir = (DIRECTORY*) malloc(sizeof(DIRECTORY));
