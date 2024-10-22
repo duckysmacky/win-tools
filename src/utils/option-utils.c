@@ -4,13 +4,13 @@
 #include <string.h>
 
 char* optionArgument = NULL;
-int optionIndex = 1, optionError = 1;
+int argIndex = 1, optionError = 1;
 char optionFlag;
 
 char getNextFlag(int argc, const char *argv[], const char* allOptionsString) {
     static char* next = NULL;
     
-    if (optionIndex == 1)
+    if (argIndex == 1)
     {
         next = NULL;
     }
@@ -18,21 +18,21 @@ char getNextFlag(int argc, const char *argv[], const char* allOptionsString) {
     optionArgument = NULL;
     if (next == NULL || *next == '\0')
     {
-        if (optionIndex == argc || argv[optionIndex][0] != '-' || argv[optionIndex][1] == '\0')
+        if (argIndex == argc || argv[argIndex][0] != '-' || argv[argIndex][1] == '\0')
         {
             next = NULL;
             return -1;
         }
 
-        if (argv[optionIndex][1] == '-' && argv[optionIndex][2] == '\0')
+        if (argv[argIndex][1] == '-' && argv[argIndex][2] == '\0')
         {
-            optionIndex++;
+            argIndex++;
             next = NULL;
             return -1;
         }
 
-        next = argv[optionIndex] + 1;
-        optionIndex++;
+        next = argv[argIndex] + 1;
+        argIndex++;
     }
 
     optionFlag = *next++;
@@ -42,7 +42,7 @@ char getNextFlag(int argc, const char *argv[], const char* allOptionsString) {
     {
         if (*next == '\0')
         {
-            optionIndex++;
+            argIndex++;
         }
 
         if (optionError && *allOptionsString != ':')
@@ -58,12 +58,12 @@ char getNextFlag(int argc, const char *argv[], const char* allOptionsString) {
         if (*next != '\0')
         {
             optionArgument = next;
-            optionIndex++;
+            argIndex++;
         }
-        else if (optionIndex < argc)
+        else if (argIndex < argc)
         {
-            optionArgument = argv[optionIndex];
-            optionIndex++;
+            optionArgument = argv[argIndex];
+            argIndex++;
         }
         else
         {

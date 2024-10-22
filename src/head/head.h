@@ -1,17 +1,28 @@
-#ifndef HEAD_H
-#define HEAD_H
-
-// Includes
+#ifndef COMMANDS_HEAD_H
+#define COMMANDS_HEAD_H
 
 #include "framework.h"
-#include "array-utils.h"
-#include "string-utils.h"
-#include "option-utils.h"
 
-#include "options.h"
+#define VERSION "1.0"
 
-// Functions
+#define MESSAGE_USAGE "Usage: head [OPTIONS]... <FILE>...\nDo \"head -h\" for help\n"
+#define MESSAGE_HELP "TODO"
+#define OPTIONS_FLAGS "vqn: b:"
 
-int readFile(const char *path, FLAGS *opts);
+struct Options
+{
+    bool showFileName; // v
+    bool hideFileName; // q
+    int nLines; // n
+    int nBytes; // b
 
-#endif // LS_H
+    Options()
+    {
+        showFileName = false;
+        hideFileName = false;
+        nLines = 10;
+        nBytes = 0;
+    }
+};
+
+#endif // !COMMANDS_HEAD_H

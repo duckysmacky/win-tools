@@ -1,7 +1,12 @@
 #ifndef STRING_UTILS_H
 #define STRING_UTILS_H
 
-#define isnumber(str) strspn(str, "0123456789") == strlen(str)
+#include <string>
+
+namespace utils
+{
+    bool isNumber(const std::string &str);
+}
 
 #ifdef __cplusplus
 extern "C" {
