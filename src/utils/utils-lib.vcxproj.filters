@@ -36,12 +36,18 @@
     <ClInclude Include="Directory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ArgParser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PathBuilder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="array-utils.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="string-utils.c">
+    <ClCompile Include="string-utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="directory-utils.c">
@@ -51,6 +57,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Directory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ArgParser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PathBuilder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
