@@ -3,9 +3,10 @@
 
 #include "framework.h"
 
-#define VERSION "1.0.1"
+#define NAME "Head"
+#define VERSION "1.0.0"
 
-#define MESSAGE_VERSION "Grep (v" VERSION ") - developed by github.com/duckysmacky"
+#define MESSAGE_VERSION NAME " v" VERSION
 #define MESSAGE_USAGE "Usage: head [OPTIONS]... <FILE>...\nDo \"head -h\" for help\n"
 #define MESSAGE_HELP "TODO"
 

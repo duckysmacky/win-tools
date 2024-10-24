@@ -8,7 +8,7 @@
 #include "option-utils.h"
 #include "string-utils.h"
 
-int readFile(const std::string& filePath, const Options& options);
+static int readFile(const std::string& filePath, const Options& options);
 
 int main(int argc, char* argv[])
 {
@@ -52,7 +52,6 @@ int main(int argc, char* argv[])
         }
     }
 
-    // Holds all non-option arguments (file paths)
     std::vector<std::string> filePaths;
     for (; argIndex < argc; argIndex++)
         filePaths.push_back(argv[argIndex]);
@@ -84,7 +83,7 @@ int main(int argc, char* argv[])
     return 0;
 }
 
-int readFile(const std::string &filePath, const Options &options)
+static int readFile(const std::string &filePath, const Options &options)
 {
     std::ifstream file(filePath);
 
