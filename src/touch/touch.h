@@ -1,20 +1,31 @@
-#ifndef TOUCH_H
-#define TOUCH_H
-
-// Includes
-#include <sys/stat.h>
+#ifndef COMMANDS_TOUCH_H
+#define COMMANDS_TOUCH_H
 
 #include "framework.h"
-#include "array-utils.h"
-#include "string-utils.h"
-#include "option-utils.h"
-#include "directory-utils.h"
 
-#include "options.h"
+#define NAME "Touch"
+#define VERSION "1.0.0"
 
-// Functions
+#define MESSAGE_VERSION NAME " v" VERSION
+#define MESSAGE_USAGE "Usage: touch [OPTIONS]... <FILE>...\n"
+#define MESSAGE_HELP "TODO"
 
-int updateFile(char *fpath, FLAGS *opts);
-int createFile(char *path);
+#define OPTIONS_FLAGS "Vham"
 
-#endif // TOUCH_H
+struct Options
+{
+    bool accessTimeOnly; // a
+    bool modifyTimeOnly; // m
+    // TODO - set access and modify time from string d
+    // TODO - set access and modify time from another file's r 
+    // TODO - supress file creation if doesnt exist c
+    // TODO - create file using specified YYMMDDHHMM t
+
+    Options()
+    {
+        accessTimeOnly = false;
+        modifyTimeOnly = false;
+    }
+};
+
+#endif // !COMMANDS_TOUCH_H
