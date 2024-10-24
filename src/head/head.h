@@ -3,25 +3,25 @@
 
 #include "framework.h"
 
-#define VERSION "1.0"
+#define VERSION "1.0.1"
 
+#define MESSAGE_VERSION "Grep (v" VERSION ") - developed by github.com/duckysmacky"
 #define MESSAGE_USAGE "Usage: head [OPTIONS]... <FILE>...\nDo \"head -h\" for help\n"
 #define MESSAGE_HELP "TODO"
-#define OPTIONS_FLAGS "vqn: b:"
+
+#define OPTIONS_FLAGS "Vhvqn: "
 
 struct Options
 {
     bool showFileName; // v
     bool hideFileName; // q
     int nLines; // n
-    int nBytes; // b
 
     Options()
     {
         showFileName = false;
         hideFileName = false;
         nLines = 10;
-        nBytes = 0;
     }
 };
 
