@@ -1,24 +1,39 @@
-#ifndef GREP_H
-#define GREP_H
+#ifndef COMMANDS_GREP_H
+#define COMMANDS_GREP_H
 
-// Includes
 #include "framework.h"
-#include "colors.h"
-#include "array-utils.h"
-#include "string-utils.h"
-#include "directory-utils.h"
-#include "option-utils.h"
 
-#include "options.h"
+#include <string>
 
-/*
-    Opens and reads directory from path
-*/
-void readDir(const char *path, char *pattern, FLAGS *opts);
+#define NAME "Grep"
+#define VERSION "1.0.0"
 
-/*
-    Opens and reads file from path
-*/
-void readFile(const char *path, char *pattern, FLAGS *opts);
+#define MESSAGE_VERSION NAME " v" VERSION
+#define MESSAGE_USAGE "Usage: grep [OPTIONS]... <PATTERN> <FILE>...\nDo \"grep -h\" for help\n"
+#define MESSAGE_HELP "TODO"
 
-#endif
+#define OPTION_FLAGS "Vhiwnclvf: "
+
+struct Options
+{
+    bool ignoreCase; // i
+    bool showLineNumber; // n
+    bool onlyCountLines; // c
+    bool onlyFileName; // l
+    bool onlyUnmatched; // v
+    bool recursive; // R
+    std::string patternFilePath; // f
+
+    Options()
+    {
+        ignoreCase = false;
+        showLineNumber = false;
+        onlyCountLines = false;
+        onlyFileName = false;
+        onlyUnmatched = false;
+        recursive = false;
+        patternFilePath = "";
+    }
+};
+
+#endif //!COMMANDS_GREP_H

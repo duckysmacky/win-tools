@@ -6,15 +6,33 @@
 
 #include "array-utils.h"
 
-using namespace std;
-
 namespace utils
 {
     bool isNumber(const std::string& str)
     {
-        string::const_iterator iter = str.begin();
+        std::string::const_iterator iter = str.begin();
         while (iter != str.end() && isdigit(*iter)) ++iter;
         return !str.empty() && iter == str.end();
+    }
+
+    std::string toLowercase(const std::string& str)
+    {
+        std::string result = "";
+
+        for (char ch : str)
+            result += tolower(ch);
+
+        return result;
+    }
+
+    std::string toUppercase(const std::string& str)
+    {
+        std::string result = "";
+
+        for (char ch : str)
+            result += toupper(ch);
+
+        return result;
     }
 }
 

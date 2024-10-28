@@ -6,6 +6,8 @@
 namespace utils
 {
     bool isNumber(const std::string &str);
+    std::string toLowercase(const std::string& str);
+    std::string toUppercase(const std::string& str);
 }
 
 #ifdef __cplusplus
