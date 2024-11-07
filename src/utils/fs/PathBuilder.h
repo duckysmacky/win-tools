@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-namespace utils
+namespace utils::files
 {
 	// A helper class for easier work with paths
 	class PathBuilder
@@ -23,7 +23,7 @@ namespace utils
 
 	public:
 		PathBuilder();
-		PathBuilder(std::string path);
+		PathBuilder(const std::string& path);
 		~PathBuilder() = default;
 
 		void operator <<(const std::string& path);

@@ -2,7 +2,7 @@
 
 // Private
 
-void utils::PathBuilder::appendPathSegments(const std::string& path)
+void utils::files::PathBuilder::appendPathSegments(const std::string& path)
 {
     std::string pathSegment = "";
 
@@ -21,7 +21,7 @@ void utils::PathBuilder::appendPathSegments(const std::string& path)
     m_pathBuffer.push_back(pathSegment);
 }
 
-void utils::PathBuilder::appendPathSegments(std::vector<std::string>& targetPathBuffer, const std::string& path) const
+void utils::files::PathBuilder::appendPathSegments(std::vector<std::string>& targetPathBuffer, const std::string& path) const
 {
     std::string pathSegment = "";
 
@@ -40,7 +40,7 @@ void utils::PathBuilder::appendPathSegments(std::vector<std::string>& targetPath
     targetPathBuffer.push_back(pathSegment);
 }
 
-std::string utils::PathBuilder::buildPathBuffer() const
+std::string utils::files::PathBuilder::buildPathBuffer() const
 {
     std::string path;
 
@@ -52,7 +52,7 @@ std::string utils::PathBuilder::buildPathBuffer() const
     return path;
 }
 
-std::string utils::PathBuilder::buildPathBuffer(const std::vector<std::string> pathBuffer) const
+std::string utils::files::PathBuilder::buildPathBuffer(const std::vector<std::string> pathBuffer) const
 {
     std::string path;
 
@@ -66,40 +66,40 @@ std::string utils::PathBuilder::buildPathBuffer(const std::vector<std::string> p
 
 // Public
 
-utils::PathBuilder::PathBuilder()
+utils::files::PathBuilder::PathBuilder()
 {
 	m_pathBuffer.push_back(".");
 }
 
-utils::PathBuilder::PathBuilder(std::string path)
+utils::files::PathBuilder::PathBuilder(const std::string& path)
 {
 	m_pathBuffer.push_back(".");
 	appendPathSegments(path);
 }
 
-void utils::PathBuilder::operator<<(const std::string& path)
+void utils::files::PathBuilder::operator<<(const std::string& path)
 {
     appendPathSegments(path);
 }
 
-void utils::PathBuilder::append(const std::string& path)
+void utils::files::PathBuilder::append(const std::string& path)
 {
     appendPathSegments(path);
 }
 
-std::string utils::PathBuilder::join(const std::string& path) const
+std::string utils::files::PathBuilder::join(const std::string& path) const
 {
     auto prefixPathBuffer = std::vector<std::string>(m_pathBuffer.begin(), m_pathBuffer.end() - 1);
     appendPathSegments(prefixPathBuffer, path);
     return buildPathBuffer(prefixPathBuffer);
 }
 
-std::string utils::PathBuilder::getPath() const
+std::string utils::files::PathBuilder::getPath() const
 {
     return buildPathBuffer();
 }
 
-std::string utils::PathBuilder::getLast() const
+std::string utils::files::PathBuilder::getLast() const
 {
     return m_pathBuffer.back();
 }
