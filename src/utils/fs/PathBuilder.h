@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-namespace utils::files
+namespace utils::fs
 {
 	// A helper class for easier work with paths
 	class PathBuilder

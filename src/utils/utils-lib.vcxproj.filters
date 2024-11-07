@@ -30,13 +30,16 @@
     <ClInclude Include="option-utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Directory.h">
+    <ClInclude Include="fs\Directory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ArgParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PathBuilder.h">
+    <ClInclude Include="fs\PathBuilder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="fs-utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -53,13 +56,13 @@
     <ClCompile Include="option-utils.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Directory.cpp">
+    <ClCompile Include="fs\Directory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ArgParser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PathBuilder.cpp">
+    <ClCompile Include="fs\PathBuilder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
