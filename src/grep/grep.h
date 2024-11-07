@@ -1,8 +1,6 @@
 #ifndef COMMANDS_GREP_H
 #define COMMANDS_GREP_H
 
-#include "framework.h"
-
 #include <string>
 
 #define NAME "Grep"

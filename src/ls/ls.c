@@ -1,5 +1,18 @@
 #include "ls.h"
 
+#include <Windows.h>
+#include <time.h>
+
+#include "colors.h"
+#include "array-utils.h"
+#include "directory-utils.h"
+#include "option-utils.h"
+
+LONGLONG getDirSize(char* fpath);
+void listDir(const char* path, FLAGS* opts);
+void readDir(const char* path, FLAGS* opts);
+char* formatLongFile(char* fpath, char* fname);
+
 char *NAME_EXEPTIONS[] = {
     "Makefile"
 };
@@ -43,7 +56,7 @@ int main(int argc, char const *argv[])
     }
 
     // holds specified dir path, else current
-    const char *dirpath = argv[optionIndex] ? argv[optionIndex] : ".";
+    const char *dirpath = argv[argIndex] ? argv[argIndex] : ".";
 
     if (flags.R)
     {

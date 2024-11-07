@@ -1,8 +1,6 @@
 #ifndef COMMANDS_TOUCH_H
 #define COMMANDS_TOUCH_H
 
-#include "framework.h"
-
 #define NAME "Touch"
 #define VERSION "1.0.0"
 

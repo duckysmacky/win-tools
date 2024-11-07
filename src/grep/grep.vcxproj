@@ -38,6 +38,7 @@
     <ProjectGuid>{b26286f3-6df8-4d80-8c53-57599ca71eb1}</ProjectGuid>
     <RootNamespace>grep</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>grep</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

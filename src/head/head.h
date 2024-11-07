@@ -1,8 +1,6 @@
 #ifndef COMMANDS_HEAD_H
 #define COMMANDS_HEAD_H
 
-#include "framework.h"
-
 #define NAME "Head"
 #define VERSION "1.0.0"
 

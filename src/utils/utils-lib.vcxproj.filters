@@ -27,9 +27,6 @@
     <ClInclude Include="directory-utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="framework.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="option-utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>

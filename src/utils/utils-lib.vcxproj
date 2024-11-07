@@ -174,7 +174,6 @@
     <ClInclude Include="array-utils.h" />
     <ClInclude Include="colors.h" />
     <ClInclude Include="directory-utils.h" />
-    <ClInclude Include="framework.h" />
     <ClInclude Include="PathBuilder.h" />
     <ClInclude Include="string-utils.h" />
   </ItemGroup>

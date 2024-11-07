@@ -5,6 +5,8 @@
 #include <vector>
 #include <filesystem>
 
+#include <Windows.h>
+
 #include "array-utils.h"
 #include "string-utils.h"
 #include "option-utils.h"
