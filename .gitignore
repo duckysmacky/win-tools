@@ -1,8 +1,26 @@
+# Dotfiles
 .vs/
 .vscode/
 
+# Build artifacts
+*.exe
+*.obj
+*.lib
+*.dll
+*.pdb
+
+# Intermediate files
 test/
 bin/
-
 src/*/Win32/
 src/*/x64/
+
+# Visual Studio specific
+*.suo
+*.user
+*.VC.db
+.vs/
+
+# Temporary files
+*.log
+*.tmp
