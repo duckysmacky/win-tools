@@ -25,21 +25,21 @@ namespace utils::fs
 
     void PathBuilder::append(const std::string& path)
     {
-        std::string pathSegment = "";
+        std::string pathElement = "";
 
         for (int i = 0; i < path.length(); i++)
         {
             if (path[i] == '/' || path[i] == '\\')
             {
-                m_pathBuffer.push_back(pathSegment);
-                pathSegment.clear();
+                m_pathBuffer.push_back(pathElement);
+                pathElement.clear();
                 continue;
             }
 
-            pathSegment += path[i];
+            pathElement += path[i];
         }
 
-        m_pathBuffer.push_back(pathSegment);
+        m_pathBuffer.push_back(pathElement);
     }
 
     std::string PathBuilder::pop()
@@ -81,16 +81,6 @@ namespace utils::fs
         m_fileExtention = fileExtention;
     }
 
-    Path* PathBuilder::build() const
-    {
-        return nullptr;
-    }
-
-    Path* PathBuilder::with(const std::string& path) const
-    {
-        return nullptr;
-    }
-
     int PathBuilder::elements() const
     {
         int elements = m_pathBuffer.size();
@@ -101,7 +91,7 @@ namespace utils::fs
     std::string PathBuilder::str() const
     {
         std::string str = buildPathBuffer();
-        if (hasFile)
+        if (m_hasFile)
             str += fileName();
         return std::string();
     }
@@ -123,7 +113,7 @@ namespace utils::fs
     std::string PathBuilder::fileName() const
     {
         std::string fileName;
-        if (hasFile)
+        if (m_hasFile)
         {
             fileName += m_fileRoot;
             if (!m_fileExtention.empty())

@@ -12,8 +12,6 @@ namespace utils::fs
 		Path(const std::string& dirPath, const std::string& fileRoot, const std::string fileExtention);
 		~Path() = default;
 
-		PathBuilder asBuilder() const;
-
 		bool exists() const;
 		bool isFile() const;
 		bool isDirectory() const;
@@ -35,8 +33,9 @@ namespace utils::fs
 		std::string m_dirPath;
 		std::string m_fileRoot;
 		std::string m_fileExtention;
-		int m_elements;
 		bool m_isFile;
+
+		void parsePath(const std::string& path);
 	};
 }
 
