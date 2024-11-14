@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ls.c" />
+    <ClCompile Include="ls.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ls.h" />
