@@ -168,23 +168,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="ArgParser.h" />
+    <ClInclude Include="cli\ArgParser.h" />
+    <ClInclude Include="cli\CommandParser.h" />
     <ClInclude Include="fs\Directory.h" />
-    <ClInclude Include="fs-utils.h" />
+    <ClInclude Include="filesystem.h" />
     <ClInclude Include="option-utils.h" />
     <ClInclude Include="array-utils.h" />
     <ClInclude Include="colors.h" />
-    <ClInclude Include="directory-utils.h" />
     <ClInclude Include="fs\PathBuilder.h" />
+    <ClInclude Include="fs\Path.h" />
     <ClInclude Include="string-utils.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ArgParser.cpp" />
+    <ClCompile Include="cli\ArgParser.cpp" />
+    <ClCompile Include="cli\CommandParser.cpp" />
     <ClCompile Include="fs\Directory.cpp" />
     <ClCompile Include="option-utils.c" />
     <ClCompile Include="array-utils.c" />
-    <ClCompile Include="directory-utils.c" />
     <ClCompile Include="fs\PathBuilder.cpp" />
+    <ClCompile Include="fs\Path.cpp" />
     <ClCompile Include="string-utils.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

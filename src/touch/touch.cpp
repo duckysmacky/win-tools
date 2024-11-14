@@ -10,7 +10,6 @@
 #include "array-utils.h"
 #include "string-utils.h"
 #include "option-utils.h"
-#include "directory-utils.h"
 
 static int updateFile(std::string filePath, const Options& options);
 static int createFile(std::string filePath, const Options& options);

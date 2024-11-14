@@ -24,22 +24,25 @@
     <ClInclude Include="string-utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="directory-utils.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="option-utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="fs\Directory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ArgParser.h">
+    <ClInclude Include="cli\ArgParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="fs\PathBuilder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="fs-utils.h">
+    <ClInclude Include="filesystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="fs\Path.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cli\CommandParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -50,19 +53,22 @@
     <ClCompile Include="string-utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="directory-utils.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="option-utils.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="fs\Directory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ArgParser.cpp">
+    <ClCompile Include="cli\ArgParser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="fs\PathBuilder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="fs\Path.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cli\CommandParser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

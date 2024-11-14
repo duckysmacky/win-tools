@@ -10,8 +10,8 @@
 #include "colors.h"
 #include "array-utils.h"
 #include "string-utils.h"
-#include "directory-utils.h"
 #include "option-utils.h"
+#include "fs/Directory.h"
 
 int readFile(std::string filePath, const std::string& pattern, const Options& options);
 int readDir(std::string dirPath, const std::string& pattern, const Options& options);
@@ -219,14 +219,12 @@ int readFile(std::string filePath, const std::string& pattern, const Options& op
 
 int readDir(std::string dirPath, const std::string& pattern, const Options& options)
 {
-    ENTRY *dirEntry;
-    DIRECTORY *dir = openDir(dirPath.c_str());
-
+    utils::fs::Directory dir(dirPath);
     std::string entryName;
     std::string filePath;
-    while (dirEntry = nextEntry(dir))
+    for (auto& entry : dir.entries())
     {
-        entryName = dirEntry->name;
+        entryName = entry.name;
 
         // ignore "." and ".." files
         if (entryName == "." || entryName == "..") continue;
@@ -249,6 +247,5 @@ int readDir(std::string dirPath, const std::string& pattern, const Options& opti
         }
     }
 
-    closeDir(dir);
     return 0;
 }
