@@ -6,6 +6,8 @@
 
 #include "Path.h"
 
+#define SLASH "/"
+
 namespace utils::fs
 {
 	// A helper class for easier work with paths
@@ -17,7 +19,7 @@ namespace utils::fs
 		~PathBuilder() = default;
 
 		void append(const std::string& path);
-		void pop();
+		std::string pop();
 		void clear();
 
 		void setFileName(const std::string& fileName);
@@ -26,17 +28,18 @@ namespace utils::fs
 		Path* build() const;
 		Path* with(const std::string& path) const;
 
-		std::string string() const;
-		std::string end() const;
-		std::string file() const;
+		int elements() const;
+		std::string str() const;
+		std::string tail() const;
 		std::string fileName() const;
+		std::string fileRoot() const;
 		std::string fileExtention() const;
-		int parts() const; // TODO: rename function
+		bool hasFile() const;
 		
-		std::string hasFile() const;
-
 	private:
 		std::vector<std::string> m_pathBuffer;
+		std::string m_fileRoot;
+		std::string m_fileExtention;
 		bool m_hasFile;
 
 		// Build buffer by connecting segments with slashes
