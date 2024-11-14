@@ -4,40 +4,43 @@
 #include <string>
 #include <vector>
 
+#include "Path.h"
+
 namespace utils::fs
 {
 	// A helper class for easier work with paths
 	class PathBuilder
 	{
-	private:
-		// Holds the segments of the path
-		std::vector<std::string> m_pathBuffer;
-
-		// Split input path by segments and append to the buffer
-		void appendPathSegments(const std::string& path);
-		void appendPathSegments(std::vector<std::string>& targetPathBuffer, const std::string& path) const;
-		// Build buffer by connecting segments with slashes
-		std::string buildPathBuffer() const;
-		std::string buildPathBuffer(const std::vector<std::string> pathBuffer) const;
-
-
 	public:
 		PathBuilder();
 		PathBuilder(const std::string& path);
 		~PathBuilder() = default;
 
-		void operator <<(const std::string& path);
-
-		// Adds the input path to the end of buffer
 		void append(const std::string& path);
-		// Sets the last buffer element to input path and
-		// retuns the whole path without modifying the original
-		std::string join(const std::string& path) const;
+		void pop();
+		void clear();
 
-		// Returns the whole path
-		std::string getPath() const;
-		// Returns the last segment of the buffer
-		std::string getLast() const;
+		void setFileName(const std::string& fileName);
+		void setFileExtention(const std::string& fileExtention);
+
+		Path* build() const;
+		Path* with(const std::string& path) const;
+
+		std::string string() const;
+		std::string end() const;
+		std::string file() const;
+		std::string fileName() const;
+		std::string fileExtention() const;
+		int parts() const; // TODO: rename function
+		
+		std::string hasFile() const;
+
+	private:
+		std::vector<std::string> m_pathBuffer;
+		bool m_hasFile;
+
+		// Build buffer by connecting segments with slashes
+		std::string buildPathBuffer() const;
 	};
 }
 

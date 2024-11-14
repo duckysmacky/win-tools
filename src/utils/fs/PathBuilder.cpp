@@ -1,105 +1,52 @@
 #include "PathBuilder.h"
 
-// Private
-
-void utils::fs::PathBuilder::appendPathSegments(const std::string& path)
+namespace utils::fs
 {
-    std::string pathSegment = "";
+    // Public
 
-    for (int i = 0; i < path.length(); i++)
+    PathBuilder::PathBuilder()
+        : m_hasFile(false)
     {
-        if (path[i] == '/' || path[i] == '\\')
+        m_pathBuffer.push_back(".");
+    }
+
+    PathBuilder::PathBuilder(const std::string& path)
+        : m_hasFile(false)
+    {
+        m_pathBuffer.push_back(".");
+        append(path);
+    }
+
+    void PathBuilder::append(const std::string& path)
+    {
+        std::string pathSegment = "";
+
+        for (int i = 0; i < path.length(); i++)
         {
-            m_pathBuffer.push_back(pathSegment);
-            pathSegment.clear();
-            continue;
+            if (path[i] == '/' || path[i] == '\\')
+            {
+                m_pathBuffer.push_back(pathSegment);
+                pathSegment.clear();
+                continue;
+            }
+
+            pathSegment += path[i];
         }
 
-        pathSegment += path[i];
+        m_pathBuffer.push_back(pathSegment);
     }
 
-    m_pathBuffer.push_back(pathSegment);
-}
+    // Private
 
-void utils::fs::PathBuilder::appendPathSegments(std::vector<std::string>& targetPathBuffer, const std::string& path) const
-{
-    std::string pathSegment = "";
-
-    for (int i = 0; i < path.length(); i++)
+    std::string PathBuilder::buildPathBuffer() const
     {
-        if (path[i] == '/' || path[i] == '\\')
+        std::string path;
+
+        for (std::string segment : m_pathBuffer)
         {
-            targetPathBuffer.push_back(pathSegment);
-            pathSegment.clear();
-            continue;
+            path += segment + "/";
         }
 
-        pathSegment += path[i];
+        return path;
     }
-
-    targetPathBuffer.push_back(pathSegment);
-}
-
-std::string utils::fs::PathBuilder::buildPathBuffer() const
-{
-    std::string path;
-
-    for (std::string segment : m_pathBuffer)
-    {
-        path += segment + "/";
-    }
-
-    return path;
-}
-
-std::string utils::fs::PathBuilder::buildPathBuffer(const std::vector<std::string> pathBuffer) const
-{
-    std::string path;
-
-    for (std::string segment : pathBuffer)
-    {
-        path += segment + "/";
-    }
-
-    return path;
-}
-
-// Public
-
-utils::fs::PathBuilder::PathBuilder()
-{
-	m_pathBuffer.push_back(".");
-}
-
-utils::fs::PathBuilder::PathBuilder(const std::string& path)
-{
-	m_pathBuffer.push_back(".");
-	appendPathSegments(path);
-}
-
-void utils::fs::PathBuilder::operator<<(const std::string& path)
-{
-    appendPathSegments(path);
-}
-
-void utils::fs::PathBuilder::append(const std::string& path)
-{
-    appendPathSegments(path);
-}
-
-std::string utils::fs::PathBuilder::join(const std::string& path) const
-{
-    auto prefixPathBuffer = std::vector<std::string>(m_pathBuffer.begin(), m_pathBuffer.end() - 1);
-    appendPathSegments(prefixPathBuffer, path);
-    return buildPathBuffer(prefixPathBuffer);
-}
-
-std::string utils::fs::PathBuilder::getPath() const
-{
-    return buildPathBuffer();
-}
-
-std::string utils::fs::PathBuilder::getLast() const
-{
-    return m_pathBuffer.back();
 }
