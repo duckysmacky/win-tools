@@ -300,7 +300,7 @@ std::string getLongFormat(const std::string& filePath, const std::string& fileNa
         : std::format("{}", sysFileTime.wYear);
 
     // long output: type permissions links owner group size lastMonth lastDate lastTime name
-    longInfo = std::format("{}{} {}{}{} {:2} {} {} {:6} {} {:2} {:5} {}",
+    longInfo = std::format("{}{} {}{}{} {:2} {} {} {:10} {} {:2} {:5} {}",
         isDir ? 'd' : '-',
         (attrs & FILE_ATTRIBUTE_HIDDEN) ? 'h' : '-',
         'r',
