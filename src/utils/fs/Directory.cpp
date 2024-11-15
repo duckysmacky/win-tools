@@ -7,6 +7,7 @@
 namespace utils::fs
 {
     Directory::Directory(const std::string& path)
+        : m_size(0)
     {
         std::string dirFilesPath = path + "\\*";
 
@@ -19,10 +20,15 @@ namespace utils::fs
 
         while (FindNextFileA(m_handle, &m_findData))
         {
-            m_entries.push_back(Entry {
-                m_findData.cFileName,
-                m_findData.cAlternateFileName
-            });
+            Entry entry;
+            LARGE_INTEGER fileSize{};
+            entry.name = m_findData.cFileName;
+            fileSize.HighPart = m_findData.nFileSizeHigh;
+            fileSize.LowPart = m_findData.nFileSizeLow;
+            entry.size = fileSize.QuadPart;
+            entry.isDir = (m_findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY);
+
+            m_entries.push_back(entry);
         }
 
         m_size = getDirSize(path);

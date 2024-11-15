@@ -15,7 +15,8 @@ namespace utils::fs
 		struct Entry
 		{
 			std::string name;
-			std::string alternateName;
+			int64_t size;
+			bool isDir;
 		};
 
 	public:

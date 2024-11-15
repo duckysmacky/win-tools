@@ -122,7 +122,7 @@ void listDir(const std::string& dirPath, const Options& options)
         // ignore dotfiles
         if (extentionPos == 0 && !(options.showAll || options.showHidden)) continue;
         // ignore everything except dirs if -d
-        if (options.listDirs && extentionPos != std::string::npos) continue;
+        if (options.listDirs && !entry.isDir) continue;
 
         // Checking file types and assigning them the correct color
         if (extentionPos == std::string::npos || fileName == "." || fileName == "..")
@@ -279,18 +279,18 @@ std::string getLongFormat(const std::string& filePath, const std::string& fileNa
     FileTimeToSystemTime(&fileTime, &sysFileTime); // Convert time to human format
     switch (sysFileTime.wMonth) // Convert months
     {
-    case 1: modifyMonth = "Jan"; break;
-    case 2: modifyMonth = "Feb"; break;
-    case 3: modifyMonth = "Mar"; break;
-    case 4: modifyMonth = "Apr"; break;
-    case 5: modifyMonth = "May"; break;
-    case 6: modifyMonth = "Jun"; break;
-    case 7: modifyMonth = "Jul"; break;
-    case 8: modifyMonth = "Aug"; break;
-    case 9: modifyMonth = "Sep"; break;
-    case 10: modifyMonth = "Oct"; break;
-    case 11: modifyMonth = "Nov"; break;
-    case 12: modifyMonth = "Dec"; break;
+        case 1: modifyMonth = "Jan"; break;
+        case 2: modifyMonth = "Feb"; break;
+        case 3: modifyMonth = "Mar"; break;
+        case 4: modifyMonth = "Apr"; break;
+        case 5: modifyMonth = "May"; break;
+        case 6: modifyMonth = "Jun"; break;
+        case 7: modifyMonth = "Jul"; break;
+        case 8: modifyMonth = "Aug"; break;
+        case 9: modifyMonth = "Sep"; break;
+        case 10: modifyMonth = "Oct"; break;
+        case 11: modifyMonth = "Nov"; break;
+        case 12: modifyMonth = "Dec"; break;
     }
     time_t currTime = time(NULL);
     struct tm locTime;
