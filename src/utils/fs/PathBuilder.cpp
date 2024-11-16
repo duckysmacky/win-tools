@@ -73,12 +73,29 @@ namespace utils::fs
 
     void PathBuilder::setFileName(const std::string& fileName)
     {
+        if (fileName.empty()) return;
+        m_hasFile = true;
         m_fileRoot = fileName;
     }
 
     void PathBuilder::setFileExtention(const std::string& fileExtention)
     {
+        if (fileExtention.empty()) return;
+        m_hasFile = true;
         m_fileExtention = fileExtention;
+    }
+
+    Path* PathBuilder::build() const
+    {
+        if (m_hasFile && !m_fileRoot.empty())
+        {
+            if (m_fileExtention.empty())
+                return new Path(buildPathBuffer(), m_fileRoot);
+            
+            return new Path(buildPathBuffer(), m_fileRoot, m_fileExtention);
+        }
+
+        return new Path(buildPathBuffer());
     }
 
     int PathBuilder::elements() const
@@ -91,8 +108,7 @@ namespace utils::fs
     std::string PathBuilder::str() const
     {
         std::string str = buildPathBuffer();
-        if (m_hasFile)
-            str += fileName();
+        if (m_hasFile) str += fileName();
         return std::string();
     }
 
@@ -100,13 +116,9 @@ namespace utils::fs
     {
         std::string tail;
         if (m_hasFile)
-        {
             tail = fileName();
-        }
         else
-        {
             tail = m_pathBuffer.back();
-        }
         return tail;
     }
 
@@ -116,8 +128,7 @@ namespace utils::fs
         if (m_hasFile)
         {
             fileName += m_fileRoot;
-            if (!m_fileExtention.empty())
-                fileName += "." + m_fileExtention;
+            if (!m_fileExtention.empty()) fileName += "." + m_fileExtention;
         }
         return fileName;
     }
@@ -144,9 +155,7 @@ namespace utils::fs
         std::string path;
 
         for (std::string segment : m_pathBuffer)
-        {
             path += segment + SLASH;
-        }
 
         return path;
     }

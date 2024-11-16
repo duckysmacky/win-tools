@@ -8,13 +8,15 @@ namespace utils::fs
 	class Path
 	{
 	public:
-		Path(const std::string& path);
+		Path(const std::string& fullPath);
+		Path(const std::string& dirPath, const std::string& fileRoot);
 		Path(const std::string& dirPath, const std::string& fileRoot, const std::string fileExtention);
 		~Path() = default;
 
 		bool exists() const;
-		bool isFile() const;
 		bool isDirectory() const;
+		bool isFile() const;
+		bool isHidden() const;
 		bool isAbsolute() const;
 		bool isRelative() const;
 
@@ -33,9 +35,13 @@ namespace utils::fs
 		std::string m_dirPath;
 		std::string m_fileRoot;
 		std::string m_fileExtention;
+		bool m_exists;
+		bool m_isDir;
 		bool m_isFile;
+		bool m_isHidden;
 
 		void parsePath(const std::string& path);
+		void parseFilePath(const std::string& path, size_t fileIndex);
 	};
 }
 
