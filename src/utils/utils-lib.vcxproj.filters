@@ -30,9 +30,6 @@
     <ClInclude Include="fs\Directory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cli\ArgParser.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="fs\PathBuilder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -42,7 +39,13 @@
     <ClInclude Include="fs\Path.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cli\CommandParser.h">
+    <ClInclude Include="cmd\Command.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cmd\CommandOption.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cmd\CommandArgument.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -59,16 +62,19 @@
     <ClCompile Include="fs\Directory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cli\ArgParser.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="fs\PathBuilder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="fs\Path.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cli\CommandParser.cpp">
+    <ClCompile Include="cmd\Command.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cmd\CommandOption.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cmd\CommandArgument.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

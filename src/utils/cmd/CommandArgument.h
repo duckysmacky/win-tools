@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace utils::cmd
+namespace utils
 {
 	class CommandArgument
 	{
@@ -11,12 +11,12 @@ namespace utils::cmd
 		CommandArgument(const std::string& id);
 		~CommandArgument() = default;
 		
-		void isRequired(bool value);
-		void isMany(bool value);
+		CommandArgument& setRequired(bool value);
+		CommandArgument& setMany(bool value);
 
-		std::string id();
-		bool required();
-		bool many();
+		std::string id() const;
+		bool required() const;
+		bool many() const;
 
 	private:
 		std::string m_id;

@@ -168,8 +168,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="cli\ArgParser.h" />
-    <ClInclude Include="cli\CommandParser.h" />
+    <ClInclude Include="cmd\CommandOption.h" />
+    <ClInclude Include="cmd\Command.h" />
+    <ClInclude Include="cmd\CommandArgument.h" />
     <ClInclude Include="fs\Directory.h" />
     <ClInclude Include="filesystem.h" />
     <ClInclude Include="option-utils.h" />
@@ -180,8 +181,9 @@
     <ClInclude Include="string-utils.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="cli\ArgParser.cpp" />
-    <ClCompile Include="cli\CommandParser.cpp" />
+    <ClCompile Include="cmd\CommandOption.cpp" />
+    <ClCompile Include="cmd\Command.cpp" />
+    <ClCompile Include="cmd\CommandArgument.cpp" />
     <ClCompile Include="fs\Directory.cpp" />
     <ClCompile Include="option-utils.c" />
     <ClCompile Include="array-utils.c" />
