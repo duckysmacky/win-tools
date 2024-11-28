@@ -4,6 +4,7 @@
 #include <string>
 #include <set>
 #include <variant>
+#include <optional>
 
 #include "CommandArgument.h"
 
@@ -47,7 +48,7 @@ namespace utils
 		std::string m_description;
 		CommandOption::Type m_type;
 		std::set<std::string> m_conflicts;
-		CommandArgument m_argument;
+		std::optional<CommandArgument> m_argument;
 		std::variant<bool, int, std::string> m_value;
 	};
 }

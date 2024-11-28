@@ -7,7 +7,7 @@
 namespace utils::fs
 {
     Directory::Directory(const std::string& path)
-        : m_size(0)
+        : m_path(path)
     {
         std::string dirFilesPath = path + "\\*";
 
@@ -30,8 +30,6 @@ namespace utils::fs
 
             m_entries.push_back(entry);
         }
-
-        m_size = getDirSize(path);
     }
 
     Directory::~Directory()
@@ -39,7 +37,17 @@ namespace utils::fs
         FindClose(m_handle);
     }
 
-    int64_t Directory::getDirSize(const std::string& path)
+    std::vector<Directory::Entry> Directory::entries() const
+    {
+        return m_entries;
+    }
+
+    int64_t Directory::size() const
+    {
+        return getDirSize(m_path);
+    }
+
+    int64_t Directory::getDirSize(const std::string& path) const
     {
         if (path == "." || path == "..") return 0;
         
@@ -81,13 +89,4 @@ namespace utils::fs
         return dirSize.QuadPart;
     }
 
-    std::vector<Directory::Entry> Directory::entries() const
-    {
-        return m_entries;
-    }
-
-    int64_t Directory::size() const
-    {
-        return m_size;
-    }
 }

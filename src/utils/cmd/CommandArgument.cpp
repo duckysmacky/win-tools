@@ -5,7 +5,6 @@ namespace utils
 	CommandArgument::CommandArgument(const std::string& id)
 		: m_id(id), m_required(false), m_many(false)
 	{
-		
 	}
 
 	CommandArgument& CommandArgument::setRequired(bool value)

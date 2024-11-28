@@ -5,13 +5,11 @@ namespace utils
 	CommandOption::CommandOption(const std::string& id)
 		: m_id(id), m_type(CommandOption::Type::FLAG)
 	{
-
 	}
 
 	CommandOption::CommandOption(const std::string& id, CommandOption::Type type)
 		: m_id(id), m_type(type)
 	{
-
 	}
 
 	CommandOption& CommandOption::setLongFlag(const std::string& flag)

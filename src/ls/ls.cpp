@@ -17,9 +17,7 @@
 
 void listDir(const std::string& dirPath, const Options& options);
 void readDir(const std::string& dirPath, const Options& options);
-
 uint32_t getFileIndex(const std::string& filePath);
-
 std::string getLongFormat(const std::string& filePath, const std::string& fileName);
 
 int main(int argc, char* argv[])
