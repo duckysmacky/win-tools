@@ -2,46 +2,43 @@
 
 A collection of useful command line tools for Windows
 
-The goal of this project is to port most commonly used Linux commands to Windows, as they are not there in CMD or Powershell by default (with exceptions)
+## About
 
-Most of these commands are their 1-to-1 replica of their Linux equivalents, but there are slight differences doe to OS specifics and my programming skills. Allthough the goal is to replicate these commands as accurate as possible, I still sometimes add my own additions into the mix
+This project aims to add a bunch of useful commands for Windows. This includes ports of the most
+popular UNIX commands to replace Windows default alternavies by adding more features, improving
+perfomance and putting then closer to their original counterparts, as well as partially adding
+some custom functionality
 
-## Installation
+All commands are build based on Windows API for a more native feel and better perfomance. Recently
+there was a switch from exclusive C codebase to mostly C++ code to improve speed, reduce complexity
+and to mostly remove dangers of the C language like memory leaks. 
 
-For now the project is still in very early development, so there are no public releases for now. But you can build all of the binaries by yourself using Visual Studio 2022 (solution)
+Current goal of the project is to optimise avaliable commands and bring the project to
+a **stable release with those four**. After that it is planned to continue rebuilding from zero and
+porting other popular UNIX commands for more native experience.
 
-All built binaries be found within the `bin/` in the corresponding target platform (32-bit or 64-bit) directory. They can be added to your system's `PATH` to be used anywhere
+Any kind of contribution is very appreciateed and will be a huge help to project's future development
 
 ## Features
 
-Documentation for each command can be found under `src/[command]/README.md`. Below are listed all of the currently implemented commands and their avaliable features
+Win-tools is in a **very active development right now**, with currently only four commands implemented:
+- `ls`
+- `grep`
+- `head`
+- `touch`
 
-| Command               | Status | Options | Stability |
-| :-------------------- |:------:| :-----: | :-------: |
-| [`ls`](#ls)           | ✅    | ➖      | ✅       |
-| [`ll (ls -l)`](#ls)   | ➖    | ❌      | ❌       |
-| [`touch`](#touch)     | ✅    | ➖      | ✅       |
-| [`grep`](#grep)       | ➖    | ➖      | ➖       |
-| [`head`](#head)       | ✅    | ➖      | ✅       |
-<!-- | [`tail`](#tail)       | ❌    | ❌      | ❌       | -->
-<!-- | [`copyf`](#copyf)     | ❌    | ❌      | ❌       | -->
-<!-- | [`cp`](#cp)           | ❌    | ❌      | ❌       | -->
-<!-- | [`mv`](#mv)           | ❌    | ❌      | ❌       | -->
-<!-- | [`less`](#less)       | ❌    | ❌      | ❌       | -->
-<!-- | [`sed`](#sed)         | ❌    | ❌      | ❌       | -->
-<!-- | [`sort`](#sort)       | ❌    | ❌      | ❌       | -->
+Possible future commands (or their alternatives) to be added in the future are, but not limited to:
+`tail`, `copyf`, `cp`, `mv`, `less`, `sed`, `sort`
 
-| Emoji | Meaning          |
-| :---: | ---------------- |
-| ✅   | Fully Functional |
-| ➖   | Semi-functional  |
-| ❌   | Incomplete       |
-| ❓    | Under question   |
+There is some outdated documentation under each `src/<command>` directory, which will be updated
+with project's development and hopefully by release will contain up to date information. It is also
+planned for each command to have a complete `--help` option for documentation to be built in.
 
-## Known Issues
+## Installation
 
-- Memory leaks 💀
-- Trying to `ls -R` or `grep` in a really big directory crashes the program
-- Trying to `ls -R` the `.git` directory crashes the program 
+For now the project is still in very early development, so there are **no public releases at the moment**.
+You can build all of the binaries by yourself using Visual Studio 2022
 
-If you find any other bugs please submit them [here](https://github.com/duckysmacky/win-tools/issues).
+All built binaries be found within the `bin/` in the corresponding target platform (32-bit or 64-bit)
+directory. They can be added to your system's `PATH` to be used anywhere (some require for default Windows
+aliases to be overritten, like `ls`)
