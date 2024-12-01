@@ -12,34 +12,28 @@ namespace utils
 	{
 	}
 
-	CommandOption& CommandOption::setLongFlag(const std::string& flag)
+	CommandOption& CommandOption::setDescription(const std::string& description)
 	{
-		m_longFlag = flag;
+		m_description = description;
 		return *this;
 	}
-
+	
 	CommandOption& CommandOption::setShortFlag(const std::string& flag)
 	{
 		m_shortFlag = flag;
 		return *this;
 	}
 
-	CommandOption& CommandOption::setDescription(const std::string& description)
+	CommandOption& CommandOption::setArgument(CommandArgument argument)
 	{
-		m_description = description;
+		m_type = Type::FLAG;
+		m_argument = argument.isRequired(true);
 		return *this;
 	}
-
-	CommandOption& CommandOption::conflictsWith(const std::string& id)
+	
+	CommandOption& CommandOption::addConflict(const std::string& id)
 	{
-		m_conflicts.insert(id);
-		return *this;
-	}
-
-	CommandOption& CommandOption::addArgument(CommandArgument argument)
-	{
-		m_type = Type::VALUE;
-		m_argument = argument;
+		m_conflictIds.insert(id);
 		return *this;
 	}
 
@@ -48,9 +42,9 @@ namespace utils
 		return m_id;
 	}
 
-	std::string CommandOption::longFlag() const
+	std::string CommandOption::description() const
 	{
-		return m_longFlag;
+		return m_description;
 	}
 
 	std::string CommandOption::shortFlag() const
@@ -58,19 +52,14 @@ namespace utils
 		return m_shortFlag;
 	}
 
-	std::string CommandOption::description() const
-	{
-		return m_description;
-	}
-
-	bool CommandOption::hasLongFlag() const
-	{
-		return !m_longFlag.empty();
-	}
-
 	bool CommandOption::hasShortFlag() const
 	{
 		return !m_shortFlag.empty();
+	}
+
+	bool CommandOption::hasArgument() const
+	{
+		return m_argument.has_value();
 	}
 
 	CommandOption::Type CommandOption::type() const
@@ -78,8 +67,13 @@ namespace utils
 		return m_type;
 	}
 
+	std::optional<CommandArgument> CommandOption::argument() const
+	{
+		return m_argument;
+	}
+
 	std::set<std::string> CommandOption::conflicts() const
 	{
-		return m_conflicts;
+		return m_conflictIds;
 	}
 }

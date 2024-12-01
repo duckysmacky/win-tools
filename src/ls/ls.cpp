@@ -13,6 +13,7 @@
 #include "array-utils.h"
 #include "string-utils.h"
 #include "option-utils.h"
+#include "terminal-utils.h"
 #include "fs/Directory.h"
 
 void listDir(const std::string& dirPath, const Options& options);
@@ -101,7 +102,6 @@ uint32_t getFileIndex(const std::string& filePath)
 void listDir(const std::string& dirPath, const Options& options)
 {
     std::vector<std::string> dirEntries;
-    CONSOLE_SCREEN_BUFFER_INFO terminalInfo;
     int i, terminalWidth;
     int maxlen = 0;
     size_t extentionPos; // index of the extention
@@ -154,8 +154,7 @@ void listDir(const std::string& dirPath, const Options& options)
         if (options.rows == 0)
         {
             // Get width of the screen
-            GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &terminalInfo);
-            terminalWidth = terminalInfo.srWindow.Right - terminalInfo.srWindow.Left + 1;
+            terminalWidth = utils::getTerminalWidth();
 
             // Set rows according to how many longest entries fit in a line
             for (i = 0; i < rowc - 1; i++) maxlen = max(maxlen, dirEntries[i].size() - 11);

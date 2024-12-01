@@ -22,9 +22,6 @@ namespace utils
 		Command& addArgument(CommandArgument argument);
 		Command& addOption(CommandOption option);
 
-		std::string help() const;
-		std::string version() const;
-
 	private:
 		std::string m_name;
 		std::string m_version;
@@ -33,6 +30,9 @@ namespace utils
 		std::vector<CommandOption> m_options;
 		//std::map<std::string, CommandOption*> m_longOptions;
 		//std::map<std::string, CommandOption*> m_shortOptions;
+
+		std::string generateVersion() const;
+		std::string generateHelp() const;
 	};
 }
 

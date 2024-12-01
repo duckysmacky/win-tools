@@ -17,8 +17,7 @@ namespace utils
 		enum Type
 		{
 			MESSAGE,
-			FLAG,
-			VALUE
+			FLAG
 		};
 
 	public:
@@ -26,30 +25,27 @@ namespace utils
 		CommandOption(const std::string& id, CommandOption::Type type);
 		~CommandOption() = default;
 
-		CommandOption& setLongFlag(const std::string& flag);
+		CommandOption& setDescription(const std::string& description);
 		CommandOption& setShortFlag(const std::string& flag);
-		CommandOption& setDescription(const std::string& message);
-		CommandOption& conflictsWith(const std::string& id);
-		CommandOption& addArgument(CommandArgument argument);
+		CommandOption& setArgument(CommandArgument argument);
+		CommandOption& addConflict(const std::string& id);
 
 		std::string id() const;
-		std::string longFlag() const;
-		std::string shortFlag() const;
 		std::string description() const;
-		bool hasLongFlag() const;
+		std::string shortFlag() const;
 		bool hasShortFlag() const;
-		CommandOption::Type type() const;
+		bool hasArgument() const;
+		Type type() const;
+		std::optional<CommandArgument> argument() const;
 		std::set<std::string> conflicts() const;
 
 	private:
 		std::string m_id;
-		std::string m_longFlag;
-		std::string m_shortFlag;
 		std::string m_description;
-		CommandOption::Type m_type;
-		std::set<std::string> m_conflicts;
+		std::string m_shortFlag;
 		std::optional<CommandArgument> m_argument;
-		std::variant<bool, int, std::string> m_value;
+		Type m_type;
+		std::set<std::string> m_conflictIds;
 	};
 }
 

@@ -2,26 +2,44 @@
 #define UTILS_CMD_COMMAND_ARGUMENT_H
 
 #include <string>
+#include <variant>
 
 namespace utils
 {
+
 	class CommandArgument
 	{
 	public:
-		CommandArgument(const std::string& id);
-		~CommandArgument() = default;
+		typedef std::variant<std::string, int, bool> ValueVariant;
 		
-		CommandArgument& setRequired(bool value);
-		CommandArgument& setMany(bool value);
+		enum Type
+		{
+			STRING,
+			INT,
+			BOOL
+		};
+
+	public:
+		CommandArgument(const std::string& id, Type type);
+		~CommandArgument() = default;
+
+		CommandArgument& setDescription(const std::string& description);
+		CommandArgument& isRequired(bool value);
+		CommandArgument& isMultiple(bool value);
 
 		std::string id() const;
+		std::string description() const;
+		Type type() const;
 		bool required() const;
-		bool many() const;
+		bool multiple() const;
 
 	private:
 		std::string m_id;
-		bool m_required;
-		bool m_many;
+		std::string m_description;
+		Type m_type;
+		ValueVariant m_value;
+		bool m_isRequired;
+		bool m_isMultiple;
 	};
 }
 
