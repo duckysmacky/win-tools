@@ -26,23 +26,26 @@ namespace utils
 		~CommandOption() = default;
 
 		CommandOption& setDescription(const std::string& description);
-		CommandOption& setShortFlag(const std::string& flag);
+		CommandOption& setShortFlag(char flag);
+		CommandOption& setDefaultValue(bool value);
 		CommandOption& setArgument(CommandArgument argument);
 		CommandOption& addConflict(const std::string& id);
 
 		std::string id() const;
 		std::string description() const;
-		std::string shortFlag() const;
+		char shortFlag() const;
 		bool hasShortFlag() const;
 		bool hasArgument() const;
+		bool value() const;
 		Type type() const;
-		std::optional<CommandArgument> argument() const;
+		CommandArgument argument() const;
 		std::set<std::string> conflicts() const;
 
 	private:
 		std::string m_id;
 		std::string m_description;
-		std::string m_shortFlag;
+		std::optional<char> m_shortFlag;
+		bool m_value;
 		std::optional<CommandArgument> m_argument;
 		Type m_type;
 		std::set<std::string> m_conflictIds;

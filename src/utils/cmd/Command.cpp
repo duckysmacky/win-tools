@@ -6,16 +6,20 @@
 
 namespace utils
 {
-	Command::Command(const std::string& name, const std::string& version)
-		: m_name(name), m_version(version)
+	Command::Command(int argc, const char* argv[])
+		: m_name("Unknown"), m_version("Unknown"), m_nextArgument(0)
 	{
-		addOption(CommandOption("HELP", CommandOption::MESSAGE)
+		for (int i = 1; i < argc; i++)
+			m_commandArgs.push_back(argv[i]);
+
+		m_options.reserve(2);
+		m_options.push_back(CommandOption("help", CommandOption::MESSAGE)
 			.setDescription("Shows help information about this command")
-			.setShortFlag("h")
+			.setShortFlag('h')
 		);
-		addOption(CommandOption("VERSION", CommandOption::MESSAGE)
+		m_options.push_back(CommandOption("version", CommandOption::MESSAGE)
 			.setDescription("Shows version information for this command")
-			.setShortFlag("V")
+			.setShortFlag('V')
 		);
 	}
 
@@ -95,4 +99,141 @@ namespace utils
 		return helpMessage;
 	}
 
+	void Command::parse()
+	{
+		// Set default option values
+		for (int i = 0; i < m_options.size(); i++)
+			m_flagValues.insert({ m_options[i].id(), m_options[i].value() });
+
+		for (int i = 0; i < m_commandArgs.size(); i++)
+		{
+			std::string arg = m_commandArgs[i];
+			// if starts with a dash
+			if (arg[0] == '-' && arg.length() > 1)
+			{
+				// if starts with a double dash
+				if (arg[1] == '-' && arg.length() > 2)
+				{
+					handleLongFlag(i);
+				}
+				else
+				{
+					handleShortFlag(i);
+				}
+			}
+			else
+			{
+				handleArgument(i);
+			}
+		}
+
+		// TODO: check if any required arguments are not supplied
+	}
+
+	void Command::handleArgument(int i)
+	{
+		CommandArgument argument = m_arguments[m_nextArgument];
+		
+		if (!argument.multiple())
+		{
+			m_singleValues.insert({argument.id(), m_commandArgs[i]});
+		}
+		else
+		{
+			while (i < m_commandArgs.size())
+			{
+				m_multipleArguments.insert({ argument.id(), std::vector<std::string>() });
+				m_multipleArguments[argument.id()].push_back(m_commandArgs[i]);
+				i++;
+			}
+		}
+
+		m_nextArgument++;
+	}
+
+	void Command::handleShortFlag(int i)
+	{
+		std::string argFlag = m_commandArgs[i];
+
+		for (int i = 1; i < argFlag.size(); i++)
+		{
+			CommandOption option = findOption(argFlag[i]);
+			
+			if (option.type() == CommandOption::MESSAGE)
+			{
+				// TODO: exit process
+			}
+
+			if (option.hasArgument())
+			{
+				CommandArgument argument = option.argument().value();
+				size_t arg_i = (size_t)(i + 1);
+
+				// Check if there is an argument after the flag
+				if (m_arguments.size() - 1 >= arg_i)
+				{
+					m_singleValues.insert({argument.id(), m_commandArgs[arg_i]});
+				}
+				else
+				{
+					// TODO: throw error (option argument not provided)
+				}
+			}
+			else
+			{
+				m_flagValues[option.id()] = true;
+			}
+		}
+	}
+
+	void Command::handleLongFlag(int i)
+	{
+		CommandOption option = findOption(m_commandArgs[i].substr(2));
+		
+		if (option.type() == CommandOption::MESSAGE)
+		{
+			// TODO: exit process
+		}
+
+		if (option.hasArgument())
+		{
+			CommandArgument argument = option.argument().value();
+			size_t arg_i = (size_t)(i + 1);
+
+			if (m_arguments.size() - 1 >= arg_i)
+			{
+				m_singleValues.insert({argument.id(), m_commandArgs[arg_i]});
+			}
+			else
+			{
+				// TODO: throw error (option argument not provided)
+			}
+		}
+		else
+		{
+			m_flagValues[option.id()] = true;
+		}
+	}
+
+	CommandOption Command::findOption(const std::string& longFlag)
+	{
+		for (int i = 0; i < m_options.size(); i++)
+		{
+			if (m_options[i].id() == longFlag)
+				return m_options[i];
+		}
+
+		// TODO: throw error (unknown option)
+	}
+
+	CommandOption Command::findOption(char shortFlag)
+	{
+		for (int i = 0; i < m_options.size(); i++)
+		{
+			if (m_options[i].shortFlag() == shortFlag)
+				return m_options[i];
+		}
+
+		// TODO: throw error (unknown option)
+	}
 }

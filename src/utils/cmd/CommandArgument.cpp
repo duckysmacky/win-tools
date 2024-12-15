@@ -2,8 +2,8 @@
 
 namespace utils
 {
-	CommandArgument::CommandArgument(const std::string& id, CommandArgument::Type type)
-		: m_id(id), m_type(type), m_isRequired(false), m_isMultiple(false)
+	CommandArgument::CommandArgument(const std::string& id)
+		: m_id(id), m_isRequired(false), m_isMultiple(false)
 	{
 	}
 
@@ -13,16 +13,21 @@ namespace utils
 		return *this;
 	}
 
-	CommandArgument& CommandArgument::isRequired(bool value)
+	CommandArgument& CommandArgument::setRequired(bool value)
 	{
 		m_isRequired = value;
 		return *this;
 	}
 
-	CommandArgument& CommandArgument::isMultiple(bool value)
+	CommandArgument& CommandArgument::setMultiple(bool value)
 	{
 		m_isMultiple = value;
 		return *this;
+	}
+
+	void CommandArgument::setValue(const std::string& value)
+	{
+		m_value = value;
 	}
 
 	std::string CommandArgument::id() const
@@ -35,9 +40,14 @@ namespace utils
 		return m_description;
 	}
 
-	CommandArgument::Type CommandArgument::type() const
+	std::string CommandArgument::value() const
 	{
-		return m_type;
+		return m_value;
+	}
+
+	bool CommandArgument::hasValue() const
+	{
+		return !m_value.empty();
 	}
 
 	bool CommandArgument::required() const
