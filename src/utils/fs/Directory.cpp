@@ -1,10 +1,10 @@
-#include "Directory.h"
+#include "./Directory.h"
 
 #include <iostream>
 #include <vector>
 #include <format>
 
-namespace utils::fs
+namespace fs
 {
     Directory::Directory(const std::string& path)
         : m_path(path)

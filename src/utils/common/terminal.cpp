@@ -1,4 +1,6 @@
-#include "terminal-utils.h"
+#include "./terminal.h"
+
+#include <Windows.h>
 
 namespace utils
 {

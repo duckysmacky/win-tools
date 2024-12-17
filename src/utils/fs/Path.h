@@ -1,9 +1,9 @@
-#ifndef UTILS_PATH_H
-#define UTILS_PATH_H
+#ifndef UTILS_FS_PATH_H
+#define UTILS_FS_PATH_H
 
 #include <string>
 
-namespace utils::fs
+namespace fs
 {
 	class Path
 	{
@@ -45,4 +45,4 @@ namespace utils::fs
 	};
 }
 
-#endif // !UTILS_PATH_H
+#endif // !UTILS_FS_PATH_H

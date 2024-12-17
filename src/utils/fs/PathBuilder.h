@@ -1,5 +1,5 @@
-#ifndef UTILS_PATH_BUILDER_H
-#define UTILS_PATH_BUILDER_H
+#ifndef UTILS_FS_PATH_BUILDER_H
+#define UTILS_FS_PATH_BUILDER_H
 
 #include <string>
 #include <vector>
@@ -8,7 +8,7 @@
 
 #define SLASH "/"
 
-namespace utils::fs
+namespace fs
 {
 	// A helper class for easier work with paths
 	class PathBuilder
@@ -47,4 +47,4 @@ namespace utils::fs
 	};
 }
 
-#endif // !UTILS_PATH_BUILDER_H
+#endif // !UTILS_FS_PATH_BUILDER_H

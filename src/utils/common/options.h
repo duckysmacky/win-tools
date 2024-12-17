@@ -1,7 +1,6 @@
+#ifndef UTILS_COMMON_OPTIONS_H
+#define UTILS_COMMON_OPTIONS_H
 // Custom implementation of getopt
-
-#ifndef OPTION_UTILS_H
-#define OPTION_UTILS_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -15,4 +14,4 @@ extern "C" {
 }
 #endif 
 
-#endif // !OPTION_UTILS_H
+#endif // !UTILS_COMMON_OPTIONS_H

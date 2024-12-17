@@ -5,10 +5,10 @@
 #include <string>
 #include <map>
 
-#include "CommandArgument.h"
-#include "CommandOption.h"
+#include "Argument.h"
+#include "Option.h"
 
-namespace utils
+namespace cmd
 {
 	class Command
 	{
@@ -19,8 +19,8 @@ namespace utils
 		Command& setName(const std::string& name);
 		Command& setVersion(const std::string& version);
 		Command& setDescription(const std::string& description);
-		Command& addArgument(CommandArgument argument);
-		Command& addOption(CommandOption option);
+		Command& addArgument(Argument argument);
+		Command& addOption(Option option);
 
 		std::string getValue(const std::string& id) const;
 		std::vector<std::string> getMultiple(const std::string& id) const;
@@ -36,8 +36,8 @@ namespace utils
 		std::vector<std::string> m_commandArgs;
 		int m_nextArgument;
 
-		std::vector<CommandArgument> m_arguments;
-		std::vector<CommandOption> m_options;
+		std::vector<Argument> m_arguments;
+		std::vector<Option> m_options;
 
 		std::map<std::string, std::string> m_singleValues;
 		std::map<std::string, std::vector<std::string>> m_multipleValues;
@@ -49,10 +49,10 @@ namespace utils
 		void handleArgument(int i);
 		void handleShortFlag(int i);
 		void handleLongFlag(int i);
-		void handleOption(const utils::CommandOption& option, int i);
+		void handleOption(const Option& option, int i);
 
-		CommandOption findOption(const std::string& longFlag);
-		CommandOption findOption(char shortFlag);
+		Option findOption(const std::string& longFlag);
+		Option findOption(char shortFlag);
 	};
 }
 

@@ -1,5 +1,5 @@
-#ifndef ARRAY_UTILS_H
-#define ARRAY_UTILS_H
+#ifndef UTILS_COMMON_ARRAYS_H
+#define UTILS_COMMON_ARRAYS_H
 
 /* Get length of array */
 #define arrlen(arr) (sizeof(arr) / sizeof(*arr))
@@ -19,4 +19,4 @@ extern "C" {
 }
 #endif 
 
-#endif
+#endif // !UTILS_COMMON_ARRAYS_H

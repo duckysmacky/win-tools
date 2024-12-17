@@ -98,6 +98,7 @@
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <PrecompiledHeaderOutputFile>$(Platform)\$(Configuration)\$(TargetName).pch</PrecompiledHeaderOutputFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>C:\Users\nikdor\Projects\win-tools\src\utils</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -118,6 +119,7 @@
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <PrecompiledHeaderOutputFile>$(Platform)\$(Configuration)\$(TargetName).pch</PrecompiledHeaderOutputFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>C:\Users\nikdor\Projects\win-tools\src\utils</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -138,6 +140,7 @@
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <PrecompiledHeaderOutputFile>$(Platform)\$(Configuration)\$(TargetName).pch</PrecompiledHeaderOutputFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>C:\Users\nikdor\Projects\win-tools\src\utils</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -158,6 +161,7 @@
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <PrecompiledHeaderOutputFile>$(Platform)\$(Configuration)\$(TargetName).pch</PrecompiledHeaderOutputFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>C:\Users\nikdor\Projects\win-tools\src\utils</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -168,31 +172,33 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="cmd\CommandOption.h" />
+    <ClInclude Include="cmd\Option.h" />
     <ClInclude Include="cmd\Command.h" />
-    <ClInclude Include="cmd\CommandArgument.h" />
-    <ClInclude Include="command.h" />
+    <ClInclude Include="cmd\Argument.h" />
+    <ClInclude Include="common\colors.h" />
+    <ClInclude Include="cmd.h" />
     <ClInclude Include="fs\Directory.h" />
-    <ClInclude Include="filesystem.h" />
-    <ClInclude Include="option-utils.h" />
-    <ClInclude Include="array-utils.h" />
-    <ClInclude Include="colors.h" />
+    <ClInclude Include="fs.h" />
+    <ClInclude Include="common\options.h" />
+    <ClInclude Include="common\arrays.h" />
     <ClInclude Include="fs\PathBuilder.h" />
     <ClInclude Include="fs\Path.h" />
-    <ClInclude Include="string-utils.h" />
-    <ClInclude Include="terminal-utils.h" />
+    <ClInclude Include="common\strings.h" />
+    <ClInclude Include="common\terminal.h" />
+    <ClInclude Include="utils.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="cmd\CommandOption.cpp" />
+    <ClCompile Include="cmd\Option.cpp" />
     <ClCompile Include="cmd\Command.cpp" />
-    <ClCompile Include="cmd\CommandArgument.cpp" />
+    <ClCompile Include="cmd\Argument.cpp" />
+    <ClCompile Include="common\colors.cpp" />
     <ClCompile Include="fs\Directory.cpp" />
-    <ClCompile Include="option-utils.c" />
-    <ClCompile Include="array-utils.c" />
+    <ClCompile Include="common\options.c" />
+    <ClCompile Include="common\arrays.c" />
     <ClCompile Include="fs\PathBuilder.cpp" />
     <ClCompile Include="fs\Path.cpp" />
-    <ClCompile Include="string-utils.cpp" />
-    <ClCompile Include="terminal-utils.cpp" />
+    <ClCompile Include="common\strings.cpp" />
+    <ClCompile Include="common\terminal.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,11 +1,11 @@
-#include "Path.h"
+#include "./Path.h"
 
 #include <string>
 #include <format>
 
 #include <Windows.h>
 
-namespace utils::fs
+namespace fs
 {
 	Path::Path(const std::string& fullPath)
 		: m_isDir(false), m_isFile(false), m_isHidden(false)

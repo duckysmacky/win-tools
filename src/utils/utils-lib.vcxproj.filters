@@ -15,16 +15,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="array-utils.h">
+    <ClInclude Include="common\arrays.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="colors.h">
+    <ClInclude Include="common\strings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="string-utils.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="option-utils.h">
+    <ClInclude Include="common\options.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="fs\Directory.h">
@@ -33,7 +30,7 @@
     <ClInclude Include="fs\PathBuilder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="filesystem.h">
+    <ClInclude Include="fs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="fs\Path.h">
@@ -42,27 +39,33 @@
     <ClInclude Include="cmd\Command.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cmd\CommandOption.h">
+    <ClInclude Include="cmd\Option.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cmd\CommandArgument.h">
+    <ClInclude Include="cmd\Argument.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="terminal-utils.h">
+    <ClInclude Include="common\terminal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="command.h">
+    <ClInclude Include="cmd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="common\colors.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="array-utils.c">
+    <ClCompile Include="common\arrays.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="string-utils.cpp">
+    <ClCompile Include="common\strings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="option-utils.c">
+    <ClCompile Include="common\options.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="fs\Directory.cpp">
@@ -77,13 +80,16 @@
     <ClCompile Include="cmd\Command.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cmd\CommandOption.cpp">
+    <ClCompile Include="cmd\Option.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cmd\CommandArgument.cpp">
+    <ClCompile Include="cmd\Argument.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="terminal-utils.cpp">
+    <ClCompile Include="common\terminal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="common\colors.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

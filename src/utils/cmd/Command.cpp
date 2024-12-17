@@ -1,11 +1,11 @@
-#include "Command.h"
+#include "./Command.h"
 
 #include <format>
 #include <iostream>
 
-#include "../string-utils.h"
+#include "utils.h"
 
-namespace utils
+namespace cmd
 {
 	Command::Command(int argc, const char* argv[])
 		: m_name("Unknown"), m_version("Unknown"), m_nextArgument(0)
@@ -14,11 +14,11 @@ namespace utils
 			m_commandArgs.push_back(argv[i]);
 
 		m_options.reserve(2);
-		m_options.push_back(CommandOption("help")
+		m_options.push_back(Option("help")
 			.setDescription("Display help message")
 			.setShortFlag('h')
 		);
-		m_options.push_back(CommandOption("version")
+		m_options.push_back(Option("version")
 			.setDescription("Display version information")
 			.setShortFlag('V')	
 		);
@@ -42,13 +42,13 @@ namespace utils
 		return *this;
 	}
 
-	Command& Command::addArgument(CommandArgument argument)
+	Command& Command::addArgument(Argument argument)
 	{
 		m_arguments.push_back(argument);
 		return *this;
 	}
 
-	Command& Command::addOption(CommandOption option)
+	Command& Command::addOption(Option option)
 	{
 		m_options.push_back(option);
 		return *this;
@@ -95,9 +95,9 @@ namespace utils
 		std::string helpMessage = std::format("Usage: {} [OPTIONS]...", m_name);
 
 		std::string arguments = "\nArguments:";
-		for (const CommandArgument& argument : m_arguments)
+		for (const Argument& argument : m_arguments)
 		{
-			std::string argumentLabel = toUppercase(argument.id());
+			std::string argumentLabel = utils::toUppercase(argument.id());
 
 			helpMessage += (argument.required())
 				? std::format(" {}", argumentLabel)
@@ -111,14 +111,14 @@ namespace utils
 		helpMessage += arguments;
 		
 		std::string options = "\n\nOptions:";
-		for (const CommandOption& option : m_options)
+		for (const Option& option : m_options)
 		{
 			std::string optionLabel = "--" + option.id();
 			
 			if (option.hasShortFlag())
 				optionLabel += std::format(", -{}", option.shortFlag());
-			if (option.type() == CommandOption::ARGUMENT)
-				optionLabel += std::format(" <{}>", toUppercase(option.argument().id()));
+			if (option.type() == Option::ARGUMENT)
+				optionLabel += std::format(" <{}>",utils::toUppercase(option.argument().id()));
 
 			options += std::format("\n  {:<25} {}", optionLabel, option.description());
 		}
@@ -136,8 +136,8 @@ namespace utils
 		// Set default option values
 		for (int i = 0; i < m_options.size(); i++)
 		{
-			CommandOption option = m_options[i];
-			if (option.type() == CommandOption::ARGUMENT)
+			Option option = m_options[i];
+			if (option.type() == Option::ARGUMENT)
 			{
 				m_singleValues.insert({ option.id(), option.defaultValue() });
 			}
@@ -180,7 +180,7 @@ namespace utils
 			std::exit(1);
 		}
 
-		CommandArgument argument = m_arguments[m_nextArgument];
+		Argument argument = m_arguments[m_nextArgument];
 		
 		if (!argument.multiple())
 		{
@@ -204,20 +204,20 @@ namespace utils
 
 		for (int j = 1; j < argFlag.size(); j++)
 		{
-			CommandOption option = findOption(argFlag[j]);
+			Option option = findOption(argFlag[j]);
 			handleOption(option, i);
 		}
 	}
 
 	void Command::handleLongFlag(int i)
 	{
-		CommandOption option = findOption(m_commandArgs[i].substr(2));
+		Option option = findOption(m_commandArgs[i].substr(2));
 		handleOption(option, i);
 	}
 
-	void Command::handleOption(const CommandOption& option, int i)
+	void Command::handleOption(const Option& option, int i)
 	{
-		if (option.type() == CommandOption::MESSAGE)
+		if (option.type() == Option::MESSAGE)
 		{
 			if (option.id() == "help")
 			{
@@ -230,9 +230,9 @@ namespace utils
 			std::exit(0);
 		}
 
-		if (option.type() == CommandOption::ARGUMENT)
+		if (option.type() == Option::ARGUMENT)
 		{
-			CommandArgument argument = option.argument();
+			Argument argument = option.argument();
 			size_t arg_i = (size_t)(i + 1);
 
 			// Check if there is an argument after the flag
@@ -252,7 +252,7 @@ namespace utils
 		}
 	}
 
-	CommandOption Command::findOption(const std::string& longFlag)
+	Option Command::findOption(const std::string& longFlag)
 	{
 		for (int i = 0; i < m_options.size(); i++)
 		{
@@ -263,7 +263,7 @@ namespace utils
 		// TODO: throw error (unknown option)
 	}
 
-	CommandOption Command::findOption(char shortFlag)
+	Option Command::findOption(char shortFlag)
 	{
 		for (int i = 0; i < m_options.size(); i++)
 		{

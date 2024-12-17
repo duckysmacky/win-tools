@@ -1,5 +1,5 @@
-#ifndef STRING_UTILS_H
-#define STRING_UTILS_H
+#ifndef UTILS_COMMON_STRINGS_H
+#define UTILS_COMMON_STRINGS_H
 
 #include <string>
 
@@ -35,4 +35,4 @@ namespace utils
 
 }
 
-#endif
+#endif // !UTILS_COMMON_STRINGS_H

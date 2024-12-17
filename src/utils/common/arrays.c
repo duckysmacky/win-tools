@@ -1,4 +1,4 @@
-#include "array-utils.h"
+#include "./arrays.h"
 
 #include <string.h>
 

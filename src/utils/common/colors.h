@@ -1,5 +1,5 @@
-#ifndef UTILS_COLOR_H
-#define UTILS_COLOR_H
+#ifndef UTILS_COLORS_H
+#define UTILS_COLORS_H
 
 #include <iostream>
 
@@ -33,25 +33,12 @@ namespace utils
 	class ccout
 	{
 	public:
-	    inline ccout(const std::string& color)
-	    {
-	        std::cout << color;
-	    }
+		inline ccout(const std::string& color);
+		inline ~ccout();
 	
 	    template <class T>
-	    inline ccout& operator<<(const T& input)
-	    {
-	        std::cout << input;
-	        return *this;
-	    }
-	
-	    inline ~ccout()
-	    {
-	        std::cout << colors::RESET << std::endl;
-	    }
+		inline ccout& operator<<(const T& input);
 	};
-
-
 }
 
-#endif // !UTILS_COLOR_H
+#endif // !UTILS_COLORS_H

@@ -7,74 +7,45 @@
 
 #include "option-utils.h"
 #include "string-utils.h"
+#include "command.h"
 
-static int readFile(const std::string& filePath, const Options& options);
+static int readFile(const std::string& filePath, const utils::Command& cmd);
 
-int main(int argc, char* argv[])
+int main(int argc, const char* argv[])
 {
-    Options options;
+    utils::Command command = utils::Command(argc, argv)
+        .setName("head")
+        .setDescription("Shows the head of the file (first n lines)")
+        .setVersion("1.0.0")
+        .addArgument(utils::CommandArgument("path")
+            .setDescription("Path to target file")
+            .setRequired(true)
+            .setMultiple(true)
+        )
+        .addOption(utils::CommandOption("lines")
+            .setDescription("How many first lines of a file to show")
+            .setShortFlag('n')
+            .setArgument("10")
+        )
+        .addOption(utils::CommandOption("show-name")
+            .setDescription("Show the name of the file")
+            .setShortFlag('v')
+            .addConflict("hide-name")
+        )
+        .addOption(utils::CommandOption("hide-name")
+            .setDescription("Hide the name of the file")
+            .setShortFlag('q')
+            .addConflict("show-name")
+        );
+    command.parse();
 
-    int flag;
-    while ((flag = getNextFlag(argc, argv, OPTIONS_FLAGS)) != -1)
+    std::vector<std::string> filePaths = command.getMultiple("path");
+    for (const std::string& path : filePaths)
     {
-        switch (flag)
-        {
-        case 'V':
-            std::cout << MESSAGE_VERSION << std::endl;
-            return 0;
-        case 'h':
-            std::cout << MESSAGE_HELP << std::endl;
-            return 0;
-        case 'v':
-            options.showFileName = true;
-            options.hideFileName = false;
-            break;
-        case 'q':
-            options.hideFileName = true;
-            options.showFileName = false;
-            break;
-        case 'n': 
-            if (utils::isNumber(optionArgument))
-            {
-                options.nLines = std::stoi(optionArgument);
-                break;
-            }
-            else
-            {
-                std::cerr << "Error: supplied option argument \"" << optionArgument << "\" is not a number value" << std::endl;
-                std::cout << MESSAGE_HELP << std::endl;
-                return -1;
-            }
-        default:
-            std::cerr << "Error: unknown option flag \"" << (char)flag << "\"" << std::endl;
-            std::cout << MESSAGE_USAGE << std::endl;
-            return -1;
-        }
-    }
-
-    std::vector<std::string> filePaths;
-    for (; argIndex < argc; argIndex++)
-        filePaths.push_back(argv[argIndex]);
-
-    if (filePaths.empty())
-    {
-        std::cerr << "Error: missing 1 argument\n";
-        std::cout << MESSAGE_USAGE << std::endl;
-        return -1;
-    }
-
-    if (filePaths.size() > 1 && !options.hideFileName)
-    {
-        options.showFileName = true;
-        options.hideFileName = false;
-    }
-
-    for (std::string path : filePaths)
-    {
-        if (options.showFileName && !options.hideFileName)
+        if ((command.getFlag("show-name") || filePaths.size() > 1) && !command.getFlag("hide-name"))
             std::cout << "==> " << path << " <==" << "\n";
 
-        if (readFile(path, options) != 0)
+        if (readFile(path, command) != 0)
             return 1;
 
         if (filePaths.size() > 1) std::cout << std::endl;
@@ -83,7 +54,7 @@ int main(int argc, char* argv[])
     return 0;
 }
 
-static int readFile(const std::string &filePath, const Options &options)
+static int readFile(const std::string &filePath, const utils::Command& cmd)
 {
     std::ifstream file(filePath);
 
@@ -95,7 +66,8 @@ static int readFile(const std::string &filePath, const Options &options)
 
     std::string buffer;
     int lineNumber = 0;
-    while (getline(file, buffer) && lineNumber < options.nLines)
+    int lineLimit = std::stoi(cmd.getValue("lines"));
+    while (getline(file, buffer) && lineNumber < lineLimit)
     {
         std::cout << buffer << std::endl;
         lineNumber++;

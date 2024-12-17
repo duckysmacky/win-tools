@@ -1,5 +1,5 @@
-#ifndef UTILS_DIRECTORY_H
-#define UTILS_DIRECTORY_H
+#ifndef UTILS_FS_DIRECTORY_H
+#define UTILS_FS_DIRECTORY_H
 
 #include <string>
 #include <vector>
@@ -7,7 +7,7 @@
 #include <Windows.h>
 #include <stdint.h>
 
-namespace utils::fs
+namespace fs
 {
 	class Directory
 	{
@@ -37,5 +37,4 @@ namespace utils::fs
 	};
 }
 
-
-#endif // !UTILS_DIRECTORY_H
+#endif // !UTILS_FS_DIRECTORY_H
