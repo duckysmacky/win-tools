@@ -3,12 +3,12 @@
 namespace utils
 {
 	CommandOption::CommandOption(const std::string& id)
-		: m_id(id), m_type(CommandOption::Type::FLAG), m_value(false)
+		: m_id(id), m_type(CommandOption::Type::FLAG), m_defaultValue(false)
 	{
 	}
 
 	CommandOption::CommandOption(const std::string& id, CommandOption::Type type)
-		: m_id(id), m_type(type), m_value(false)
+		: m_id(id), m_type(type), m_defaultValue(false)
 	{
 	}
 
@@ -26,7 +26,7 @@ namespace utils
 
 	CommandOption& CommandOption::setDefaultValue(bool value)
 	{
-		m_value = value;
+		m_defaultValue = value;
 		return *this;
 	}
 
@@ -34,6 +34,12 @@ namespace utils
 	{
 		m_type = Type::FLAG;
 		m_argument = argument.setRequired(true);
+		return *this;
+	}
+
+	CommandOption& CommandOption::setDefaultArgumentValue(const std::string& value)
+	{
+		m_defaultArgumentValue = value;
 		return *this;
 	}
 	
@@ -58,9 +64,9 @@ namespace utils
 		return m_shortFlag.value();
 	}
 
-	bool CommandOption::value() const
+	bool CommandOption::defaultValue() const
 	{
-		return m_value;
+		return m_defaultValue;
 	}
 
 	bool CommandOption::hasShortFlag() const
@@ -81,6 +87,11 @@ namespace utils
 	CommandArgument CommandOption::argument() const
 	{
 		return m_argument.value();
+	}
+
+	std::string CommandOption::defaultArgumentValue() const
+	{
+		return m_defaultArgumentValue;
 	}
 
 	std::set<std::string> CommandOption::conflicts() const

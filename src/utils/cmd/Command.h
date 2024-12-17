@@ -24,9 +24,9 @@ namespace utils
 		Command& addArgument(CommandArgument argument);
 		Command& addOption(CommandOption option);
 
-		std::string getSingle(const std::string& id);
-		std::vector<std::string> getMultiple(const std::string& id);
-		bool getFlag(const std::string& id);
+		std::string getSingle(const std::string& id) const;
+		std::vector<std::string> getMultiple(const std::string& id) const;
+		bool getFlag(const std::string& id) const;
 
 		void parse();
 
@@ -42,7 +42,7 @@ namespace utils
 		std::vector<CommandOption> m_options;
 
 		std::map<std::string, std::string> m_singleValues;
-		std::map<std::string, std::vector<std::string>> m_multipleArguments;
+		std::map<std::string, std::vector<std::string>> m_multipleValues;
 		std::map<std::string, bool> m_flagValues;
 
 		std::string generateVersion() const;
@@ -51,6 +51,7 @@ namespace utils
 		void handleArgument(int i);
 		void handleShortFlag(int i);
 		void handleLongFlag(int i);
+		void handleOption(const utils::CommandOption& option, int i);
 
 		CommandOption findOption(const std::string& longFlag);
 		CommandOption findOption(char shortFlag);

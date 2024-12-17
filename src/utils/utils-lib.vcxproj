@@ -171,6 +171,7 @@
     <ClInclude Include="cmd\CommandOption.h" />
     <ClInclude Include="cmd\Command.h" />
     <ClInclude Include="cmd\CommandArgument.h" />
+    <ClInclude Include="command.h" />
     <ClInclude Include="fs\Directory.h" />
     <ClInclude Include="filesystem.h" />
     <ClInclude Include="option-utils.h" />
