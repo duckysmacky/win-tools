@@ -25,11 +25,6 @@ namespace utils
 		return *this;
 	}
 
-	void CommandArgument::setValue(const std::string& value)
-	{
-		m_value = value;
-	}
-
 	std::string CommandArgument::id() const
 	{
 		return m_id;
@@ -38,16 +33,6 @@ namespace utils
 	std::string CommandArgument::description() const
 	{
 		return m_description;
-	}
-
-	std::string CommandArgument::value() const
-	{
-		return m_value;
-	}
-
-	bool CommandArgument::hasValue() const
-	{
-		return !m_value.empty();
 	}
 
 	bool CommandArgument::required() const

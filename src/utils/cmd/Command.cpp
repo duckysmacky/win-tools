@@ -14,13 +14,13 @@ namespace utils
 			m_commandArgs.push_back(argv[i]);
 
 		m_options.reserve(2);
-		m_options.push_back(CommandOption("help", CommandOption::MESSAGE)
-			.setDescription("Shows help information about this command")
+		m_options.push_back(CommandOption("help")
+			.setDescription("Display help message")
 			.setShortFlag('h')
 		);
-		m_options.push_back(CommandOption("version", CommandOption::MESSAGE)
-			.setDescription("Shows version information for this command")
-			.setShortFlag('V')
+		m_options.push_back(CommandOption("version")
+			.setDescription("Display version information")
+			.setShortFlag('V')	
 		);
 	}
 
@@ -54,7 +54,7 @@ namespace utils
 		return *this;
 	}
 
-	std::string Command::getSingle(const std::string& id) const
+	std::string Command::getValue(const std::string& id) const
 	{
 		return m_singleValues.at(id);
 	}
@@ -117,7 +117,7 @@ namespace utils
 			
 			if (option.hasShortFlag())
 				optionLabel += std::format(", -{}", option.shortFlag());
-			if (option.hasArgument())
+			if (option.type() == CommandOption::ARGUMENT)
 				optionLabel += std::format(" <{}>", toUppercase(option.argument().id()));
 
 			options += std::format("\n  {:<25} {}", optionLabel, option.description());
@@ -129,15 +129,19 @@ namespace utils
 
 	void Command::parse()
 	{
+		// Setup default messages
+		m_options[0].setMessage(generateHelp());
+		m_options[1].setMessage(generateVersion());
+
 		// Set default option values
 		for (int i = 0; i < m_options.size(); i++)
 		{
 			CommandOption option = m_options[i];
-			if (option.hasArgument())
+			if (option.type() == CommandOption::ARGUMENT)
 			{
-				m_singleValues.insert({ option.id(), option.defaultArgumentValue() });
+				m_singleValues.insert({ option.id(), option.defaultValue() });
 			}
-			m_flagValues.insert({ option.id(), option.defaultValue() });
+			m_flagValues.insert({ option.id(), false });
 		}
 
 		for (int i = 0; i < m_commandArgs.size(); i++)
@@ -226,7 +230,7 @@ namespace utils
 			std::exit(0);
 		}
 
-		if (option.hasArgument())
+		if (option.type() == CommandOption::ARGUMENT)
 		{
 			CommandArgument argument = option.argument();
 			size_t arg_i = (size_t)(i + 1);

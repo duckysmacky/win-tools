@@ -4,8 +4,6 @@
 #include <vector>
 #include <string>
 #include <map>
-#include <optional>
-#include <variant>
 
 #include "CommandArgument.h"
 #include "CommandOption.h"
@@ -24,7 +22,7 @@ namespace utils
 		Command& addArgument(CommandArgument argument);
 		Command& addOption(CommandOption option);
 
-		std::string getSingle(const std::string& id) const;
+		std::string getValue(const std::string& id) const;
 		std::vector<std::string> getMultiple(const std::string& id) const;
 		bool getFlag(const std::string& id) const;
 
