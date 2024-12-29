@@ -38,6 +38,7 @@ namespace cmd
 				std::exit(1);
 			}
 		}
+
 		m_arguments.push_back(argument);
 		return *this;
 	}
@@ -49,6 +50,7 @@ namespace cmd
 			utils::logError(std::format("Unable to add option with reserved id \"{}\"", option.id()));
 			std::exit(1);
 		}
+
 		for (int i = 0; i < m_options.size(); i++)
 		{
 			if (m_options[i].id() == option.id())
@@ -57,6 +59,7 @@ namespace cmd
 				std::exit(1);
 			}
 		}
+
 		m_options.push_back(option);
 		return *this;
 	}
@@ -90,17 +93,17 @@ namespace cmd
 
 		helpMessage += std::format("Usage: {} [OPTIONS]...", m_name);
 
-		std::string arguments = "\nArguments:";
+		std::string arguments = "\n\nArguments:";
 		for (const Argument& argument : m_arguments)
 		{
 			std::string argumentLabel = utils::toUppercase(argument.id());
 
 			helpMessage += (argument.required())
-				? std::format(" {}", argumentLabel)
+				? std::format(" <{}>", argumentLabel)
 				: std::format(" [{}]", argumentLabel);
-			helpMessage += (argument.multiple())
-				? "...\n"
-				: "\n";
+
+			if (argument.multiple())
+				helpMessage += "...";
 
 			arguments += std::format("\n  {:<25} {}", argumentLabel, argument.description());
 		}

@@ -37,7 +37,6 @@ namespace cmd
 		for (int i = 0; i < m_commandArgs.size(); i++)
 		{
 			std::string arg = m_commandArgs[i];
-			std::cout << arg << std::endl;
 
 			if (arg.empty()) continue;
 
@@ -65,19 +64,29 @@ namespace cmd
 		{
 			Argument argument = m_arguments[m_nextArgument];
 
-			if (argument.required() && !(argument.multiple() && m_multipleValues.size() > -1))
+			if (argument.required() && !(argument.multiple() && m_multipleValues.size() > 0))
 			{
-				utils::logError(std::format("Required argument <{}> was not privided", utils::toUppercase(argument.id())));
+				utils::logError(std::format("Required argument <{}> was not provided", utils::toUppercase(argument.id())));
 				std::exit(0);
 			}
 		}
+	}
+
+	bool Command::hasValue(const std::string& id) const
+	{
+		return m_singleValues.contains(id);
+	}
+
+	bool Command::hasMultiple(const std::string& id) const
+	{
+		return m_multipleValues.contains(id);
 	}
 
 	std::string Command::getValue(const std::string& id) const
 	{
 		if (!m_singleValues.contains(id))
 		{
-			utils::logError(std::format("value with ID \"{}\" not found", id));
+			utils::logError(std::format("Value with ID \"{}\" not found", id));
 			std::exit(1);
 		}
 		return m_singleValues.at(id);
@@ -87,7 +96,7 @@ namespace cmd
 	{
 		if (!m_multipleValues.contains(id))
 		{
-			utils::logError(std::format("values with ID \"{}\" not found", id));
+			utils::logError(std::format("Values with ID \"{}\" not found", id));
 			std::exit(1);
 		}
 		return m_multipleValues.at(id);
@@ -97,7 +106,7 @@ namespace cmd
 	{
 		if (!m_flagValues.contains(id))
 		{
-			utils::logError(std::format("flag with ID \"{}\" not found", id));
+			utils::logError(std::format("Flag with ID \"{}\" not found", id));
 			std::exit(1);
 		}
 		return m_flagValues.at(id);
@@ -160,6 +169,19 @@ namespace cmd
 
 	void Command::handleOption(const Option& option, int i)
 	{
+		for (int i = 0; i < m_options.size(); i++)
+		{
+			Option other_option = m_options[i];
+
+			if (other_option.id() == option.id()) continue;
+
+			if (other_option.conflicts().contains(option.id()) && m_flagValues[other_option.id()])
+			{
+				utils::logError(std::format("Option \"{}\" conficts with \"{}\"", option.id(), other_option.id()));
+				std::exit(1);
+			}
+		}
+
 		switch (option.type())
 		{
 		// In case of a message option, simply display it and exit
@@ -182,7 +204,7 @@ namespace cmd
 			}
 			else
 			{
-				utils::logError(std::format("Required option argument for {} was not privided", option.id()));
+				utils::logError(std::format("Required option argument for {} was not provided", option.id()));
 				std::exit(1);
 			}
 			break;
