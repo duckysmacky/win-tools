@@ -7,7 +7,7 @@ extern "C" {
 #endif 
 	extern char* optionArgument;
 	extern int argIndex, optionError;
-	char optionFlag;
+	extern char optionFlag;
 
 	char getNextFlag(int argc, char* const argv[], const char* allOptionsString);
 #ifdef __cplusplus

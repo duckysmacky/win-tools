@@ -6,5 +6,6 @@
 #include "./common/options.h"
 #include "./common/terminal.h"
 #include "./common/colors.h"
+#include "./common/logs.h"
 
 #endif // !UTILS_COMMON_H
