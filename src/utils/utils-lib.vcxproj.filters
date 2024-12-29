@@ -36,7 +36,7 @@
     <ClInclude Include="fs\Path.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cmd\Command.h">
+    <ClInclude Include="cmd\CommandBuilder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="cmd\Option.h">
@@ -55,6 +55,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="common\colors.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cmd\Command.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="common\logs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -77,7 +83,7 @@
     <ClCompile Include="fs\Path.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cmd\Command.cpp">
+    <ClCompile Include="cmd\CommandBuilder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="cmd\Option.cpp">
@@ -90,6 +96,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="common\colors.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cmd\Command.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="common\logs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

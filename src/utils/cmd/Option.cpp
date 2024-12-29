@@ -24,6 +24,7 @@ namespace cmd
 	Option& Option::setMessage(const std::string& message)
 	{
 		m_type = Type::MESSAGE;
+		m_message = message;
 		return *this;
 	}
 

@@ -172,11 +172,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="cmd\Option.h" />
     <ClInclude Include="cmd\Command.h" />
+    <ClInclude Include="cmd\Option.h" />
+    <ClInclude Include="cmd\CommandBuilder.h" />
     <ClInclude Include="cmd\Argument.h" />
     <ClInclude Include="common\colors.h" />
     <ClInclude Include="cmd.h" />
+    <ClInclude Include="common\logs.h" />
     <ClInclude Include="fs\Directory.h" />
     <ClInclude Include="fs.h" />
     <ClInclude Include="common\options.h" />
@@ -188,10 +190,12 @@
     <ClInclude Include="utils.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="cmd\Option.cpp" />
     <ClCompile Include="cmd\Command.cpp" />
+    <ClCompile Include="cmd\Option.cpp" />
+    <ClCompile Include="cmd\CommandBuilder.cpp" />
     <ClCompile Include="cmd\Argument.cpp" />
     <ClCompile Include="common\colors.cpp" />
+    <ClCompile Include="common\logs.cpp" />
     <ClCompile Include="fs\Directory.cpp" />
     <ClCompile Include="common\options.c" />
     <ClCompile Include="common\arrays.c" />
