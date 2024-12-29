@@ -12,7 +12,7 @@ static int readFile(const std::string& filePath, const cmd::Command& cmd);
 
 int main(int argc, const char* argv[])
 {
-    cmd::Command command = cmd::CommandBuilder(NAME, VERSION)
+    cmd::Command cmd = cmd::CommandBuilder(NAME, VERSION)
         .setDescription("Shows the head of the file (first n lines)")
         .addArgument(cmd::Argument("path")
             .setDescription("Path to target file")
@@ -36,13 +36,13 @@ int main(int argc, const char* argv[])
         )
         .parse(argc, argv);
 
-    std::vector<std::string> filePaths = command.getMultiple("path");
+    std::vector<std::string> filePaths = cmd.getMultiple("path");
     for (const std::string& path : filePaths)
     {
-        if ((command.getFlag("show-name") || filePaths.size() > 1) && !command.getFlag("hide-name"))
+        if ((cmd.getFlag("show-name") || filePaths.size() > 1) && !cmd.getFlag("hide-name"))
             std::cout << "==> " << path << " <==" << "\n";
 
-        if (readFile(path, command) != 0)
+        if (readFile(path, cmd) != 0)
             return 1;
 
         if (filePaths.size() > 1) std::cout << std::endl;
