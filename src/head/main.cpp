@@ -1,43 +1,40 @@
-#include "head.h"
+#include "./head.h"
 
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <vector>
 
-#include "option-utils.h"
-#include "string-utils.h"
-#include "command.h"
+#include "utils.h"
+#include "cmd.h"
 
-static int readFile(const std::string& filePath, const utils::Command& cmd);
+static int readFile(const std::string& filePath, const cmd::Command& cmd);
 
 int main(int argc, const char* argv[])
 {
-    utils::Command command = utils::Command(argc, argv)
-        .setName("head")
+    cmd::Command command = cmd::CommandBuilder(NAME, VERSION)
         .setDescription("Shows the head of the file (first n lines)")
-        .setVersion("1.0.0")
-        .addArgument(utils::CommandArgument("path")
+        .addArgument(cmd::Argument("path")
             .setDescription("Path to target file")
             .setRequired(true)
             .setMultiple(true)
         )
-        .addOption(utils::CommandOption("lines")
+        .addOption(cmd::Option("lines")
             .setDescription("How many first lines of a file to show")
             .setShortFlag('n')
             .setArgument("10")
         )
-        .addOption(utils::CommandOption("show-name")
+        .addOption(cmd::Option("show-name")
             .setDescription("Show the name of the file")
             .setShortFlag('v')
             .addConflict("hide-name")
         )
-        .addOption(utils::CommandOption("hide-name")
+        .addOption(cmd::Option("hide-name")
             .setDescription("Hide the name of the file")
             .setShortFlag('q')
             .addConflict("show-name")
-        );
-    command.parse();
+        )
+        .parse(argc, argv);
 
     std::vector<std::string> filePaths = command.getMultiple("path");
     for (const std::string& path : filePaths)
@@ -54,7 +51,7 @@ int main(int argc, const char* argv[])
     return 0;
 }
 
-static int readFile(const std::string &filePath, const utils::Command& cmd)
+static int readFile(const std::string &filePath, const cmd::Command& cmd)
 {
     std::ifstream file(filePath);
 
