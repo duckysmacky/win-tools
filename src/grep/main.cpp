@@ -16,6 +16,7 @@ static void readDir(std::string dirPath, const std::string& pattern, const cmd::
 int main(int argc, const char* argv[])
 {
     cmd::Command cmd = cmd::CommandBuilder(NAME, VERSION)
+        .setDescription("Searches a file for matching lines using the provided pattern.")
         .addArgument(cmd::Argument("pattern")
             .setDescription("Pattern to match against")
             .setRequired(true)
