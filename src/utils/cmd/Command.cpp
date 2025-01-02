@@ -1,5 +1,6 @@
 #include "./Command.h"
 
+#include <iostream>
 #include <format>
 
 #include "utils.h"
@@ -126,7 +127,7 @@ namespace cmd
 	{
 		if (m_nextArgument > m_arguments.size() - 1)
 		{
-			utils::logError(std::format("Unknown argument \"{}\"", m_commandArgs[i]));
+			utils::logError(std::format("Unexpected argument \"{}\"", m_commandArgs[i]));
 			std::exit(1);
 		}
 
@@ -141,7 +142,7 @@ namespace cmd
 		{
 			if (m_multipleValues.count(argument.id()) == 0)
 			{
-			m_multipleValues.insert({ argument.id(), std::vector<std::string>() });
+				m_multipleValues.insert({ argument.id(), std::vector<std::string>() });
 			}
 
 			m_multipleValues[argument.id()].push_back(m_commandArgs[i]);
@@ -180,16 +181,14 @@ namespace cmd
 			}
 		}
 
-		switch (option.type())
-		{
 		// In case of a message option, simply display it and exit
-		case Option::MESSAGE:
+		if (option.type() == Option::MESSAGE)
 		{
 			std::cout << option.message() << std::endl;
 			std::exit(0);
-			break;
 		}
-		case Option::ARGUMENT:
+		
+		if (option.type() == Option::ARGUMENT)
 		{
 			Argument argument = option.argument();
 			size_t arg_i = (size_t)(i + 1);
@@ -205,14 +204,9 @@ namespace cmd
 				utils::logError(std::format("Required option argument for {} was not provided", option.id()));
 				std::exit(1);
 			}
-			break;
 		}
-		default:
-		{
-			m_flagValues[option.id()] = true;
-			break;
-		}
-		}
+
+		m_flagValues[option.id()] = true;
 	}
 
 	Option Command::findOption(const std::string& longFlag)

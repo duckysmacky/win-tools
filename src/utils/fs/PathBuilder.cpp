@@ -4,7 +4,7 @@
 #include <vector>
 #include <format>
 
-#include "./Path.h";
+#include "./Path.h"
 
 namespace fs
 {
@@ -100,7 +100,7 @@ namespace fs
 
     int PathBuilder::elements() const
     {
-        int elements = m_pathBuffer.size();
+        int elements = (int) m_pathBuffer.size();
         if (m_hasFile) elements += 1;
         return elements;
     }

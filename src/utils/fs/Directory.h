@@ -17,6 +17,8 @@ namespace fs
 			std::string name;
 			int64_t size;
 			bool isDir;
+
+			Entry() : size(0), isDir(false) {};
 		};
 
 	public:

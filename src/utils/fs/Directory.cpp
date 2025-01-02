@@ -4,6 +4,8 @@
 #include <vector>
 #include <format>
 
+#include "../common/logs.h"
+
 namespace fs
 {
     Directory::Directory(const std::string& path)
@@ -14,8 +16,8 @@ namespace fs
         m_handle = FindFirstFileExA(dirFilesPath.c_str(), FindExInfoStandard, &m_findData, FindExSearchNameMatch, NULL, FIND_FIRST_EX_LARGE_FETCH);
         if (m_handle == INVALID_HANDLE_VALUE)
         {
-            std::cerr << "Error getting directory handle for \"" << path << "\" (" << GetLastError() << ")" << std::endl;
-            return;
+            utils::logError(std::format("Unable to open \"{}\"", path), GetLastError());
+            std::exit(1);
         }
 
         while (FindNextFileA(m_handle, &m_findData))
