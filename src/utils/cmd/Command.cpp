@@ -82,22 +82,20 @@ namespace cmd
 		return m_multipleValues.contains(id);
 	}
 
-	std::string Command::getValue(const std::string& id) const
+	std::optional<std::string> Command::getValue(const std::string& id) const
 	{
 		if (!m_singleValues.contains(id))
 		{
-			utils::logError(std::format("Value with ID \"{}\" not found", id));
-			std::exit(1);
+			return std::nullopt;
 		}
 		return m_singleValues.at(id);
 	}
 
-	std::vector<std::string> Command::getMultiple(const std::string& id) const
+	std::optional<std::vector<std::string>> Command::getMultiple(const std::string& id) const
 	{
 		if (!m_multipleValues.contains(id))
 		{
-			utils::logError(std::format("Values with ID \"{}\" not found", id));
-			std::exit(1);
+			return std::nullopt;
 		}
 		return m_multipleValues.at(id);
 	}

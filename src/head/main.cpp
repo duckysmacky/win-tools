@@ -36,7 +36,7 @@ int main(int argc, const char* argv[])
         )
         .parse(argc, argv);
 
-    std::vector<std::string> filePaths = cmd.getMultiple("path");
+    std::vector<std::string> filePaths = cmd.getMultiple("path").value();
     for (const std::string& path : filePaths)
     {
         if ((cmd.getFlag("show-name") || filePaths.size() > 1) && !cmd.getFlag("hide-name"))

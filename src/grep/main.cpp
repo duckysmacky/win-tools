@@ -55,10 +55,10 @@ int main(int argc, const char* argv[])
         .parse(argc, argv);
 
     std::string pattern = cmd.getFlag("ignore-case")
-        ? utils::toLowercase(cmd.getValue("pattern"))
-        : cmd.getValue("pattern");
+        ? utils::toLowercase(cmd.getValue("pattern").value())
+        : cmd.getValue("pattern").value();
 
-    std::vector<std::string> filePaths = cmd.getMultiple("file");
+    std::vector<std::string> filePaths = cmd.getMultiple("file").value();
     for (const std::string& path : filePaths)
     {
         if (!std::filesystem::exists(path))

@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <optional>
 
 #include "./Argument.h"
 #include "./Option.h"
@@ -25,8 +26,8 @@ namespace cmd
 		bool hasValue(const std::string& id) const;
 		bool hasMultiple(const std::string& id) const;
 
-		std::string getValue(const std::string& id) const;
-		std::vector<std::string> getMultiple(const std::string& id) const;
+		std::optional<std::string> getValue(const std::string& id) const;
+		std::optional<std::vector<std::string>> getMultiple(const std::string& id) const;
 		bool getFlag(const std::string& id) const;
 
 		std::string name() const;

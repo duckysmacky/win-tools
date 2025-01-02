@@ -42,7 +42,7 @@ int main(int argc, const char* argv[])
         // )
         .parse(argc, argv);
 
-    std::vector<std::string> filePaths = cmd.getMultiple("path");
+    std::vector<std::string> filePaths = cmd.getMultiple("path").value();
     for (const std::string& filePath : filePaths)
     {
         if (std::filesystem::exists(filePath))
