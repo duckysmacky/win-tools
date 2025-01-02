@@ -17,8 +17,10 @@ static std::vector<int> getSlashIndexes(const std::string& filePath);
 int main(int argc, const char* argv[])
 {
     cmd::Command cmd = cmd::CommandBuilder(NAME, VERSION)
-        .setDescription("Creates a new file at the provided location and with the provided name.\
-            If the file already exists, updates the modify and access time values")
+        .setDescription(
+            "Creates a new file at the provided location and with the provided name. If the file already "
+            "exists, updates the modify and access time values"
+        )
         .addArgument(cmd::Argument("path")
             .setDescription("Path and the name of the file to create or update")
             .setRequired(true)

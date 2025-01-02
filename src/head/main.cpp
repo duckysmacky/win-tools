@@ -63,7 +63,7 @@ static int readFile(const std::string &filePath, const cmd::Command& cmd)
 
     std::string buffer;
     int lineNumber = 0;
-    int lineLimit = std::stoi(cmd.getValue("lines"));
+    int lineLimit = std::stoi(cmd.getValue("lines").value());
     while (getline(file, buffer) && lineNumber < lineLimit)
     {
         std::cout << buffer << std::endl;
