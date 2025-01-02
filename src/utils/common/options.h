@@ -1,3 +1,5 @@
+// DEPRICATED
+
 #ifndef UTILS_COMMON_OPTIONS_H
 #define UTILS_COMMON_OPTIONS_H
 // Custom implementation of getopt
@@ -9,7 +11,7 @@ extern "C" {
 	extern int argIndex, optionError;
 	extern char optionFlag;
 
-	char getNextFlag(int argc, char* const argv[], const char* allOptionsString);
+	char getNextFlag(int argc, const char* argv[], const char* allOptionsString);
 #ifdef __cplusplus
 }
 #endif 

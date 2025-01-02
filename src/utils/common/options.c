@@ -1,3 +1,5 @@
+// DEPRICATED
+
 #include "./options.h"
 
 #include <stdio.h>
@@ -7,7 +9,7 @@ char* optionArgument = NULL;
 int argIndex = 1, optionError = 1;
 char optionFlag;
 
-char getNextFlag(int argc, const char *argv[], const char* allOptionsString) {
+char getNextFlag(int argc, const char* argv[], const char* allOptionsString) {
     static char* next = NULL;
     
     if (argIndex == 1)

@@ -1,23 +1,27 @@
 #include "./colors.h"
 
+// TODO: fix unresolved external symbol error on operator overload
+
+/*
 #include <iostream>
 
 namespace utils
 {
-	inline ccout::ccout(const std::string& color)
+	ccout::ccout(const std::string& color)
 	{
 		std::cout << color;
 	}
 
-	inline ccout::~ccout()
+	ccout::~ccout()
 	{
 		std::cout << colors::RESET << std::endl;
 	}
 
 	template <class T>
-	inline ccout& ccout::operator <<(const T& input)
+	ccout& ccout::operator <<(const T& input)
 	{
 		std::cout << input;
 		return *this;
 	}
 }
+*/

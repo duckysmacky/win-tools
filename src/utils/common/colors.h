@@ -1,8 +1,6 @@
 #ifndef UTILS_COLORS_H
 #define UTILS_COLORS_H
 
-#include <iostream>
-
 // Color values
 #define COLOR_RESET "\033[0m"
 #define COLOR_BLACK "\033[0;30m"
@@ -27,17 +25,31 @@ namespace colors
 	constexpr auto WHITE = COLOR_WHITE;
 }
 
+#include <string>
+#include <iostream>
+
 namespace utils
 {
 	// Colored std::cout alternative
 	class ccout
 	{
 	public:
-		inline ccout(const std::string& color);
-		inline ~ccout();
+		ccout(const std::string& color)
+		{
+			std::cout << color;
+		}
+
+		~ccout()
+		{
+			std::cout << colors::RESET << std::endl;
+		}
 	
 	    template <class T>
-		inline ccout& operator<<(const T& input);
+		ccout& operator <<(const T& input)
+		{
+			std::cout << input;
+			return *this;
+		}
 	};
 }
 
