@@ -39,6 +39,6 @@ planned for each command to have a complete `--help` option for documentation to
 For now the project is still in very early development, so there are **no public releases at the moment**.
 You can build all of the binaries by yourself using Visual Studio 2022
 
-All built binaries be found within the `bin/` in the corresponding target platform (32-bit or 64-bit)
+All built binaries be found within the `build/bin/` in the corresponding target platform (32-bit or 64-bit)
 directory. They can be added to your system's `PATH` to be used anywhere (some require for default Windows
 aliases to be overritten, like `ls`)

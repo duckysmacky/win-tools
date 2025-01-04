@@ -10,10 +10,11 @@
 *.pdb
 
 # Intermediate files
-test/
-bin/
-src/*/Win32/
-src/*/x64/
+build/
+src/*/*/obj
+
+# Test files
+files/
 
 # Visual Studio specific
 *.suo
