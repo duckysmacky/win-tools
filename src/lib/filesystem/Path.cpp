@@ -1,179 +1,188 @@
 #include "./Path.h"
 
-#include <string>
 #include <format>
+#include <string>
+#include <string_view>
+#include <optional>
 
 #include <Windows.h>
 
 namespace fs
 {
-	Path::Path(const std::string& fullPath)
-		: m_isDir(false), m_isFile(false), m_isHidden(false)
+	Path::Path(const std::string& path)
+		: m_path(path)
 	{
-		WIN32_FILE_ATTRIBUTE_DATA attributeData{};
-		m_exists = GetFileAttributesExA(fullPath.c_str(), GetFileExInfoStandard, &attributeData) != 0;
-
-		if (m_exists)
-		{
-			DWORD attributes = attributeData.dwFileAttributes;
-			m_isDir = attributes & FILE_ATTRIBUTE_DIRECTORY;
-			m_isFile = !m_isDir;
-			m_isHidden = attributes & FILE_ATTRIBUTE_HIDDEN;
-		}
-
-		parsePath(fullPath);
+		normalizeSlashes(m_path);
 	}
 
-	Path::Path(const std::string& dirPath, const std::string& fileRoot)
-		: m_dirPath(dirPath), m_fileRoot(fileRoot), m_isDir(false), m_isFile(true), m_isHidden(false)
+	Path::Path(std::string_view path)
+		: m_path(path)
 	{
-		WIN32_FILE_ATTRIBUTE_DATA attributeData{};
-		std::string fullPath = std::format("{}{}", dirPath, fileRoot);
-		m_exists = GetFileAttributesExA(fullPath.c_str(), GetFileExInfoStandard, &attributeData) != 0;
-
-		if (m_exists)
-		{
-			DWORD attributes = attributeData.dwFileAttributes;
-			m_isDir = attributes & FILE_ATTRIBUTE_DIRECTORY;
-			m_isFile = !m_isDir;
-			m_isHidden = attributes & FILE_ATTRIBUTE_HIDDEN;
-		}
+		normalizeSlashes(m_path);
 	}
 
-	Path::Path(const std::string& dirPath, const std::string& fileRoot, const std::string fileExtention)
-		: m_dirPath(dirPath), m_fileRoot(fileRoot), m_fileExtention(fileExtention), m_isDir(false), m_isFile(true), m_isHidden(false)
+	Path::Path(char* path)
+		: m_path(path)
 	{
-		WIN32_FILE_ATTRIBUTE_DATA attributeData{};
-		std::string fullPath = std::format("{}{}.{}", dirPath, fileRoot, fileExtention);
-		m_exists = GetFileAttributesExA(fullPath.c_str(), GetFileExInfoStandard, &attributeData) != 0;
+		normalizeSlashes(m_path);
+	}
 
-		if (m_exists)
-		{
-			DWORD attributes = attributeData.dwFileAttributes;
-			m_isDir = attributes & FILE_ATTRIBUTE_DIRECTORY;
-			m_isFile = !m_isDir;
-			m_isHidden = attributes & FILE_ATTRIBUTE_HIDDEN;
-		}
+	Path::operator std::string_view() const
+	{
+		return m_path;
+	}
+
+	Path::operator std::string() const
+	{
+		return std::string(m_path);
+	}
+
+	bool Path::exists() const
+	{
+		DWORD fileAttributes = GetFileAttributesA(m_path.data());
+
+		return fileAttributes != INVALID_FILE_ATTRIBUTES;
 	}
 
 	bool Path::isDirectory() const
 	{
-		return m_isDir;
+		DWORD fileAttributes = GetFileAttributesA(m_path.data());
+
+		if (fileAttributes != INVALID_FILE_ATTRIBUTES)
+		{
+			return fileAttributes & FILE_ATTRIBUTE_DIRECTORY;
+		}
+		else
+		{
+			return !fileExtension().has_value();
+		}
 	}
 
 	bool Path::isFile() const
 	{
-		return m_isFile;
+		DWORD fileAttributes = GetFileAttributesA(m_path.data());
+
+		if (fileAttributes != INVALID_FILE_ATTRIBUTES)
+		{
+			return !(fileAttributes & FILE_ATTRIBUTE_DIRECTORY);
+		}
+		else
+		{
+			return fileExtension().has_value();
+		}
 	}
 
 	bool Path::isHidden() const
 	{
-		return m_isHidden;
-	}
+		DWORD fileAttributes = GetFileAttributesA(m_path.data());
 
-	std::string Path::str() const
-	{
-		std::string str = m_dirPath;
-		if (m_isFile)
+		if (fileAttributes != INVALID_FILE_ATTRIBUTES)
 		{
-			str += fileName();
-		}
-		return str;
-	}
-
-	std::string Path::directory() const
-	{
-		return m_dirPath;
-	}
-
-	std::string Path::tail() const
-	{
-		return std::string();
-	}
-
-	std::string Path::fileName() const
-	{
-		std::string fileName;
-		if (m_isFile)
-		{
-			fileName += m_fileRoot;
-			if (!m_fileExtention.empty()) fileName += m_fileExtention;
-		}
-		return fileName;
-	}
-
-	std::string Path::fileRoot() const
-	{
-		return m_fileRoot;
-	}
-
-	std::string Path::fileExtention() const
-	{
-		return m_fileExtention;
-	}
-
-	void Path::parsePath(const std::string& path)
-	{
-		if (m_exists && m_isDir)
-		{
-			m_dirPath = path;
-			return;
-		}
-
-		// if ends with a slash or is a dot (e.g. path/to/dir/ or .)
-		if (path.back() == '/' || path.back() == '\\' || path == "." || path == "..")
-		{
-			m_dirPath = path;
-			m_isDir = true;
-			return;
-		}
-		
-		// if we have atleast one slash, find the rightmost of the two variants (e.g. path/to/file.ext)
-		if (path.rfind('/') != std::string::npos || path.rfind('\\') != std::string::npos)
-		{
-			size_t slashIndexRight = (path.rfind('/') != std::string::npos) ? path.rfind('/') : -1;
-			size_t slashIndexLeft = (path.rfind('\\') != std::string::npos) ? path.rfind('\\') : -1;
-			size_t slashIndex = max(slashIndexLeft, slashIndexRight);
-			parseFilePath(path, slashIndex + 1);
+			return fileAttributes & FILE_ATTRIBUTE_HIDDEN;
 		}
 		else
 		{
-			parseFilePath(path, 0);
+			return fileRoot().at(0) == '.';
 		}
 	}
 
-	void Path::parseFilePath(const std::string& path, size_t fileIndex)
+	bool Path::isAbsolute() const
 	{
-		std::string fileName(path.begin() + fileIndex, path.end());
-		// if we end up with an empty name (just a safety check) (e.g. path/to/)
-		if (fileName.empty())
+		// TODO
+		return false;
+	}
+
+	bool Path::isRelative() const
+	{
+		// TODO
+		return false;
+	}
+
+	Path Path::with(std::string_view subpath) const
+	{
+		return Path(std::string(m_path).append(subpath));
+	}
+
+	Path Path::absolute() const
+	{
+		// TODO
+	}
+
+	std::string Path::toString() const
+	{
+		return std::string(m_path);
+	}
+
+	std::optional<std::string_view> Path::directory() const
+	{
+		size_t directoryEnd = m_path.find_last_of('\\');
+
+		if (directoryEnd != std::string_view::npos)
 		{
-			m_dirPath = path;
-			m_isDir = true;
-			return;
+			return m_path.substr(0, directoryEnd);
+		}
+		else
+		{
+			return std::nullopt;
+		}
+	}
+
+	std::optional<std::string_view> Path::parent() const
+	{
+		size_t parentEnd = m_path.find_last_of('\\');
+
+		if (parentEnd == std::string_view::npos)
+		{
+			return std::nullopt;
 		}
 
-		size_t dotIndex = fileName.rfind('.');
-		// in case there is no extention (e.g. path/to/dir) and we haven't checked existing before
-		if (dotIndex == std::string::npos && !m_exists)
+		size_t parentStart = m_path.find_last_of('\\', parentEnd - 1);
+
+		if (parentStart == std::string_view::npos)
 		{
-			m_dirPath = path;
-			m_isDir = true;
-			return;
-		}
-		// or if it is a dotfile (e.g. path/to/.dotfile) and we haven't checked existing before
-		// if haven't checked, assume that dotfile is a directory
-		else if (dotIndex == 0 && !m_exists)
-		{
-			m_dirPath = path;
-			m_isDir = true;
-			m_isHidden = true;
-			return;
+			return m_path.substr(0, parentEnd);
 		}
 
-		// we passed all checks, it is fine to consider given path a path to a file (e.g. path/to/file.ext -> path/to/, file, ext)
-		m_dirPath = std::string(path.begin(), path.begin() + fileIndex + 1);
-		m_fileRoot = std::string(path.begin() + fileIndex + 1, path.begin() + dotIndex);
-		m_fileExtention = std::string(path.begin() + dotIndex + 1, path.end());
+		size_t parentLength = parentEnd - parentStart - 1;
+
+		return m_path.substr(parentStart + 1, parentLength);
+	}
+
+	std::string_view Path::fileName() const
+	{
+		size_t fileStart = m_path.find_last_of('\\');
+
+		return m_path.substr(fileStart + 1);
+	}
+
+	std::string_view Path::fileRoot() const
+	{
+		size_t rootStart = m_path.find_last_of('\\');
+		size_t rootEnd = m_path.find_last_of('.');
+		size_t rootLength = rootEnd - rootStart - 1;
+
+		return m_path.substr(rootStart + 1, rootLength);
+	}
+
+	std::optional<std::string_view> Path::fileExtension() const
+	{
+		size_t extensionStart = m_path.find_last_of('.');
+
+		if (extensionStart != std::string_view::npos)
+		{
+			return m_path.substr(extensionStart + 1);
+		}
+		else
+		{
+			return std::nullopt;
+		}
+	}
+
+	void Path::normalizeSlashes(std::string_view& path)
+	{
+		for (int i = 0; i < path.length(); i++)
+		{
+			if (path[i] == '/') path[i] == '\\';
+		}
 	}
 }
