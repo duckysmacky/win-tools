@@ -12,8 +12,8 @@ namespace fs
 	public:
 		//* Constructors
 		Path(const std::string& path);
-		Path(std::string_view);
-		Path(char* path);
+		Path(std::string_view path);
+		Path(const char* path);
 
 		//* Destructors
 		~Path() = default;
@@ -27,14 +27,10 @@ namespace fs
 		bool isDirectory() const;
 		bool isFile() const;
 		bool isHidden() const;
-		bool isAbsolute() const;
-		bool isRelative() const;
 
 		//* Path manipulation
 		// Returns a new Path with a subpath appended at the end
 		Path with(std::string_view subpath) const;
-		// Retuns a path as an absolute path
-		Path absolute() const;
 
 		//* Getters
 		// Returns a full path as a string

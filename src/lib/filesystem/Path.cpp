@@ -10,22 +10,13 @@
 namespace fs
 {
 	Path::Path(const std::string& path)
-		: m_path(path)
-	{
-		normalizeSlashes(m_path);
-	}
+		: m_path(path) {}
 
 	Path::Path(std::string_view path)
-		: m_path(path)
-	{
-		normalizeSlashes(m_path);
-	}
+		: m_path(path) {}
 
-	Path::Path(char* path)
-		: m_path(path)
-	{
-		normalizeSlashes(m_path);
-	}
+	Path::Path(const char* path)
+		: m_path(path) {}
 
 	Path::operator std::string_view() const
 	{
@@ -86,26 +77,9 @@ namespace fs
 		}
 	}
 
-	bool Path::isAbsolute() const
-	{
-		// TODO
-		return false;
-	}
-
-	bool Path::isRelative() const
-	{
-		// TODO
-		return false;
-	}
-
 	Path Path::with(std::string_view subpath) const
 	{
 		return Path(std::string(m_path).append(subpath));
-	}
-
-	Path Path::absolute() const
-	{
-		// TODO
 	}
 
 	std::string Path::toString() const
@@ -175,14 +149,6 @@ namespace fs
 		else
 		{
 			return std::nullopt;
-		}
-	}
-
-	void Path::normalizeSlashes(std::string_view& path)
-	{
-		for (int i = 0; i < path.length(); i++)
-		{
-			if (path[i] == '/') path[i] == '\\';
 		}
 	}
 }
