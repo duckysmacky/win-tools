@@ -21,12 +21,10 @@
   <ItemGroup>
     <ClCompile Include="Directory.cpp" />
     <ClCompile Include="Path.cpp" />
-    <ClCompile Include="PathBuilder.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Directory.h" />
     <ClInclude Include="Path.h" />
-    <ClInclude Include="PathBuilder.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

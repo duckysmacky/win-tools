@@ -3,38 +3,52 @@
 
 namespace fs
 {
-	// An immutable view on a filesystem path
+	// A class used to build and manipulate paths
 	class Path
 	{
 	private:
-		std::string_view m_path;
+		std::string m_buffer;
 
 	public:
-		//* Constructors
 		Path(const std::string& path);
 		Path(std::string_view path);
-		Path(const char* path);
+		Path(const std::string segments[]);
 
-		//* Destructors
 		~Path() = default;
 
-		//* Conversions
-		operator std::string_view() const;
 		operator std::string() const;
+		operator std::string_view() const;
 
-		//* Filesystem checks
+		// Joins the subpath with current path and returns a new Path instance
+		Path join(const std::string& subpath) const;
+		// Append to the end of the path
+		void push(const std::string& subpath);
+		// Remove the end of the path and return it
+		std::string pop();
+
+		// Checks whether the file exists on the system
 		bool exists() const;
+		// Checks whether this is a path to a directory. If doesn't exist on the
+		// disk, will try to check if the file doesn't have an extension
 		bool isDirectory() const;
+		// Checks whether this is a path to a file. If doesn't exist on the disk,
+		// will try to check if the file has extension
 		bool isFile() const;
+		// Checks if the file is hidden. If doesn't exist on the disk, will try
+		// to find a '.' at the start of the file name
 		bool isHidden() const;
 
-		//* Path manipulation
-		// Returns a new Path with a subpath appended at the end
-		Path with(std::string_view subpath) const;
+		// Set the full file name (last path segment)
+		void setFile(const std::string& file);
+		// Set the file name without changing the extension
+		void setFileName(const std::string& fileName);
+		// Set the file extension without change its name (after the last dot)
+		void setFileExtension(const std::string& extension);
 
-		//* Getters
-		// Returns a full path as a string
-		std::string toString() const;
+		// Returns wheather the Path Builder is empty
+		bool empty() const;
+		// Retuns the segment count in path
+		int segments() const;
 		// Returns only the directory part of the path
 		std::optional<std::string_view> directory() const;
 		// Returns the parent of the last segment
@@ -47,7 +61,9 @@ namespace fs
 		std::optional<std::string_view> fileExtension() const;
 
 	private:
-		void normalizeSlashes(std::string_view& path);
+		// Normalize given path. Replaces all '/' with '\', removes redundant
+		// slashes
+		std::string normalize(const std::string& path) const;
 	};
 }
 
