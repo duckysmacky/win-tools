@@ -21,23 +21,26 @@ Any kind of contribution is very appreciateed and will be a huge help to project
 
 ## Features
 
-Win-tools is in a **very active development right now**, with currently only four commands implemented:
+Four commands are currently avaliable:
 - `ls`
 - `grep`
 - `head`
 - `touch`
 
-Possible future commands (or their alternatives) to be added in the future are, but not limited to:
-`tail`, `copyf`, `cp`, `mv`, `less`, `sed`, `sort`
-
-There is some outdated documentation under each `src/<command>` directory, which will be updated
-with project's development and hopefully by release will contain up to date information. It is also
-planned for each command to have a complete `--help` option for documentation to be built in.
+There is currently some **outdated documentation** under each `src/commands/<command>` directory in a README
+file. Please refer to each command's `--help` menu for the up-to-date documentation and usage.
 
 ## Installation
 
-For now the project is still in very early development, so there are **no public releases at the moment**.
-You can build all of the binaries by yourself using Visual Studio 2022
+For now the project is still in development, so there are no public releases at the moment. Instead, you 
+can build all of the binaries by yourself using Visual Studio 2022 or `msbuild` command using the Developer's 
+Power Shell:
+
+```shell
+git clone https://github.com/duckysmacky/win-tools.git
+cd win-tools
+msbuild -p:Configuration=Release
+```
 
 All built binaries be found within the `build/bin/` in the corresponding target platform (32-bit or 64-bit)
 directory. They can be added to your system's `PATH` to be used anywhere (some require for default Windows
