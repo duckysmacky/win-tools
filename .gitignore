@@ -20,7 +20,6 @@ files/
 *.suo
 *.user
 *.VC.db
-.vs/
 
 # Temporary files
 *.log
