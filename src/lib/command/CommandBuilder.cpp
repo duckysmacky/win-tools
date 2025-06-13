@@ -113,9 +113,12 @@ namespace cmd
 		for (const Option& option : m_options)
 		{
 			std::string optionLabel = "--" + option.id();
-			
+
 			if (option.hasShortFlag())
-				optionLabel += std::format(", -{}", option.shortFlag());
+				optionLabel += std::format("-{}, ", option.shortFlag());
+			else
+				optionLabel += "    ";
+
 			if (option.type() == Option::ARGUMENT)
 				optionLabel += std::format(" <{}>",utils::toUppercase(option.argument().id()));
 
