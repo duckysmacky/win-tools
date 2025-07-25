@@ -3,6 +3,7 @@
 #include "utils/general.h"
 #include "utils/filesystem.h"
 #include "utils/logs.h"
+#include "utils/colors.h"
 #include "command.h"
 
 #include <iostream>
@@ -117,7 +118,7 @@ static void readFile(std::string filePath, const std::string& pattern, const cmd
                 // highlight the found pattern within the line with color
                 if (!cmd.getFlag("unmatched"))
                 {
-                    std::string colored = COLOR_GREEN + pattern + COLOR_RESET;
+                    std::string colored = colors::paint(colors::ansi::GREEN, pattern);
                     line.replace(foundIndex, pattern.size(), colored);
                     foundIndex += colored.length();
                 }

@@ -20,7 +20,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="arrays.c" />
-    <ClCompile Include="colors.cpp" />
     <ClCompile Include="Directory.cpp" />
     <ClCompile Include="logs.cpp" />
     <ClCompile Include="options.c" />
@@ -32,6 +31,10 @@
     <ClInclude Include="arrays.h" />
     <ClInclude Include="colors.h" />
     <ClInclude Include="Directory.hpp" />
+    <ClInclude Include="include\utils\colors.h" />
+    <ClInclude Include="include\utils\filesystem.h" />
+    <ClInclude Include="include\utils\general.h" />
+    <ClInclude Include="include\utils\logs.h" />
     <ClInclude Include="logs.h" />
     <ClInclude Include="options.h" />
     <ClInclude Include="Path.hpp" />

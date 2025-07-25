@@ -2,7 +2,6 @@
 #define INCLUDE_UTILS_H
 
 #include "../../arrays.h"
-#include "../../colors.h"
 #include "../../strings.h"
 #include "../../terminal.h"
 

@@ -1,56 +1,112 @@
-#ifndef UTILS_COLORS_H
-#define UTILS_COLORS_H
-
-// Color values
-#define COLOR_RESET "\033[0m"
-#define COLOR_BLACK "\033[0;30m"
-#define COLOR_RED "\033[0;31m"
-#define COLOR_GREEN "\033[0;32m"
-#define COLOR_YELLOW "\033[0;33m"
-#define COLOR_BLUE "\033[0;34m"
-#define COLOR_PURPLE "\033[0;35m"
-#define COLOR_CYAN "\033[0;36m"
-#define COLOR_WHITE "\033[0;37m"
-
-namespace colors
-{
-	constexpr auto RESET = COLOR_RESET;
-	constexpr auto BLACK = COLOR_BLACK;
-	constexpr auto RED = COLOR_RED;
-	constexpr auto GREEN = COLOR_GREEN;
-	constexpr auto YELLOW = COLOR_YELLOW;
-	constexpr auto BLUE = COLOR_BLUE;
-	constexpr auto PURPLE = COLOR_PURPLE;
-	constexpr auto CYAN = COLOR_CYAN;
-	constexpr auto WHITE = COLOR_WHITE;
-}
+#pragma once
 
 #include <string>
 #include <iostream>
+#include <format>
 
-namespace utils
+#include <Windows.h>
+
+namespace colors
 {
-	// Colored std::cout alternative
-	class ccout
+	// ANSI codes for colors and additional formatting
+	namespace ansi {
+		constexpr auto RESET      = "\033[0m";
+
+		constexpr auto BLACK      = "\033[30m";
+		constexpr auto RED        = "\033[31m";
+		constexpr auto GREEN      = "\033[32m";
+		constexpr auto YELLOW     = "\033[33m";
+		constexpr auto BLUE       = "\033[34m";
+		constexpr auto PURPLE     = "\033[35m";
+		constexpr auto CYAN       = "\033[36m";
+		constexpr auto WHITE      = "\033[37m";
+
+		constexpr auto BOLD       = "\033[1m";
+		constexpr auto UNDERLINE  = "\033[4m";
+	}
+
+	// Custom endl type which resets color and flushes the stream
+	struct endl_t {};
+	constexpr endl_t endl;
+
+	// Custom coloret output stream that works above std::cout
+	class coloredStream
 	{
+	private:
+		const char* m_color;
+
 	public:
-		ccout(const std::string& color)
+		explicit coloredStream(const char* ansiColorCode)
+			: m_color(ansiColorCode) {}
+
+		// Passes value into std::cout with set color
+		template<typename T>
+		coloredStream& operator<<(const T& value)
 		{
-			std::cout << color;
+			std::cout << m_color << value;
+			return *this;
 		}
 
-		~ccout()
+		// Support for the custom colors::endl (resets color and flushes stream)
+		coloredStream& operator<<(endl_t _)
 		{
-			std::cout << colors::RESET << std::endl;
+			std::cout << ansi::RESET << std::endl;
+			return *this;
 		}
-	
-	    template <class T>
-		ccout& operator <<(const T& input)
+
+		// Support for the STL stream manipulators
+		coloredStream& operator<<(std::ostream& (*streamManipulator)(std::ostream&))
 		{
-			std::cout << input;
+			streamManipulator(std::cout);
 			return *this;
 		}
 	};
-}
 
-#endif // !UTILS_COLORS_H
+	// Static ANSI initializer, which enables ANSI codes for the current console
+	class ANSIInitializer
+	{
+	private:
+		HANDLE m_hConsole;
+		DWORD m_dwConsoleMode;
+
+	public:
+		ANSIInitializer()
+			: m_hConsole(GetStdHandle(STD_OUTPUT_HANDLE))
+			, m_dwConsoleMode(0)
+		{
+			GetConsoleMode(m_hConsole, &m_dwConsoleMode);
+
+			if (isConsoleApp() && !(m_dwConsoleMode & ENABLE_VIRTUAL_TERMINAL_PROCESSING))
+			{
+				m_dwConsoleMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+				SetConsoleMode(m_hConsole, m_dwConsoleMode);
+			}
+		}
+
+	private:
+		bool isConsoleApp() const
+		{
+			if (m_hConsole == INVALID_HANDLE_VALUE) return false;
+			return GetFileType(m_hConsole) == FILE_TYPE_CHAR;
+		}
+	};
+
+	// Factory function / shortcut for coloredOutput
+	inline coloredStream cout(const char* ansiColorCode)
+	{
+		return coloredStream(ansiColorCode);
+	}
+
+	// Returns a formatted string, which is colored to the specified color
+	template<typename T>
+	inline std::string paint(const char* ansiColorCode, const T& value)
+	{
+		return std::format("{}{}{}", ansiColorCode, value, ansi::RESET);
+	}
+	
+	// Automatically initialize ANSI support at runtime
+	namespace
+	{
+		ANSIInitializer _initializer;
+	}
+}

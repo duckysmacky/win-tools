@@ -3,6 +3,7 @@
 #include "utils/general.h"
 #include "utils/filesystem.h"
 #include "utils/logs.h"
+#include "utils/colors.h"
 #include "command.h"
 
 #include <iostream>
@@ -104,7 +105,7 @@ int main(int argc, const char* argv[])
     std::string dirPath = cmd.getValue("path").has_value() ? cmd.getValue("path").value() : ".";
     if (cmd.getFlag("recursive"))
     {
-        utils::ccout(colors::BLUE) << std::format("==> {} <==", dirPath);
+        colors::cout(colors::ansi::BLUE) << std::format("==> {} <==", dirPath) << colors::endl;
         listDir(dirPath, cmd);
         readDir(dirPath, cmd);
     }
@@ -142,17 +143,17 @@ static void listDir(const std::string& dirPath, const cmd::Command& cmd)
         // Checking file types and assigning them the correct color
         if (extentionPos == std::string::npos || fileName == "." || fileName == "..")
         {
-            colorName = std::format("{}{}/{}", COLOR_FILE_DIRECTORY, fileName, colors::RESET);
+            colorName = colors::paint(COLOR_FILE_DIRECTORY, fileName);
         }
         // if index of the extention is 0 (dot files)
         else if (extentionPos == 0)
         {
-            colorName = std::format("{}{}{}", COLOR_FILE_HIDDEN, fileName, colors::RESET);
+            colorName = colors::paint(COLOR_FILE_HIDDEN, fileName);
         }
         // all other files (except hidden)
         else
         {
-            colorName = std::format("{}{}{}", COLOR_FILE_OTHER, fileName, colors::RESET);
+            colorName = colors::paint(COLOR_FILE_OTHER, fileName);
         }
 
         dirEntries.push_back(
@@ -162,8 +163,6 @@ static void listDir(const std::string& dirPath, const cmd::Command& cmd)
         );
 
         rowc++;
-        // free(cname); DO NOT FREE CNAME. IT STAYS HERE TILL THE END. FREEDOM IS A LIE. CNAME IS AN ETERNAL SLAVE TO THIS PROGRAM.
-        // I will just keep this old comment because it's funny, even though I switched to C++
     }
 
     if (!cmd.getFlag("long"))
@@ -236,7 +235,7 @@ static void readDir(const std::string& dirPath, const cmd::Command& cmd)
         // try to open entry item as dir
         if (std::filesystem::is_directory(newDirPath))
         {
-			utils::ccout(colors::BLUE) << std::format("==> {} <==", newDirPath);
+            colors::cout(colors::ansi::BLUE) << std::format("==> {} <==", newDirPath) << colors::endl;
             listDir(newDirPath, cmd);
             readDir(newDirPath, cmd);
         }
