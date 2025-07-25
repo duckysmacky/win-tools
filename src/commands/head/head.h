@@ -1,7 +1,4 @@
-#ifndef COMMANDS_HEAD_H
-#define COMMANDS_HEAD_H
+#pragma once
 
-#define NAME "head"
-#define VERSION "1.0.0"
-
-#endif // !COMMANDS_HEAD_H
+constexpr auto NAME = "head";
+constexpr auto VERSION = "1.0.0";

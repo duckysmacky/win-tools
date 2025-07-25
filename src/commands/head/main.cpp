@@ -1,12 +1,14 @@
 #include "./head.h"
 
+#include "utils/general.h"
+#include "utils/filesystem.h"
+#include "command.h"
+
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <vector>
 
-#include "command.h"
-#include "utils.h"
 
 static int readFile(const std::string& filePath, const cmd::Command& cmd);
 

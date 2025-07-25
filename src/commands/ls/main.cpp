@@ -1,5 +1,10 @@
 #include "./ls.h"
 
+#include "utils/general.h"
+#include "utils/filesystem.h"
+#include "utils/logs.h"
+#include "command.h"
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -8,10 +13,6 @@
 
 #include <Windows.h>
 #include <time.h>
-
-#include "command.h"
-#include "utils.h"
-#include "filesystem.h"
 
 static void listDir(const std::string& dirPath, const cmd::Command& cmd);
 static void readDir(const std::string& dirPath, const cmd::Command& cmd);
@@ -271,7 +272,7 @@ std::string getLongFormat(const std::string& filePath, const std::string& fileNa
 
     if (hFile == INVALID_HANDLE_VALUE)
     {
-        utils::logError(std::format("Unable to get access to \"{}\"", fileName), GetLastError());
+        logs::logError(std::format("Unable to get access to \"{}\"", fileName), GetLastError());
         CloseHandle(hFile);
         std::exit(1);
     }
@@ -344,7 +345,7 @@ static uint32_t getFileIndex(const std::string& filePath)
     hFile = CreateFileA(filePath.c_str(), GENERIC_READ, (FILE_SHARE_READ | FILE_SHARE_WRITE), NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
     if (hFile == INVALID_HANDLE_VALUE)
     {
-        utils::logError(std::format("Unable to access \"{}\"", filePath), GetLastError());
+        logs::logError(std::format("Unable to access \"{}\"", filePath), GetLastError());
         std::exit(1);
     }
     GetFileInformationByHandleEx(hFile, FileFullDirectoryInfo, &fileDirInfo, sizeof(fileDirInfo));

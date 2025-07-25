@@ -1,14 +1,15 @@
 #include "./grep.h"
 
+#include "utils/general.h"
+#include "utils/filesystem.h"
+#include "utils/logs.h"
+#include "command.h"
+
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <vector>
 #include <filesystem>
-
-#include "command.h"
-#include "utils.h"
-#include "filesystem.h"
 
 static void readFile(std::string filePath, const std::string& pattern, const cmd::Command& cmd);
 static void readDir(std::string dirPath, const std::string& pattern, const cmd::Command& cmd);
@@ -63,7 +64,7 @@ int main(int argc, const char* argv[])
     {
         if (!std::filesystem::exists(path))
         {
-            utils::logError(std::format("File \"{}\" doesn't exist", path));
+            logs::logError(std::format("File \"{}\" doesn't exist", path));
             std::exit(1);
         }
 
@@ -89,7 +90,7 @@ static void readFile(std::string filePath, const std::string& pattern, const cmd
 
     if (!file.is_open())
     {
-        utils::logError(std::format("Unable to opem file \"{}\"", filePath));
+        logs::logError(std::format("Unable to opem file \"{}\"", filePath));
         std::exit(1);
     }
 
@@ -176,7 +177,7 @@ static void readDir(std::string dirPath, const std::string& pattern, const cmd::
 
         if (!std::filesystem::exists(filePath))
         {
-            utils::logError(std::format("File \"{}\" doesn't exist", filePath));
+            logs::logError(std::format("File \"{}\" doesn't exist", filePath));
             std::exit(1);
         }
 

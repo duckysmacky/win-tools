@@ -1,14 +1,16 @@
 #include "./touch.h"
 
+#include "utils/general.h"
+#include "utils/filesystem.h"
+#include "utils/logs.h"
+#include "command.h"
+
 #include <iostream>
 #include <string>
 #include <vector>
 #include <filesystem>
 
 #include <Windows.h>
-
-#include "command.h"
-#include "utils.h"
 
 static void updateFile(const std::string& filePath, const cmd::Command& cmd);
 static void createFile(const std::string& filePath, const cmd::Command& cmd);
@@ -65,7 +67,7 @@ static void updateFile(const std::string& filePath, const cmd::Command& cmd)
     HANDLE hFile = CreateFileA(filePath.c_str(), FILE_WRITE_ATTRIBUTES, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
     if (hFile == INVALID_HANDLE_VALUE)
     {
-        utils::logError(std::format("Unable to access \"{}\"", filePath), GetLastError());
+        logs::logError(std::format("Unable to access \"{}\"", filePath), GetLastError());
         CloseHandle(hFile);
         std::exit(1);
     }
@@ -77,7 +79,7 @@ static void updateFile(const std::string& filePath, const cmd::Command& cmd)
     BOOL success = SystemTimeToFileTime(&sysTime, &fileTime);
     if (!success)
     {
-        utils::logError("Unable to convert system time", GetLastError());
+        logs::logError("Unable to convert system time", GetLastError());
         CloseHandle(hFile);
         std::exit(1);
     }
@@ -89,7 +91,7 @@ static void updateFile(const std::string& filePath, const cmd::Command& cmd)
     );
     if (!success)
     {
-        utils::logError(std::format("Unable to update time data for \"{}\"", filePath), GetLastError());
+        logs::logError(std::format("Unable to update time data for \"{}\"", filePath), GetLastError());
         CloseHandle(hFile);
         std::exit(1);
     }
@@ -120,7 +122,7 @@ static void createFile(const std::string& filePath, const cmd::Command& cmd)
     HANDLE hFile = CreateFileA(filePath.c_str(), GENERIC_WRITE, NULL, NULL, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, NULL);
     if (hFile == INVALID_HANDLE_VALUE)
     {
-        utils::logError(std::format("Unable to create \"{}\"", filePath), GetLastError());
+        logs::logError(std::format("Unable to create \"{}\"", filePath), GetLastError());
         CloseHandle(hFile);
         std::exit(1);
     }
