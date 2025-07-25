@@ -1,7 +1,7 @@
 #ifndef INCLUDE_FILESYSTEM_H
 #define INCLUDE_FILESYSTEM_H
 
-#include "../lib/filesystem/Path.h"
-#include "../lib/filesystem/Directory.h"
+#include "../lib/utils/Path.hpp"
+#include "../lib/utils/Directory.hpp"
 
 #endif // !INCLUDE_FILESYSTEM_H

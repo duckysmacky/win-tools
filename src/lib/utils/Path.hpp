@@ -1,5 +1,4 @@
-#ifndef FILESYSTEM_PATH_H
-#define FILESYSTEM_PATH_H
+#pragma once
 
 namespace fs
 {
@@ -66,5 +65,3 @@ namespace fs
 		std::string normalize(const std::string& path) const;
 	};
 }
-
-#endif // !FILESYSTEM_PATH_H

@@ -7,7 +7,7 @@
 
 #include <Windows.h>
 
-#include "./Path.h"
+#include "./Path.hpp"
 
 namespace fs
 {

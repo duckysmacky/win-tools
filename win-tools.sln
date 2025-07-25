@@ -13,25 +13,21 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "grep", "src\commands\grep\g
 	ProjectSection(ProjectDependencies) = postProject
 		{64658E33-693F-4FD4-B46E-290544BA800D} = {64658E33-693F-4FD4-B46E-290544BA800D}
 		{91284F6F-6194-4BE8-B4E3-F9A6860073D1} = {91284F6F-6194-4BE8-B4E3-F9A6860073D1}
-		{F8A3F8BB-4257-4DE5-9509-04AD216090DB} = {F8A3F8BB-4257-4DE5-9509-04AD216090DB}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "head", "src\commands\head\head.vcxproj", "{60C22DAB-2A1F-4860-9379-903DFA51701A}"
 	ProjectSection(ProjectDependencies) = postProject
 		{64658E33-693F-4FD4-B46E-290544BA800D} = {64658E33-693F-4FD4-B46E-290544BA800D}
-		{F8A3F8BB-4257-4DE5-9509-04AD216090DB} = {F8A3F8BB-4257-4DE5-9509-04AD216090DB}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ls", "src\commands\ls\ls.vcxproj", "{10F40D2D-2617-4797-BA2D-F784E0DF7EF0}"
 	ProjectSection(ProjectDependencies) = postProject
 		{64658E33-693F-4FD4-B46E-290544BA800D} = {64658E33-693F-4FD4-B46E-290544BA800D}
-		{F8A3F8BB-4257-4DE5-9509-04AD216090DB} = {F8A3F8BB-4257-4DE5-9509-04AD216090DB}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "touch", "src\commands\touch\touch.vcxproj", "{7D617204-29BE-4D96-B1BA-8C54B1EA09C7}"
 	ProjectSection(ProjectDependencies) = postProject
 		{64658E33-693F-4FD4-B46E-290544BA800D} = {64658E33-693F-4FD4-B46E-290544BA800D}
-		{F8A3F8BB-4257-4DE5-9509-04AD216090DB} = {F8A3F8BB-4257-4DE5-9509-04AD216090DB}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "command", "src\lib\command\command.vcxproj", "{64658E33-693F-4FD4-B46E-290544BA800D}"
@@ -39,21 +35,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "command", "src\lib\command\
 		{91284F6F-6194-4BE8-B4E3-F9A6860073D1} = {91284F6F-6194-4BE8-B4E3-F9A6860073D1}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "filesystem", "src\lib\filesystem\filesystem.vcxproj", "{F8A3F8BB-4257-4DE5-9509-04AD216090DB}"
-	ProjectSection(ProjectDependencies) = postProject
-		{91284F6F-6194-4BE8-B4E3-F9A6860073D1} = {91284F6F-6194-4BE8-B4E3-F9A6860073D1}
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "commands", "commands", "{91D281EA-E720-43D8-8E77-311460C6DDE9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "libraries", "libraries", "{720A59A1-9EE5-479B-956C-673E05DFAD43}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "include", "include", "{B0103624-8C03-464D-901A-FF18F90CFA38}"
-	ProjectSection(SolutionItems) = preProject
-		src\include\command.h = src\include\command.h
-		src\include\filesystem.h = src\include\filesystem.h
-		src\include\utils.h = src\include\utils.h
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "files", "files", "{2CE5B02A-3D8E-4BE5-A74A-37567A98BD85}"
 	ProjectSection(SolutionItems) = preProject
@@ -63,6 +47,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "files", "files", "{2CE5B02A
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "utils", "src\lib\utils\utils.vcxproj", "{91284F6F-6194-4BE8-B4E3-F9A6860073D1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "include", "include", "{1A7296AD-B57D-42F1-9EE9-D03885120FA1}"
+	ProjectSection(SolutionItems) = preProject
+		src\include\command.h = src\include\command.h
+		src\include\filesystem.h = src\include\filesystem.h
+		src\include\utils.h = src\include\utils.h
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -112,14 +103,6 @@ Global
 		{64658E33-693F-4FD4-B46E-290544BA800D}.Release|x64.Build.0 = Release|x64
 		{64658E33-693F-4FD4-B46E-290544BA800D}.Release|x86.ActiveCfg = Release|Win32
 		{64658E33-693F-4FD4-B46E-290544BA800D}.Release|x86.Build.0 = Release|Win32
-		{F8A3F8BB-4257-4DE5-9509-04AD216090DB}.Debug|x64.ActiveCfg = Debug|x64
-		{F8A3F8BB-4257-4DE5-9509-04AD216090DB}.Debug|x64.Build.0 = Debug|x64
-		{F8A3F8BB-4257-4DE5-9509-04AD216090DB}.Debug|x86.ActiveCfg = Debug|Win32
-		{F8A3F8BB-4257-4DE5-9509-04AD216090DB}.Debug|x86.Build.0 = Debug|Win32
-		{F8A3F8BB-4257-4DE5-9509-04AD216090DB}.Release|x64.ActiveCfg = Release|x64
-		{F8A3F8BB-4257-4DE5-9509-04AD216090DB}.Release|x64.Build.0 = Release|x64
-		{F8A3F8BB-4257-4DE5-9509-04AD216090DB}.Release|x86.ActiveCfg = Release|Win32
-		{F8A3F8BB-4257-4DE5-9509-04AD216090DB}.Release|x86.Build.0 = Release|Win32
 		{91284F6F-6194-4BE8-B4E3-F9A6860073D1}.Debug|x64.ActiveCfg = Debug|x64
 		{91284F6F-6194-4BE8-B4E3-F9A6860073D1}.Debug|x64.Build.0 = Debug|x64
 		{91284F6F-6194-4BE8-B4E3-F9A6860073D1}.Debug|x86.ActiveCfg = Debug|Win32
@@ -138,7 +121,6 @@ Global
 		{10F40D2D-2617-4797-BA2D-F784E0DF7EF0} = {91D281EA-E720-43D8-8E77-311460C6DDE9}
 		{7D617204-29BE-4D96-B1BA-8C54B1EA09C7} = {91D281EA-E720-43D8-8E77-311460C6DDE9}
 		{64658E33-693F-4FD4-B46E-290544BA800D} = {720A59A1-9EE5-479B-956C-673E05DFAD43}
-		{F8A3F8BB-4257-4DE5-9509-04AD216090DB} = {720A59A1-9EE5-479B-956C-673E05DFAD43}
 		{2CE5B02A-3D8E-4BE5-A74A-37567A98BD85} = {D20AF184-A5E8-40B5-81EB-F5B8739AB432}
 		{91284F6F-6194-4BE8-B4E3-F9A6860073D1} = {720A59A1-9EE5-479B-956C-673E05DFAD43}
 	EndGlobalSection

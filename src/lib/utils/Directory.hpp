@@ -1,5 +1,4 @@
-#ifndef FILESYSTEM_DIRECTORY_H
-#define FILESYSTEM_DIRECTORY_H
+#pragma once
 
 #include <string>
 #include <vector>
@@ -38,5 +37,3 @@ namespace fs
 
 	};
 }
-
-#endif // !FILESYSTEM_DIRECTORY_H

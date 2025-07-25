@@ -21,16 +21,20 @@
   <ItemGroup>
     <ClCompile Include="arrays.c" />
     <ClCompile Include="colors.cpp" />
+    <ClCompile Include="Directory.cpp" />
     <ClCompile Include="logs.cpp" />
     <ClCompile Include="options.c" />
+    <ClCompile Include="Path.cpp" />
     <ClCompile Include="strings.cpp" />
     <ClCompile Include="terminal.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="arrays.h" />
     <ClInclude Include="colors.h" />
+    <ClInclude Include="Directory.hpp" />
     <ClInclude Include="logs.h" />
     <ClInclude Include="options.h" />
+    <ClInclude Include="Path.hpp" />
     <ClInclude Include="strings.h" />
     <ClInclude Include="terminal.h" />
   </ItemGroup>
@@ -114,7 +118,7 @@
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <PrecompiledHeaderOutputFile>$(Platform)\$(Configuration)\$(TargetName).pch</PrecompiledHeaderOutputFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Users\nikdor\Projects\win-tools\src\utils</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -135,7 +139,7 @@
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <PrecompiledHeaderOutputFile>$(Platform)\$(Configuration)\$(TargetName).pch</PrecompiledHeaderOutputFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Users\nikdor\Projects\win-tools\src\utils</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -156,7 +160,7 @@
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <PrecompiledHeaderOutputFile>$(Platform)\$(Configuration)\$(TargetName).pch</PrecompiledHeaderOutputFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Users\nikdor\Projects\win-tools\src\utils</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -177,7 +181,7 @@
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <PrecompiledHeaderOutputFile>$(Platform)\$(Configuration)\$(TargetName).pch</PrecompiledHeaderOutputFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Users\nikdor\Projects\win-tools\src\utils</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
