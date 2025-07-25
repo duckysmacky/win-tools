@@ -50,9 +50,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "utils", "src\lib\utils\util
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "include", "include", "{1A7296AD-B57D-42F1-9EE9-D03885120FA1}"
 	ProjectSection(SolutionItems) = preProject
-		src\include\command.h = src\include\command.h
-		src\include\filesystem.h = src\include\filesystem.h
-		src\include\utils.h = src\include\utils.h
+		src\lib\command\include\command.h = src\lib\command\include\command.h
+		src\lib\utils\include\utils\filesystem.h = src\lib\utils\include\utils\filesystem.h
+		src\lib\utils\include\utils\general.h = src\lib\utils\include\utils\general.h
+		src\lib\utils\include\utils\logs.h = src\lib\utils\include\utils\logs.h
 	EndProjectSection
 EndProject
 Global

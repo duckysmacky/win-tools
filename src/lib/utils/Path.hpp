@@ -1,5 +1,9 @@
 #pragma once
 
+#include <string>
+#include <string_view>
+#include <optional>
+
 namespace fs
 {
 	// A class used to build and manipulate paths

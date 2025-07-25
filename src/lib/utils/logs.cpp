@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-namespace utils
+namespace logs
 {
 	void logError(const std::string& message)
 	{

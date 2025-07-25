@@ -1,11 +1,10 @@
-#ifndef COMMAND_OPTION_H
-#define COMMAND_OPTION_H
+#pragma once
+
+#include "./Argument.hpp"
 
 #include <string>
 #include <optional>
 #include <set>
-
-#include "./Argument.h"
 
 namespace cmd
 {
@@ -51,5 +50,3 @@ namespace cmd
 		std::set<std::string> m_conflictIds;
 	};
 }
-
-#endif // !COMMAND_OPTION_H

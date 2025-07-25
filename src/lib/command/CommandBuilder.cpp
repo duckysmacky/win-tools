@@ -1,9 +1,10 @@
-#include "./CommandBuilder.h"
+#include "CommandBuilder.hpp"
+
+#include "utils/logs.h"
+#include "utils/general.h"
 
 #include <format>
 #include <iostream>
-
-#include "utils.h"
 
 namespace cmd
 {
@@ -34,7 +35,7 @@ namespace cmd
 		{
 			if (m_arguments[i].id() == argument.id())
 			{
-				utils::logError(std::format("Argument with id \"{}\" already exists", argument.id()));
+				logs::logError(std::format("Argument with id \"{}\" already exists", argument.id()));
 				std::exit(1);
 			}
 		}
@@ -47,7 +48,7 @@ namespace cmd
 	{
 		if (option.id() == "help" || option.id() == "version")
 		{
-			utils::logError(std::format("Unable to add option with reserved id \"{}\"", option.id()));
+			logs::logError(std::format("Unable to add option with reserved id \"{}\"", option.id()));
 			std::exit(1);
 		}
 
@@ -55,7 +56,7 @@ namespace cmd
 		{
 			if (m_options[i].id() == option.id())
 			{
-				utils::logError(std::format("Option with id \"{}\" already exists", option.id()));
+				logs::logError(std::format("Option with id \"{}\" already exists", option.id()));
 				std::exit(1);
 			}
 		}
@@ -120,7 +121,7 @@ namespace cmd
 				optionLabel += "    ";
 
 			if (option.type() == Option::ARGUMENT)
-				optionLabel += std::format(" <{}>",utils::toUppercase(option.argument().id()));
+				optionLabel += std::format(" <{}>", utils::toUppercase(option.argument().id()));
 
 			options += std::format("\n  {:<25} {}", optionLabel, option.description());
 			

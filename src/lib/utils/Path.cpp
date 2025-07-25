@@ -1,25 +1,18 @@
-#include <string>
-#include <string_view>
+#include "Path.hpp"
+
 #include <sstream>
 #include <vector>
 #include <format>
-#include <optional>
 
 #include <Windows.h>
-
-#include "./Path.hpp"
 
 namespace fs
 {
     Path::Path(const std::string& path)
-        : m_buffer(normalize(path))
-    {
-    }
+        : m_buffer(normalize(path)) {}
 
     Path::Path(std::string_view path)
-        : m_buffer(normalize(path.data()))
-    {
-    }
+        : m_buffer(normalize(path.data())) {}
 
     Path::Path(const std::string segments[])
     {

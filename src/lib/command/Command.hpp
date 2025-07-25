@@ -1,18 +1,31 @@
-#ifndef COMMAND_COMMAND_H
-#define COMMAND_COMMAND_H
+#pragma once
+
+#include "./Argument.hpp"
+#include "./Option.hpp"
 
 #include <string>
 #include <vector>
 #include <map>
 #include <optional>
 
-#include "./Argument.h"
-#include "./Option.h"
-
 namespace cmd
 {
 	class Command
 	{
+	private:
+		std::string m_name;
+		std::string m_version;
+
+		std::vector<std::string> m_commandArgs;
+		std::vector<Argument> m_arguments;
+		std::vector<Option> m_options;
+		
+		int m_nextArgument;
+
+		std::map<std::string, std::string> m_singleValues;
+		std::map<std::string, std::vector<std::string>> m_multipleValues;
+		std::map<std::string, bool> m_flagValues;
+
 	public:
 		Command(
 			const std::string& name,
@@ -34,19 +47,6 @@ namespace cmd
 		std::string version() const;
 
 	private:
-		std::string m_name;
-		std::string m_version;
-
-		std::vector<std::string> m_commandArgs;
-		std::vector<Argument> m_arguments;
-		std::vector<Option> m_options;
-		
-		int m_nextArgument;
-
-		std::map<std::string, std::string> m_singleValues;
-		std::map<std::string, std::vector<std::string>> m_multipleValues;
-		std::map<std::string, bool> m_flagValues;
-
 		void handleArgument(int i);
 		void handleShortFlag(int i);
 		void handleLongFlag(int i);
@@ -56,5 +56,3 @@ namespace cmd
 		Option findOption(char shortFlag);
 	};
 }
-
-#endif // !COMMAND_COMMAND_H

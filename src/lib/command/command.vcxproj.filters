@@ -29,16 +29,16 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Argument.h">
+    <ClInclude Include="Argument.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Command.h">
+    <ClInclude Include="Command.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CommandBuilder.h">
+    <ClInclude Include="CommandBuilder.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Option.h">
+    <ClInclude Include="Option.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

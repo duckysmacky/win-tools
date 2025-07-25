@@ -1,13 +1,15 @@
+#include "Directory.hpp"
+
+#include "utils/logs.h"
+
 #include <iostream>
-#include <vector>
 #include <format>
-
-#include "utils.h"
-
-#include "./Directory.hpp"
 
 namespace fs
 {
+    Directory::Entry::Entry()
+        : size(0), isDir(false) {}
+
     Directory::Directory(const std::string& path)
         : m_path(path)
     {
@@ -16,7 +18,7 @@ namespace fs
         m_handle = FindFirstFileExA(dirFilesPath.c_str(), FindExInfoStandard, &m_findData, FindExSearchNameMatch, NULL, FIND_FIRST_EX_LARGE_FETCH);
         if (m_handle == INVALID_HANDLE_VALUE)
         {
-            utils::logError(std::format("Unable to open \"{}\"", path), GetLastError());
+            logs::logError(std::format("Unable to open \"{}\"", path), GetLastError());
             std::exit(1);
         }
 

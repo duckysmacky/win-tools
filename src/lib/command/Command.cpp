@@ -1,9 +1,10 @@
-#include "./Command.h"
+#include "Command.hpp"
+
+#include "utils/logs.h"
+#include "utils/general.h"
 
 #include <iostream>
 #include <format>
-
-#include "utils.h"
 
 namespace cmd
 {
@@ -67,7 +68,7 @@ namespace cmd
 
 			if (argument.required() && !(argument.multiple() && m_multipleValues.size() > 0))
 			{
-				utils::logError(std::format("Required argument <{}> was not provided", utils::toUppercase(argument.id())));
+				logs::logError(std::format("Required argument <{}> was not provided", utils::toUppercase(argument.id())));
 				std::exit(0);
 			}
 		}
@@ -105,7 +106,7 @@ namespace cmd
 	{
 		if (!m_flagValues.contains(id))
 		{
-			utils::logError(std::format("Flag with ID \"{}\" not found", id));
+			logs::logError(std::format("Flag with ID \"{}\" not found", id));
 			std::exit(1);
 		}
 		return m_flagValues.at(id);
@@ -127,7 +128,7 @@ namespace cmd
 	{
 		if (m_nextArgument > m_arguments.size() - 1)
 		{
-			utils::logError(std::format("Unexpected argument \"{}\"", m_commandArgs[i]));
+			logs::logError(std::format("Unexpected argument \"{}\"", m_commandArgs[i]));
 			std::exit(1);
 		}
 
@@ -176,7 +177,7 @@ namespace cmd
 
 			if (other_option.conflicts().contains(option.id()) && m_flagValues[other_option.id()])
 			{
-				utils::logError(std::format("Option \"{}\" conficts with \"{}\"", option.id(), other_option.id()));
+				logs::logError(std::format("Option \"{}\" conficts with \"{}\"", option.id(), other_option.id()));
 				std::exit(1);
 			}
 		}
@@ -201,7 +202,7 @@ namespace cmd
 			}
 			else
 			{
-				utils::logError(std::format("Required option argument for {} was not provided", option.id()));
+				logs::logError(std::format("Required option argument for {} was not provided", option.id()));
 				std::exit(1);
 			}
 		}
@@ -217,7 +218,7 @@ namespace cmd
 				return m_options[i];
 		}
 
-		utils::logError(std::format("Unknown option \"{}\"", longFlag));
+		logs::logError(std::format("Unknown option \"{}\"", longFlag));
 		std::exit(1);
 	}
 
@@ -229,7 +230,7 @@ namespace cmd
 				return m_options[i];
 		}
 
-		utils::logError(std::format("Unknown option \"{}\"", shortFlag));
+		logs::logError(std::format("Unknown option \"{}\"", shortFlag));
 		std::exit(1);
 	}
 }
